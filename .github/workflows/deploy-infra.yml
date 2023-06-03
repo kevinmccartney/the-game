@@ -1,4 +1,4 @@
-name: "Deploy infrastructure"
+name: 'Deploy infrastructure'
 
 on:
   workflow_dispatch:
@@ -11,14 +11,13 @@ permissions:
   contents: read
 
 jobs:
-  deploy-infra:
+  terraform-plan:
     runs-on: ubuntu-latest
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
         shell: bash
         working-directory: ./infra
-
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
@@ -48,6 +47,42 @@ jobs:
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-      # For verification
-      - name: Hello world
-        run: echo "Hello, world"
+  terraform-apply:
+    runs-on: ubuntu-latest
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./infra
+
+    environment: 'prod'
+
+    needs: [terraform-plan]
+
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Setup terraform variables
+        id: vars
+        run: |-
+          cat > pipeline.auto.tfvars <<EOF
+          region="${{ vars.GCP_REGION }}" 
+          project="${{ vars.GCP_PROJECT_ID }}" 
+          EOF
+
+      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+      - name: Terraform Init
+        run: terraform init
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
