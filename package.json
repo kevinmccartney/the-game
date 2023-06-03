@@ -1,0 +1,30 @@
+{
+  "name": "the-game",
+  "version": "0.1.0",
+  "description": "This is a joke",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install",
+    "prettier:staged": "pretty-quick --staged",
+    "commitlint": "commitlint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevinmccartney/the-game.git"
+  },
+  "author": "Kevin McCartney <hello@kevinmccartney.is>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kevinmccartney/the-game/issues"
+  },
+  "homepage": "https://github.com/kevinmccartney/the-game#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.5",
+    "@commitlint/config-conventional": "^17.6.5",
+    "@commitlint/cz-commitlint": "^17.5.0",
+    "husky": "^7.0.0",
+    "prettier": "^2.8.8",
+    "pretty-quick": "^3.1.3"
+  }
+}

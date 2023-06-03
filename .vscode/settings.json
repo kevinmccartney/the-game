@@ -123,5 +123,10 @@
     "editor.defaultFormatter": "hashicorp.terraform"
   },
   "peacock.color": "#50FA7B",
-  "indentRainbow.includedLanguages": ["python"]
+  "indentRainbow.includedLanguages": ["python"],
+  "prettier.requireConfig": true,
+  "prettier.prettierPath": "./node_modules/prettier",
+  "prettier.configPath": "./.prettierrc.yml",
+  "prettier.useEditorConfig": true,
+  "cSpell.words": ["commitlint"]
 }
