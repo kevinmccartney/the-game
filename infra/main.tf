@@ -7,7 +7,7 @@ resource "google_storage_bucket" "tf_state" {
   force_destroy = false
   location      = "US"
   storage_class = "STANDARD"
-  project       = var.project_id
+  project       = var.project
 
   versioning {
     enabled = true
