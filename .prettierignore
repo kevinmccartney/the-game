@@ -1,0 +1,15 @@
+!*.scss
+!*.css
+!*.js
+!*.json
+!*.md
+!*.ts
+!*.yaml
+!*.yml
+
+
+.husky
+npm-debug.log
+package-lock.json
+.gitignore
+.prettierignore
