@@ -15,12 +15,12 @@
  */
 
 
-variable "project_id" {
+variable "project" {
   description = "Project to create resources."
   type        = string
 }
 
-variable "default_region" {
-  description = "Default region to create resources where applicable."
+variable "region" {
+  description = "Region to create resources where applicable."
   type        = string
 }
