@@ -1,30 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
+import { Center, ChakraProvider, Heading, VStack } from '@chakra-ui/react';
+
+import { Navbar } from './components/navbar';
+
+const App = () => (
+  <ChakraProvider>
+    <Navbar />
+    <Center
+      minH="100vh"
+      bgColor="blue.500"
+    >
       <header className="App-header">
-        <img
-          src={logo}
-          className="App-logo"
-          alt="logo"
-        />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <VStack>
+          <Heading
+            size="4xl"
+            color="white"
+          >
+            The Game
+          </Heading>
+          <Heading
+            size="2xl"
+            color="white"
+          >
+            It's all about points baby
+          </Heading>
+        </VStack>
       </header>
-    </div>
-  );
-}
+    </Center>
+  </ChakraProvider>
+);
 
 export default App;
