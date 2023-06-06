@@ -11,6 +11,7 @@
   - Make sure the json string is all on one line (no newlines)
 - Create a new actions secret called `GCP_REGION` that contains the GCP region
 - Create a new actions secret called `GCP_PROJECT` that contains the GCP project ID
+- Before building the web host GCS buckets, make sure to verify the domain & add the service account email on the [Webmaster Central](https://www.google.com/webmasters/verification/home?hl=en)
 
 # Reference
 
