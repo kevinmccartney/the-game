@@ -37,6 +37,11 @@ resource "google_storage_bucket" "web_client" {
 
   uniform_bucket_level_access = true
 
+  website {
+    main_page_suffix = "index.html"
+    not_found_page   = "404.html"
+  }
+
   versioning {
     enabled = false
   }
