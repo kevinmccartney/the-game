@@ -15,7 +15,7 @@ resource "google_storage_bucket" "tf_state" {
 }
 
 resource "google_storage_bucket" "web_client" {
-  name          = "the-game.kevinmccartney.is"
+  name          = "the-game.kevinmccartney.dev"
   force_destroy = false
   location      = "US"
   storage_class = "STANDARD"
