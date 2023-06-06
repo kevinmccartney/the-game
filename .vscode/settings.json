@@ -128,5 +128,5 @@
   "prettier.prettierPath": "./node_modules/prettier",
   "prettier.configPath": "./.prettierrc.yml",
   "prettier.useEditorConfig": true,
-  "cSpell.words": ["Chakra", "commitlint"]
+  "cSpell.words": ["Chakra", "commitlint", "roboto"]
 }
