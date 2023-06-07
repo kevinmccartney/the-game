@@ -64,6 +64,7 @@
       "last 1 safari version"
     ]
   },
+  "homepage": "/the-game.kevinmccartney.dev",
   "devDependencies": {
     "customize-cra": "^1.0.0",
     "react-app-rewired": "^2.2.1",
