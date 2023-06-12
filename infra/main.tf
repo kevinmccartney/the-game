@@ -61,7 +61,7 @@ resource "google_dns_record_set" "the_game" {
 
   managed_zone = google_dns_managed_zone.kevinmccartney_dev.name
 
-  rrdatas = ["c.storage.googleapis.com"]
+  rrdatas = ["c.storage.googleapis.com."]
 }
 
 
