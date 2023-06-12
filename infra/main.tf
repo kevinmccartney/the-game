@@ -47,11 +47,21 @@ resource "google_storage_bucket" "web_client" {
   }
 }
 
-resource "google_dns_managed_zone" "kevinmccartney-dev" {
-  name        = "kevinmccartney.dev"
+resource "google_dns_managed_zone" "kevinmccartney_dev" {
+  name        = "kevinmccartney-dev"
   dns_name    = "kevinmccartney.dev"
   description = "DNS Zone for kevinmccartney.dev"
   project     = var.project
+}
+
+resource "google_dns_record_set" "the_game" {
+  name = "the-game.${google_dns_managed_zone.kevinmccartney_dev.dns_name}"
+  type = "CNAME"
+  ttl  = 300
+
+  managed_zone = google_dns_managed_zone.kevinmccartney_dev.name
+
+  rrdatas = ["c.storage.googleapis.com"]
 }
 
 
