@@ -55,7 +55,7 @@ resource "google_dns_managed_zone" "kevinmccartney_dev" {
 }
 
 resource "google_dns_record_set" "the_game" {
-  name = "the-game.${google_dns_managed_zone.kevinmccartney_dev.dns_name}."
+  name = "the-game.${google_dns_managed_zone.kevinmccartney_dev.dns_name}"
   type = "CNAME"
   ttl  = 300
 
