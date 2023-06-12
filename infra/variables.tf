@@ -15,8 +15,8 @@
  */
 
 
-variable "project" {
-  description = "Project to create resources."
+variable "project_id" {
+  description = "Project ID to create resources."
   type        = string
 }
 
