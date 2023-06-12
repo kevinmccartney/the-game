@@ -47,11 +47,11 @@ resource "google_storage_bucket" "web_client" {
   }
 }
 
-resource "google_dns_managed_zone" "kevinmccartney.dev" {
+resource "google_dns_managed_zone" "kevinmccartney-dev" {
   name        = "kevinmccartney.dev"
   dns_name    = "kevinmccartney.dev"
   description = "DNS Zone for kevinmccartney.dev"
-  project       = var.project
+  project     = var.project
 }
 
 
