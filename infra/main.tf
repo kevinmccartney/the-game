@@ -7,7 +7,7 @@ resource "google_storage_bucket" "tf_state" {
   force_destroy = false
   location      = "US"
   storage_class = "STANDARD"
-  project       = var.project
+  project       = var.project_id
 
   versioning {
     enabled = true
@@ -33,7 +33,7 @@ resource "google_storage_bucket" "web_client" {
   force_destroy = false
   location      = "US"
   storage_class = "STANDARD"
-  project       = var.project
+  project       = var.project_id
 
   uniform_bucket_level_access = true
 
@@ -51,11 +51,11 @@ resource "google_dns_managed_zone" "kevinmccartney_dev" {
   name        = "kevinmccartney-dev"
   dns_name    = "kevinmccartney.dev"
   description = "DNS Zone for kevinmccartney.dev"
-  project     = var.project
+  project     = var.project_id
 }
 
 resource "google_dns_record_set" "the_game" {
-  name = "the-game.${google_dns_managed_zone.kevinmccartney_dev.dns_name}"
+  name = "the-game.${google_dns_managed_zone.kevinmccartney_dev.dns_name}."
   type = "CNAME"
   ttl  = 300
 
