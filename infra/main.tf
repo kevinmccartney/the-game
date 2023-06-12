@@ -49,7 +49,7 @@ resource "google_storage_bucket" "web_client" {
 
 resource "google_dns_managed_zone" "kevinmccartney_dev" {
   name        = "kevinmccartney-dev"
-  dns_name    = "kevinmccartney.dev"
+  dns_name    = "kevinmccartney.dev."
   description = "DNS Zone for kevinmccartney.dev"
   project     = var.project_id
 }
