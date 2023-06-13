@@ -63,12 +63,12 @@ resource "google_storage_bucket" "web_client" {
 
 resource "google_compute_managed_ssl_certificate" "dev" {
   provider    = google-beta
-  name        = "the-game-ssl-cert"
+  name        = "the-game-cert"
   description = "cert for the game (including subdomains)"
   project     = var.project_id
 
   managed {
-    domains = ["the-game.kevinmmcartney.dev"]
+    domains = ["the-game.kevinmccartney.dev"]
   }
 }
 
@@ -112,6 +112,18 @@ resource "google_compute_url_map" "the_game_lb" {
   default_service = google_compute_backend_bucket.the_game_prod.self_link
   name            = "the-game-lb"
   project         = var.project_id
+
+  host_rule {
+    hosts        = [google_storage_bucket.web_client.name]
+    path_matcher = "default-matcher"
+  }
+
+  path_matcher {
+    default_service = google_compute_backend_bucket.the_game_prod.self_link
+    name            = "default-matcher"
+  }
+
+  timeouts {}
 }
 
 resource "google_compute_url_map" "the_game_lb_forwarding_rule_redirect" {
