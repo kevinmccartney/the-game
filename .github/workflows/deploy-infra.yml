@@ -3,6 +3,7 @@ name: 'Deploy infrastructure'
 on:
   workflow_dispatch:
   push:
+    paths: infra/**/*
     branches:
       - main
       - develop
