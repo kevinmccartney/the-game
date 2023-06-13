@@ -1,16 +1,43 @@
-name: "Deploy client"
+name: 'Deploy client'
 
 on:
   workflow_dispatch:
   push:
+    paths: the-game-client/**/*
     branches:
       - main
       - develop
 
+permissions:
+  contents: read
+
 jobs:
-  deploy-infra:
+  terraform-plan:
     runs-on: ubuntu-latest
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./the-game-client
     steps:
-      # For verification
-      - name: Show files changed
-        run: echo "hello, world"
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+
+      - name: npm install
+        run: npm intall
+
+      - name: npm build
+        run: npm run build
