@@ -37,7 +37,7 @@ jobs:
           restore-keys: npm-
 
       - name: npm install
-        run: npm intall
+        run: npm install
 
       - name: npm build
         run: npm run build
