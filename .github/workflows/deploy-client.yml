@@ -55,3 +55,6 @@ jobs:
 
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
+
+      - name: Upload react app
+        run: gsutil -m -o GSUtil:parallel_composite_upload_threshold=150M cp -r build gs://the-game.kevinmccartney.dev/
