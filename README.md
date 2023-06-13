@@ -13,6 +13,11 @@
 - Create a new actions secret called `GCP_PROJECT` that contains the GCP project ID
 - Before building the web host GCS buckets, make sure to verify the domain & add the service account email on the [Webmaster Central](https://www.google.com/webmasters/verification/home?hl=en)
 - Your service account will need the Storage Admin (roles/storage.admin) role on "The Game" project to update the IAM policy on the bucket
+- Set up DNS in your project that contains DNS (not in scope for now). Add a CNAME record as follows
+
+| DNS Name                | Resource Record Type | TTL                     | Cannonical Name           |
+| ----------------------- | -------------------- | ----------------------- | ------------------------- |
+| the-game.{your-domain}. | CNAME                | 300 seconds (5 minutes) | c.storage.googleapis.com. |
 
 # Reference
 
