@@ -14,6 +14,11 @@ resource "google_storage_bucket" "tf_state" {
   }
 }
 
+resource "google_project_service" "compute" {
+  project = var.project_id
+  service = "compute.googleapis.com"
+}
+
 data "google_iam_policy" "all_users_viewer" {
   binding {
     role = "roles/storage.objectViewer"
