@@ -19,6 +19,9 @@
 | ----------------------- | -------------------- | ----------------------- | ------------------------- |
 | the-game.{your-domain}. | CNAME                | 300 seconds (5 minutes) | c.storage.googleapis.com. |
 
+- Make sure the Service Usage & Cloud Resource Manager services are enabled
+  - `gcloud services enable serviceusage.googleapis.com cloudresourcemanager.googleapis.com --project {project_id}`
+
 # Reference
 
 - [Using GitHub Actions with Terraform on GCP](https://jozimarback.medium.com/using-github-actions-with-terraform-on-gcp-d473a37ddbd6)
@@ -28,3 +31,4 @@
 - [Super fast npm install on Github Actions](https://www.voorhoede.nl/en/blog/super-fast-npm-install-on-github-actions/)
 - [How to upload files to Google Cloud Storage (GCS) Bucket](https://sametkaradag.medium.com/how-to-upload-files-to-google-cloud-storage-gcs-bucket-70f9599a01e5)
 - [Setting up SSL for Google Cloud Storage static website?](https://stackoverflow.com/questions/22759710/setting-up-ssl-for-google-cloud-storage-static-website)
+- [Can I automatically enable APIs when using GCP cloud with terraform?](https://stackoverflow.com/a/72094901)
