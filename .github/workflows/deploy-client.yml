@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 jobs:
-  terraform-plan:
+  deploy_client:
     runs-on: ubuntu-latest
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -41,3 +41,6 @@ jobs:
 
       - name: npm build
         run: npm run build
+
+      - name: show build contents
+        run: ls -la build
