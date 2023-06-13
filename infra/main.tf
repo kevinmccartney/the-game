@@ -23,7 +23,7 @@ resource "google_storage_bucket" "tf_state" {
 
 resource "google_project_service" "services" {
   for_each = local.services_to_activate
-  
+
   project = var.project_id
   service = each.value
 }
@@ -72,3 +72,67 @@ resource "google_compute_managed_ssl_certificate" "dev" {
   }
 }
 
+resource "google_compute_global_address" "the_game_frontend_ip" {
+  address      = "34.36.250.58"
+  address_type = "EXTERNAL"
+  description  = "IP for the load balancer serving The Game"
+  name         = "the-game-frontend-ip"
+  project      = var.project_id
+}
+
+resource "google_compute_global_forwarding_rule" "the_game_lb_forwarding_rule_forwarding_rule" {
+  ip_address            = "34.36.250.58"
+  ip_protocol           = "TCP"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
+  name                  = "the-game-lb-forwarding-rule-forwarding-rule"
+  port_range            = "80-80"
+  project               = var.project_id
+  target                = google_compute_target_http_proxy.the_game_lb_forwarding_rule_target_proxy.self_link
+}
+
+resource "google_compute_global_forwarding_rule" "the_game_lb_forwarding_rule" {
+  ip_address            = "34.36.250.58"
+  ip_protocol           = "TCP"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
+  name                  = "the-game-lb-forwarding-rule"
+  port_range            = "443-443"
+  project               = var.project_id
+  target                = google_compute_target_https_proxy.the_game_lb_target_proxy.self_link
+}
+
+resource "google_compute_target_https_proxy" "the_game_lb_target_proxy" {
+  name             = "the-game-lb-target-proxy"
+  project          = var.project_id
+  quic_override    = "NONE"
+  ssl_certificates = [google_compute_managed_ssl_certificate.dev.self_link]
+  url_map          = google_compute_url_map.the_game_lb.self_link
+}
+
+resource "google_compute_url_map" "the_game_lb" {
+  default_service = google_compute_backend_bucket.the_game_prod.self_link
+  name            = "the-game-lb"
+  project         = var.project_id
+}
+
+resource "google_compute_url_map" "the_game_lb_forwarding_rule_redirect" {
+  default_url_redirect {
+    https_redirect         = true
+    redirect_response_code = "MOVED_PERMANENTLY_DEFAULT"
+    strip_query            = false
+  }
+  description = "Automatically generated HTTP to HTTPS redirect for the the-game-lb-forwarding-rule forwarding rule"
+  name        = "the-game-lb-forwarding-rule-redirect"
+  project     = var.project_id
+}
+
+resource "google_compute_target_http_proxy" "the_game_lb_forwarding_rule_target_proxy" {
+  name    = "the-game-lb-forwarding-rule-target-proxy"
+  project = var.project_id
+  url_map = google_compute_url_map.the_game_lb_forwarding_rule_redirect.self_link
+}
+
+resource "google_compute_backend_bucket" "the_game_prod" {
+  bucket_name = google_storage_bucket.web_client.name
+  name        = "the-game-prod"
+  project     = var.project_id
+}
