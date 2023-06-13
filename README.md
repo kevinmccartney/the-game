@@ -13,14 +13,16 @@
 - Create a new actions secret called `GCP_PROJECT` that contains the GCP project ID
 - Before building the web host GCS buckets, make sure to verify the domain & add the service account email on the [Webmaster Central](https://www.google.com/webmasters/verification/home?hl=en)
 - Your service account will need the Storage Admin (roles/storage.admin) role on "The Game" project to update the IAM policy on the bucket
-- Set up DNS in your project that contains DNS (not in scope for now). Add a CNAME record as follows
-
-| DNS Name                | Resource Record Type | TTL                     | Cannonical Name           |
-| ----------------------- | -------------------- | ----------------------- | ------------------------- |
-| the-game.{your-domain}. | CNAME                | 300 seconds (5 minutes) | c.storage.googleapis.com. |
-
 - Make sure the Service Usage & Cloud Resource Manager services are enabled
   - `gcloud services enable serviceusage.googleapis.com cloudresourcemanager.googleapis.com --project {project_id}`
+  - _This will allow you to export infrastructure created in the GCP console & imported into Terraform state if you get stuck_
+- Make sure you create the LB before the cert
+  - [Relevant SO answer](https://stackoverflow.com/a/66578266)
+- Create domain DNS A record in your project that contains DNS (not in scope for now) pointed to the LB frontend IP
+
+| DNS Name                | Resource Record Type | TTL                     | IPv4 Address          |
+| ----------------------- | -------------------- | ----------------------- | --------------------- |
+| the-game.{your-domain}. | A                    | 300 seconds (5 minutes) | {your-lb-frontend-ip} |
 
 # Reference
 
@@ -29,6 +31,8 @@
 - [`setup-gcloud` GitHub Action](https://github.com/google-github-actions/setup-gcloud)
 - [Setup Node.js environment](https://github.com/marketplace/actions/setup-node-js-environment)
 - [Super fast npm install on Github Actions](https://www.voorhoede.nl/en/blog/super-fast-npm-install-on-github-actions/)
+- [Host a Static Website in Google Cloud with Cloud Storage](https://codelabs.developers.google.com/codelabs/cloud-webapp-hosting-gcs#0)
 - [How to upload files to Google Cloud Storage (GCS) Bucket](https://sametkaradag.medium.com/how-to-upload-files-to-google-cloud-storage-gcs-bucket-70f9599a01e5)
 - [Setting up SSL for Google Cloud Storage static website?](https://stackoverflow.com/questions/22759710/setting-up-ssl-for-google-cloud-storage-static-website)
+- [Use Google-managed SSL certificates](https://cloud.google.com/load-balancing/docs/ssl-certificates/google-managed-certs)
 - [Can I automatically enable APIs when using GCP cloud with terraform?](https://stackoverflow.com/a/72094901)
