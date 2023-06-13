@@ -27,3 +27,4 @@
 - [Setup Node.js environment](https://github.com/marketplace/actions/setup-node-js-environment)
 - [Super fast npm install on Github Actions](https://www.voorhoede.nl/en/blog/super-fast-npm-install-on-github-actions/)
 - [How to upload files to Google Cloud Storage (GCS) Bucket](https://sametkaradag.medium.com/how-to-upload-files-to-google-cloud-storage-gcs-bucket-70f9599a01e5)
+- [Setting up SSL for Google Cloud Storage static website?](https://stackoverflow.com/questions/22759710/setting-up-ssl-for-google-cloud-storage-static-website)
