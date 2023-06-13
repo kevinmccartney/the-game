@@ -52,3 +52,14 @@ resource "google_storage_bucket" "web_client" {
   }
 }
 
+resource "google_compute_managed_ssl_certificate" "dev" {
+  provider = google-beta
+  name     = "the-game-ssl-cert"
+  description = "cert for the game (including subdomains)"
+  project = var.project_id
+
+  managed {
+    domains = ["the-game.kevinmmcartney.dev"]
+  }
+}
+
