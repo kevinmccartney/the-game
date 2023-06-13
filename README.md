@@ -26,3 +26,4 @@
 - [`setup-gcloud` GitHub Action](https://github.com/google-github-actions/setup-gcloud)
 - [Setup Node.js environment](https://github.com/marketplace/actions/setup-node-js-environment)
 - [Super fast npm install on Github Actions](https://www.voorhoede.nl/en/blog/super-fast-npm-install-on-github-actions/)
+- [How to upload files to Google Cloud Storage (GCS) Bucket](https://sametkaradag.medium.com/how-to-upload-files-to-google-cloud-storage-gcs-bucket-70f9599a01e5)
