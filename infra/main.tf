@@ -1,3 +1,10 @@
+locals {
+  services_to_activate = toset([
+    "cloudasset.googleapis.com",
+    "compute.googleapis.com"
+  ])
+}
+
 resource "random_id" "bucket_prefix" {
   byte_length = 8
 }
@@ -14,9 +21,11 @@ resource "google_storage_bucket" "tf_state" {
   }
 }
 
-resource "google_project_service" "compute" {
+resource "google_project_service" "services" {
+  for_each = local.services_to_activate
+  
   project = var.project_id
-  service = "compute.googleapis.com"
+  service = each.value
 }
 
 data "google_iam_policy" "all_users_viewer" {
@@ -53,10 +62,10 @@ resource "google_storage_bucket" "web_client" {
 }
 
 resource "google_compute_managed_ssl_certificate" "dev" {
-  provider = google-beta
-  name     = "the-game-ssl-cert"
+  provider    = google-beta
+  name        = "the-game-ssl-cert"
   description = "cert for the game (including subdomains)"
-  project = var.project_id
+  project     = var.project_id
 
   managed {
     domains = ["the-game.kevinmmcartney.dev"]
