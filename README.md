@@ -23,3 +23,6 @@
 
 - [Using GitHub Actions with Terraform on GCP](https://jozimarback.medium.com/using-github-actions-with-terraform-on-gcp-d473a37ddbd6)
 - [Automating Terraform Deployment to Google Cloud with GitHub Actions](https://medium.com/interleap/automating-terraform-deployment-to-google-cloud-with-github-actions-17516c4fb2e5)
+- [`setup-gcloud` GitHub Action](https://github.com/google-github-actions/setup-gcloud)
+- [Setup Node.js environment](https://github.com/marketplace/actions/setup-node-js-environment)
+- [Super fast npm install on Github Actions](https://www.voorhoede.nl/en/blog/super-fast-npm-install-on-github-actions/)
