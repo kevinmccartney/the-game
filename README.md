@@ -36,3 +36,6 @@
 - [Setting up SSL for Google Cloud Storage static website?](https://stackoverflow.com/questions/22759710/setting-up-ssl-for-google-cloud-storage-static-website)
 - [Use Google-managed SSL certificates](https://cloud.google.com/load-balancing/docs/ssl-certificates/google-managed-certs)
 - [Can I automatically enable APIs when using GCP cloud with terraform?](https://stackoverflow.com/a/72094901)
+- [Solving HTTP 404 for GCP Storage Bucket Hosted Single Page Web App](https://thepaulo.medium.com/solving-http-404-for-gcp-storage-bucket-hosted-single-page-web-app-140b15316cde)
+- [Allow Users to Set HTTP Response Status ](https://issuetracker.google.com/issues/151212194)
+- [Install Tailwind CSS with Create React App](https://tailwindcss.com/docs/guides/create-react-app)
