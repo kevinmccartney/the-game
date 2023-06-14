@@ -1,10 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { hydrate, render } from 'react-dom';
 import { Landing, Login } from './views';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+import './main.css';
 
 const router = createBrowserRouter([
   {
@@ -17,14 +19,18 @@ const router = createBrowserRouter([
   },
 ]);
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement,
-);
-root.render(
+const root = document.getElementById('root') as HTMLElement;
+const App = () => (
   <React.StrictMode>
     <RouterProvider router={router} />
-  </React.StrictMode>,
+  </React.StrictMode>
 );
+
+if (root.hasChildNodes()) {
+  hydrate(<App />, root);
+} else {
+  render(<App />, root);
+}
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
