@@ -128,5 +128,13 @@
   "prettier.prettierPath": "./node_modules/prettier",
   "prettier.configPath": "./.prettierrc.yml",
   "prettier.useEditorConfig": true,
-  "cSpell.words": ["Chakra", "commitlint", "postbuild", "roboto"]
+  "cSpell.words": [
+    "Chakra",
+    "commitlint",
+    "cprint",
+    "postbuild",
+    "roboto",
+    "yaspin"
+  ],
+  "python.defaultInterpreterPath": "\"/Users/kevinmccartney/.local/share/virtualenvs/the-game-YZQVw8on/bin/python\""
 }
