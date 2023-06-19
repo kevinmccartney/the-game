@@ -62,6 +62,9 @@ jobs:
         run: |
           cd ../ && pipenv install --deploy --dev
 
+      - name: pipenv version
+        run: pipenv --version
+
       - name: Enforce Deployment Folder Index
         run: |
           ../bin/edfi ./out --ci
