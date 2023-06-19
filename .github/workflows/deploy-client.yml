@@ -62,8 +62,8 @@ jobs:
         run: |
           cd ../ && pipenv install --deploy --dev
 
-      - name: pipenv version
-        run: pipenv --version
+      - name: Activate pipenv virtual environment
+        run: pipenv shell
 
       - name: Enforce Deployment Folder Index
         run: |
