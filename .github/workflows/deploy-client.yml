@@ -64,7 +64,7 @@ jobs:
 
       - name: Enforce Deployment Folder Index
         run: |
-          pipenv run python ../scripts/enforce_deployment_folder_index.py ./out
+          ../bin/edfi ./out --ci
 
       - name: show build contents
         run: ls -la out
