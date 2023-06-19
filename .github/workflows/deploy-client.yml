@@ -62,12 +62,8 @@ jobs:
         run: |
           cd ../ && pipenv install --deploy --dev
 
-      - name: Activate pipenv virtual environment
-        run: pipenv shell
-
       - name: Enforce Deployment Folder Index
-        run: |
-          ../bin/edfi ./out --ci
+        run: pipenv run python ../bin/edfi ./out --ci
 
       - name: show build contents
         run: ls -la out
