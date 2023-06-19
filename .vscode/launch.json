@@ -11,7 +11,7 @@
       "program": "${file}",
       "console": "integratedTerminal",
       "justMyCode": true,
-      "args": ["./the-game-client-next/out"]
+      "args": ["./the-game-client-next/out", "--ci"]
     }
   ]
 }

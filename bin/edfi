@@ -1,9 +1,10 @@
+#!/usr/bin/env pipenv run python
+
 import sys
 import os
 import fnmatch
 import shutil
-
-# import pathlib
+import argparse
 
 from termcolor import cprint
 from yaspin import yaspin
@@ -15,18 +16,20 @@ from yaspin import yaspin
 # Output = white
 # Section = purple
 
-PIPE = "│"
-ELBOW = "└──"
-TEE = "├──"
-PIPE_PREFIX = "│   "
-SPACE_PREFIX = "    "
+# Help text?
+
+# PIPE = "│"
+# ELBOW = "└──"
+# TEE = "├──"
+# PIPE_PREFIX = "│   "
+# SPACE_PREFIX = "    "
 
 
-def get_path():
+def get_path(args):
     cwd = os.getcwd()
 
     try:
-        path = sys.argv[1]
+        path = args.path
         real_path = os.path.abspath(os.path.join(cwd, path))
 
         cprint(f"Using {real_path}", "blue")
@@ -41,13 +44,7 @@ def get_path():
 def walk_folders(base_path: str) -> dict:
     changes = []
     for root, dirs, files in os.walk("."):
-        # print("root", root)
-        # print("")
-        # print("dirs:", dirs)
-        # print("")
-
         for item in fnmatch.filter(files, "*.html"):
-            # print("...", item)
             if item != "index.html":
                 formatted_item = item.replace(".html", "")
                 new_change = {
@@ -67,15 +64,12 @@ def walk_folders(base_path: str) -> dict:
                     },
                 }
                 changes = [*changes, new_change]
-        # print("")
-
-    # print(pprint.pformat(changes))
 
     return changes
 
 
-def process_changes(changes: dict):
-    cprint(f"{len(changes)} changes found -", "blue")
+def process_changes(args, changes: dict):
+    cprint(f"{len(changes)} changes found", "blue")
     for entry in changes:
         cprint(
             f"Old Path - {entry['old']['relative_path']} ({entry['old']['abs_path']})",
@@ -86,24 +80,29 @@ def process_changes(changes: dict):
             "green",
         )
 
-    confirm = input("Apply these changes [y/N]: ")
+    confirm = ""
 
-    if confirm == "" or confirm.lower() == "n":
+    if not args.ci or len(changes) > 0:
+        confirm = input("Apply these changes [y/N]: ")
+
+    # add ci handling
+    if confirm.lower() == "y" or args.ci:
+        print("Applying changes...")
+    elif confirm == "" or confirm.lower() == "n":
         print("Not applying changes. exiting...")
         sys.exit(0)
-    elif confirm.lower() == "y":
-        print("Applying changes...")
 
     for entry in changes:
         os.makedirs(os.path.dirname(entry["new"]["abs_path"]), exist_ok=True)
         shutil.move(entry["old"]["abs_path"], entry["new"]["abs_path"])
 
 
-def main():
+def main(args):
     changes = {}
     # get path or use cwd
-    path = get_path()
+    path = get_path(args)
 
+    # FileNotFoundError
     os.chdir(path)
 
     # tree = DirectoryTree(path)
@@ -120,13 +119,25 @@ def main():
             cprint(f"Error: Something went wrong with processing the directory", "red")
             cprint(ex, "red")
 
-    process_changes(changes)
+    process_changes(args, changes)
 
     print("Done!")
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(
+        prog="EnforceDeploymentFolderIndex",
+        description="Makes sure that an index html files reside inside a named folder representing a route",
+        epilog="Made with ❤️ by Kevin McCartney",
+    )
+
+    parser.add_argument("path", help="Path to directory to run this command")
+    parser.add_argument(
+        "--ci", help="Run command non-interactively", action="store_true"
+    )
+    args = parser.parse_args()
+
+    main(args)
 
 
 # class DirectoryTree:
