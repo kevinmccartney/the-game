@@ -82,7 +82,7 @@ def process_changes(args, changes: dict):
 
     confirm = ""
 
-    if not args.ci or len(changes) > 0:
+    if not args.ci and len(changes) > 0:
         confirm = input("Apply these changes [y/N]: ")
 
     # add ci handling
