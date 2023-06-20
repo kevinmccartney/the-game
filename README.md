@@ -39,3 +39,6 @@
 - [Solving HTTP 404 for GCP Storage Bucket Hosted Single Page Web App](https://thepaulo.medium.com/solving-http-404-for-gcp-storage-bucket-hosted-single-page-web-app-140b15316cde)
 - [Allow Users to Set HTTP Response Status ](https://issuetracker.google.com/issues/151212194)
 - [Install Tailwind CSS with Create React App](https://tailwindcss.com/docs/guides/create-react-app)
+- [<Link href="/link" /> forwards to "/link.txt"](https://github.com/vercel/next.js/issues/48996)
+- [An example Github Actions for Python + Pipenv + Postgres + Pyright](https://gist.github.com/alukach/6f3a371e9af600e417aca1b36806ad72)
+- [Static website examples and tips](https://cloud.google.com/storage/docs/static-website)

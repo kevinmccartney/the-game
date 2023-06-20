@@ -5,7 +5,7 @@ import React from 'react';
 import { Heading, VStack } from '@chakra-ui/react';
 import { DefaultLayout } from '@the-game/client/components/layouts';
 
-const Login = () => (
+const Landing = () => (
   <DefaultLayout>
     <header className="App-header">
       <VStack>
@@ -15,11 +15,18 @@ const Login = () => (
           className="font-bold"
           as="h1"
         >
-          Login
+          The Game
+        </Heading>
+        <Heading
+          size="2xl"
+          color="purple.500"
+          className="font-light"
+        >
+          It{"'"}s all about points baby
         </Heading>
       </VStack>
     </header>
   </DefaultLayout>
 );
 
-export default Login;
+export default Landing;

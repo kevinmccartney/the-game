@@ -42,6 +42,9 @@ jobs:
       - name: npm build
         run: npm run build
 
+      - name: Export next app
+        run: npx next export
+
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
