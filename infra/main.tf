@@ -148,3 +148,6 @@ resource "google_compute_backend_bucket" "the_game_prod" {
   name        = "the-game-prod"
   project     = var.project_id
 }
+
+# Google Identity provider
+# OAuth 2.0 Client ID

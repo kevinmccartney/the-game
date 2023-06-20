@@ -24,6 +24,8 @@
 | ----------------------- | -------------------- | ----------------------- | --------------------- |
 | the-game.{your-domain}. | A                    | 300 seconds (5 minutes) | {your-lb-frontend-ip} |
 
+- Set up Oauth consent screen
+
 # Reference
 
 - [Using GitHub Actions with Terraform on GCP](https://jozimarback.medium.com/using-github-actions-with-terraform-on-gcp-d473a37ddbd6)
