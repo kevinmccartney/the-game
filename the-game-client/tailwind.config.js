@@ -1,12 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  important: true,
-  content: ['./src/**/*.tsx'],
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
   theme: {
-    fontFamily: {
-      'roboto-300': ['Roboto', 'Helvetica', 'Arial', 'sans-serif'],
-      'roboto-400': ['Roboto', 'Helvetica', 'Arial', 'sans-serif'],
-      'roboto-700': ['Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+    extend: {
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic':
+          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      },
     },
   },
   plugins: [],
