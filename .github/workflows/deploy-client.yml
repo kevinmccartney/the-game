@@ -3,7 +3,9 @@ name: 'Deploy client'
 on:
   workflow_dispatch:
   push:
-    paths: the-game-client/**/*
+    paths:
+      - the-game-client/**/*
+      - .github/workflows/deploy-client.yml
     branches:
       - main
       - develop
@@ -18,7 +20,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./the-game-client-next
+        working-directory: ./the-game-client
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
