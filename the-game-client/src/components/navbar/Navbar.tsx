@@ -8,9 +8,8 @@ import {
   MenuList,
 } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
-
-import { icon } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { faCircleUser, faDice } from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';
 
 export const Navbar = () => (
   <Flex
@@ -19,9 +18,9 @@ export const Navbar = () => (
     role="navigation"
     justifyContent="space-between"
   >
-    <Link to={`/`}>
+    <Link href="/">
       <FontAwesomeIcon
-        icon={icon({ name: 'dice' })}
+        icon={faDice}
         inverse
         size="2x"
       />
@@ -32,13 +31,13 @@ export const Navbar = () => (
         colorScheme="transparent"
       >
         <FontAwesomeIcon
-          icon={icon({ name: 'circle-user' })}
+          icon={faCircleUser}
           inverse
           size="2x"
         />
       </MenuButton>
       <MenuList>
-        <Link to={`/login`}>
+        <Link href="/login/">
           <MenuItem>Login</MenuItem>
         </Link>
       </MenuList>

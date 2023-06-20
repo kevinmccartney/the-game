@@ -1,8 +1,7 @@
 import React from 'react';
 import { Flex, Text, Link } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import { icon } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
 export const Footer = () => (
   <Flex
@@ -16,7 +15,7 @@ export const Footer = () => (
       color="red.400"
       ml={1}
     >
-      <FontAwesomeIcon icon={icon({ name: 'heart' })} />
+      <FontAwesomeIcon icon={faHeart} />
     </Text>
     <Text
       color="white"
