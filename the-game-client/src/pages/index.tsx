@@ -4,29 +4,20 @@ import React from 'react';
 
 import { Heading, VStack } from '@chakra-ui/react';
 import { DefaultLayout } from '@the-game/client/components/layouts';
+import { getAuth } from 'firebase/auth';
+import Dashboard from '@the-game/client/components/dashboard';
+import Splash from '@the-game/client/components/splash/Splash';
+// import { useRouter } from 'next/router';
+// import { getAuth } from 'firebase/auth';
 
-const Landing = () => (
-  <DefaultLayout>
-    <header className="App-header">
-      <VStack>
-        <Heading
-          size="4xl"
-          color="purple.500"
-          className="font-bold"
-          as="h1"
-        >
-          The Game
-        </Heading>
-        <Heading
-          size="2xl"
-          color="purple.500"
-          className="font-light"
-        >
-          It{"'"}s all about points baby
-        </Heading>
-      </VStack>
-    </header>
-  </DefaultLayout>
-);
+const AppRoot = () => {
+  const auth = getAuth();
+  // const router = useRouter();
+  // if (auth.currentUser) {
+  //   router.replace('/dashboard');
+  // }
 
-export default Landing;
+  return auth.currentUser ? <Dashboard /> : <Splash />;
+};
+
+export default AppRoot;
