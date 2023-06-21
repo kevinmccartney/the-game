@@ -16,17 +16,21 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
+import { useRouter } from 'next/router';
 
 export const Navbar = () => {
-  const [isAuthed, setIsAuthed] = useState(false);
   const auth = getAuth();
+  const [isAuthed, setIsAuthed] = useState(!!auth.currentUser);
+
   const provider = new GoogleAuthProvider();
+  const router = useRouter();
 
   const logout = async () => {
     try {
       const result = await signOut(auth);
       console.log(result);
       setIsAuthed(false);
+      router.push('/');
     } catch (error) {
       console.error(error);
     }
@@ -37,6 +41,7 @@ export const Navbar = () => {
       const result = await signInWithPopup(auth, provider);
       console.log(result);
       setIsAuthed(true);
+      router.push('/');
     } catch (error) {
       console.error(error);
     }
@@ -69,7 +74,7 @@ export const Navbar = () => {
             />
           </MenuButton>
           <MenuList>
-            {auth.currentUser ? (
+            {isAuthed ? (
               <MenuItem onClick={logout}>Logout</MenuItem>
             ) : (
               <MenuItem onClick={login}>Login</MenuItem>
