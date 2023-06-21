@@ -1,4 +1,4 @@
-import { Center, ChakraProvider, Flex } from '@chakra-ui/react';
+import { Box, Center, ChakraProvider, Flex } from '@chakra-ui/react';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import theme from '@the-game/client/app/theme';
@@ -16,7 +16,12 @@ export const DefaultLayout: FunctionComponent<{ children: any }> = (props) => {
         justifyContent="space-between"
       >
         <Navbar />
-        <Center role="main">{props.children}</Center>
+        <Center
+          role="main"
+          px={6}
+        >
+          <Box maxW="container.sm">{props.children}</Box>
+        </Center>
         <Footer />
       </Flex>
     </ChakraProvider>

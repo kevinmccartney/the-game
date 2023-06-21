@@ -14,6 +14,7 @@ const Splash = () => (
           color="purple.500"
           className="font-bold"
           as="h1"
+          textAlign="center"
         >
           The Game
         </Heading>
@@ -21,6 +22,7 @@ const Splash = () => (
           size="2xl"
           color="purple.500"
           className="font-light"
+          textAlign="center"
         >
           It{"'"}s all about points baby
         </Heading>
