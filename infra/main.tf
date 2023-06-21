@@ -35,7 +35,8 @@ locals {
     "firebasehosting.googleapis.com",
     "firebaseinstallations.googleapis.com",
     "oslogin.googleapis.com",
-    "serviceusage.googleapis.com"
+    "serviceusage.googleapis.com",
+    "iam.googleapis.com"
   ])
 }
 
@@ -194,25 +195,25 @@ resource "google_compute_backend_bucket" "the_game_prod" {
 resource "google_project_default_service_accounts" "my_project" {
   project = var.project_id
 
-  action = "DISABLE"
+  action         = "DISABLE"
   restore_policy = "REVERT"
 }
 
-resource "google_service_account" "firebase_adminsdk" {
-  account_id   = "firebase-adminsdk-gb9r0"
-  description  = "Firebase Admin SDK Service Agent"
-  display_name = "firebase-adminsdk"
-  project      = "the-game-388502"
-}
+# resource "google_service_account" "firebase_adminsdk" {
+#   account_id   = "firebase-adminsdk-gb9r0"
+#   description  = "Firebase Admin SDK Service Agent"
+#   display_name = "firebase-adminsdk"
+#   project      = "the-game-388502"
+# }
 
-resource "google_project_iam_member" "firebase_admin_firebase_sdkAdmin" {
-  project = var.project_id
-  role = "roles/firebase.sdkAdminServiceAgent"
-  member = "serviceAccount:${google_service_account.firebase_adminsdk.email}"
-}
+# resource "google_project_iam_member" "firebase_admin_firebase_sdkAdmin" {
+#   project = var.project_id
+#   role    = "roles/firebase.sdkAdminServiceAgent"
+#   member  = "serviceAccount:${google_service_account.firebase_adminsdk.email}"
+# }
 
-resource "google_project_iam_member" "firebase_admin_token_creator" {
-  project = var.project_id
-  role = "roles/iam.serviceAccountTokenCreator"
-  member = "serviceAccount:${google_service_account.firebase_adminsdk.email}"
-}
+# resource "google_project_iam_member" "firebase_admin_token_creator" {
+#   project = var.project_id
+#   role    = "roles/iam.serviceAccountTokenCreator"
+#   member  = "serviceAccount:${google_service_account.firebase_adminsdk.email}"
+# }
