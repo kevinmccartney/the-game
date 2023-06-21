@@ -1,7 +1,41 @@
 locals {
   services_to_activate = toset([
     "cloudasset.googleapis.com",
-    "compute.googleapis.com"
+    "compute.googleapis.com",
+    "cloudtrace.googleapis.com",
+    "appengine.googleapis.com",
+    "cloudapis.googleapis.com",
+    "bigquery.googleapis.com",
+    "bigquerystorage.googleapis.com",
+    "firebasedynamiclinks.googleapis.com",
+    "bigquerymigration.googleapis.com",
+    "monitoring.googleapis.com",
+    "logging.googleapis.com",
+    "cloudasset.googleapis.com",
+    "fcm.googleapis.com",
+    "servicemanagement.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
+    "datastore.googleapis.com",
+    "storage-api.googleapis.com",
+    "firebaseremoteconfig.googleapis.com",
+    "domains.googleapis.com",
+    "storage-component.googleapis.com",
+    "sql-component.googleapis.com",
+    "runtimeconfig.googleapis.com",
+    "storage.googleapis.com",
+    "testing.googleapis.com",
+    "pubsub.googleapis.com",
+    "securetoken.googleapis.com",
+    "firebaseremoteconfigrealtime.googleapis.com",
+    "clouddebugger.googleapis.com",
+    "firebase.googleapis.com",
+    "dns.googleapis.com",
+    "firebaserules.googleapis.com",
+    "identitytoolkit.googleapis.com",
+    "firebasehosting.googleapis.com",
+    "firebaseinstallations.googleapis.com",
+    "oslogin.googleapis.com",
+    "serviceusage.googleapis.com"
   ])
 }
 
@@ -122,8 +156,6 @@ resource "google_compute_url_map" "the_game_lb" {
     default_service = google_compute_backend_bucket.the_game_prod.self_link
     name            = "default-matcher"
   }
-
-  timeouts {}
 }
 
 resource "google_compute_url_map" "the_game_lb_forwarding_rule_redirect" {
