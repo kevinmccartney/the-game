@@ -18,6 +18,7 @@ const Dashboard = () => {
               size="4xl"
               color="purple.500"
               className="font-bold"
+              textAlign="center"
               as="h1"
             >
               Hello {auth.currentUser?.displayName}
