@@ -195,7 +195,7 @@ resource "google_compute_backend_bucket" "the_game_prod" {
 resource "google_project_default_service_accounts" "my_project" {
   project = var.project_id
 
-  action         = "DISABLE"
+  action         = "ENABLE"
   restore_policy = "REVERT"
 }
 
