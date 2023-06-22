@@ -192,12 +192,6 @@ resource "google_compute_backend_bucket" "the_game_prod" {
 # - Project itself
 # - Logging sink
 # - firebase-service-account@firebase-sa-management.iam.gserviceaccount.com
-resource "google_project_default_service_accounts" "my_project" {
-  project = var.project_id
-
-  action         = "ENABLE"
-  restore_policy = "REVERT"
-}
 
 resource "google_service_account" "firebase_adminsdk" {
   account_id   = "firebase-adminsdk-gb9r0"
