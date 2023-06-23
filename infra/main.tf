@@ -107,8 +107,9 @@ resource "google_storage_bucket" "web_client" {
     enabled = false
   }
 }
-
+########################################
 # SSL & Public IP for Load Balancer
+########################################
 resource "google_compute_managed_ssl_certificate" "dev" {
   provider    = google-beta
   name        = "the-game-cert"
@@ -127,8 +128,9 @@ resource "google_compute_global_address" "the_game_frontend_ip" {
   name         = "the-game-frontend-ip"
   project      = var.project_id
 }
-
+####################
 # Load balancer
+####################
 resource "google_compute_global_forwarding_rule" "the_game_lb_forwarding_rule_forwarding_rule" {
   ip_address            = "34.36.250.58"
   ip_protocol           = "TCP"
@@ -196,7 +198,9 @@ resource "google_compute_backend_bucket" "the_game_prod" {
   project     = var.project_id
 }
 
+####################
 # Firebase stuff
+####################
 resource "google_service_account" "firebase_adminsdk" {
   account_id   = "firebase-adminsdk-gb9r0"
   description  = "Firebase Admin SDK Service Agent"
@@ -214,6 +218,44 @@ resource "google_project_iam_member" "firebase_admin_token_creator" {
   project = var.project_id
   role    = "roles/iam.serviceAccountTokenCreator"
   member  = "serviceAccount:${google_service_account.firebase_adminsdk.email}"
+}
+
+####################
+# Cloud Function
+####################
+resource "google_storage_bucket" "bucket" {
+  name                        = "${local.project}-gcf-source"
+  location                    = "US"
+  uniform_bucket_level_access = true
+}
+
+# resource "google_storage_bucket_object" "object" {
+#   name   = "function-source.zip"
+#   bucket = google_storage_bucket.bucket.name
+#   source = "function-source.zip" # Add path to the zipped function source code
+# }
+
+resource "google_cloudfunctions2_function" "ping" {
+  name        = "the-game-ping"
+  location    = "us-central1"
+  description = "A ping service for The Game API"
+
+  # build_config {
+  #   runtime     = "nodejs18"
+  #   entry_point = "ping" # Set the entry point 
+  #   source {
+  #     storage_source {
+  #       bucket = google_storage_bucket.bucket.name
+  #       object = google_storage_bucket_object.object.name
+  #     }
+  #   }
+  # }
+
+  service_config {
+    max_instance_count = 1
+    available_memory   = "256M"
+    timeout_seconds    = 60
+  }
 }
 
 # API Gateway
