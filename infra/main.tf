@@ -224,7 +224,7 @@ resource "google_project_iam_member" "firebase_admin_token_creator" {
 # Cloud Function
 ####################
 resource "google_storage_bucket" "bucket" {
-  name                        = "${local.project}-gcf-source"
+  name                        = "${var.project_id}-gcf-source"
   location                    = "US"
   uniform_bucket_level_access = true
 }
