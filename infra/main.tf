@@ -240,16 +240,16 @@ resource "google_cloudfunctions2_function" "ping" {
   location    = "us-central1"
   description = "A ping service for The Game API"
 
-  # build_config {
-  #   runtime     = "nodejs18"
-  #   entry_point = "ping" # Set the entry point 
-  #   source {
-  #     storage_source {
-  #       bucket = google_storage_bucket.bucket.name
-  #       object = google_storage_bucket_object.object.name
-  #     }
-  #   }
-  # }
+  build_config {
+    runtime     = "nodejs18"
+    entry_point = "function_handler" # Set the entry point 
+    # source {
+    #   storage_source {
+    #     bucket = google_storage_bucket.bucket.name
+    #     object = google_storage_bucket_object.object.name
+    #   }
+    # }
+  }
 
   service_config {
     max_instance_count = 1
