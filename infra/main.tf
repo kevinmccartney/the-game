@@ -1,3 +1,12 @@
+# Stuff I haven't done
+# - Firewalls
+# - Project itself
+# - Logging sink
+# - firebase SAs (googlee-provuded) roles
+# - Google Identity provider
+# - OAuth 2.0 Client ID
+# - Enable Identity Toolkit API
+
 locals {
   services_to_activate = toset([
     "cloudasset.googleapis.com",
@@ -36,12 +45,14 @@ locals {
     "firebaseinstallations.googleapis.com",
     "oslogin.googleapis.com",
     "serviceusage.googleapis.com",
-    "iam.googleapis.com"
+    "iam.googleapis.com",
+    "cloudfunctions.googleapis.com",
+    "cloudbuild.googleapis.com"
   ])
 }
 
 resource "random_id" "bucket_prefix" {
-  byte_length = 8
+  byte_length = 8 # TODO: change this to less bytes (4?)
 }
 
 resource "google_storage_bucket" "tf_state" {
@@ -63,6 +74,7 @@ resource "google_project_service" "services" {
   service = each.value
 }
 
+# Web bucket
 data "google_iam_policy" "all_users_viewer" {
   binding {
     role = "roles/storage.objectViewer"
@@ -96,6 +108,7 @@ resource "google_storage_bucket" "web_client" {
   }
 }
 
+# SSL & Public IP for Load Balancer
 resource "google_compute_managed_ssl_certificate" "dev" {
   provider    = google-beta
   name        = "the-game-cert"
@@ -115,6 +128,7 @@ resource "google_compute_global_address" "the_game_frontend_ip" {
   project      = var.project_id
 }
 
+# Load balancer
 resource "google_compute_global_forwarding_rule" "the_game_lb_forwarding_rule_forwarding_rule" {
   ip_address            = "34.36.250.58"
   ip_protocol           = "TCP"
@@ -182,17 +196,7 @@ resource "google_compute_backend_bucket" "the_game_prod" {
   project     = var.project_id
 }
 
-# Google Identity provider
-# OAuth 2.0 Client ID
-# Enable Identity Toolkit API
-
-# Default Gcloud Stuff
-# Stuff I haven't done
-# - Firewalls
-# - Project itself
-# - Logging sink
-# - firebase-service-account@firebase-sa-management.iam.gserviceaccount.com
-
+# Firebase stuff
 resource "google_service_account" "firebase_adminsdk" {
   account_id   = "firebase-adminsdk-gb9r0"
   description  = "Firebase Admin SDK Service Agent"
@@ -211,3 +215,37 @@ resource "google_project_iam_member" "firebase_admin_token_creator" {
   role    = "roles/iam.serviceAccountTokenCreator"
   member  = "serviceAccount:${google_service_account.firebase_adminsdk.email}"
 }
+
+# API Gateway
+# resource "google_api_gateway_api" "the_game_api" {
+#   provider = google-beta
+#   project = var.project_id
+#   api_id = "the-game-api"
+#   display_name = "the-game-api"
+# }
+
+# resource "google_api_gateway_api_config" "the_game_api_cfg" {
+#   provider = google-beta
+#   project = var.project_id
+#   api = google_api_gateway_api.the_game_api.api_id
+#   api_config_id = "the-game-api-config"
+
+#   openapi_documents {
+#     document {
+#       path = "the-game-api.yml"
+#       contents = filebase64("the-game-api.yml")
+#     }
+#   }
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
+
+# resource "google_api_gateway_gateway" "api_gw" {
+#   provider = google-beta
+#   project = var.project_id
+#   api_config = google_api_gateway_api_config.the_game_api_cfg.id
+#   gateway_id = "the-game-gateway"
+#   display_name = "the-game-gateway"
+#   region = var.region
+# }
