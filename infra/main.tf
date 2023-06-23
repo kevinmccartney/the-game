@@ -235,28 +235,28 @@ resource "google_storage_bucket" "bucket" {
 #   source = "function-source.zip" # Add path to the zipped function source code
 # }
 
-resource "google_cloudfunctions2_function" "ping" {
-  name        = "the-game-ping"
-  location    = "us-central1"
-  description = "A ping service for The Game API"
+# resource "google_cloudfunctions2_function" "ping" {
+#   name        = "the-game-ping"
+#   location    = "us-central1"
+#   description = "A ping service for The Game API"
 
-  build_config {
-    runtime     = "nodejs18"
-    entry_point = "function_handler" # Set the entry point 
-    # source {
-    #   storage_source {
-    #     bucket = google_storage_bucket.bucket.name
-    #     object = google_storage_bucket_object.object.name
-    #   }
-    # }
-  }
+#   build_config {
+#     runtime     = "nodejs18"
+#     entry_point = "function_handler" # Set the entry point 
+#     # source {
+#     #   storage_source {
+#     #     bucket = google_storage_bucket.bucket.name
+#     #     object = google_storage_bucket_object.object.name
+#     #   }
+#     # }
+#   }
 
-  service_config {
-    max_instance_count = 1
-    available_memory   = "256M"
-    timeout_seconds    = 60
-  }
-}
+#   service_config {
+#     max_instance_count = 1
+#     available_memory   = "256M"
+#     timeout_seconds    = 60
+#   }
+# }
 
 # API Gateway
 # resource "google_api_gateway_api" "the_game_api" {
