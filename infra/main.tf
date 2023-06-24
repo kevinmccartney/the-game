@@ -230,7 +230,7 @@ resource "google_storage_bucket" "cloud_function_source" {
 }
 
 resource "google_storage_bucket_object" "ping_source" {
-  name   = "pinng/function-source.zip"
+  name   = "ping/function-source.zip"
   bucket = google_storage_bucket.cloud_function_source.name
   source = "function-source.zip" # Add path to the zipped function source code
 }
