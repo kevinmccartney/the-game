@@ -223,7 +223,7 @@ resource "google_project_iam_member" "firebase_admin_token_creator" {
 ####################
 # Cloud Function
 ####################
-resource "google_storage_bucket" "cloud_funcion_source" {
+resource "google_storage_bucket" "cloud_function_source" {
   name                        = "${var.project_id}-gcf-source"
   location                    = "US"
   uniform_bucket_level_access = true
@@ -231,7 +231,7 @@ resource "google_storage_bucket" "cloud_funcion_source" {
 
 resource "google_storage_bucket_object" "ping_source" {
   name   = "pinng/function-source.zip"
-  bucket = google_storage_bucket.cloud_funcion_source.name
+  bucket = google_storage_bucket.cloud_function_source.name
   source = "function-source.zip" # Add path to the zipped function source code
 }
 
@@ -246,7 +246,7 @@ resource "google_cloudfunctions2_function" "ping" {
 
     source {
       storage_source {
-        bucket = google_storage_bucket.cloud_funcion_source.name
+        bucket = google_storage_bucket.cloud_function_source.name
         object = google_storage_bucket_object.ping_source.name
       }
     }
