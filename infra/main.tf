@@ -267,35 +267,35 @@ resource "google_cloudfunctions2_function" "ping" {
 }
 
 # API Gateway
-# resource "google_api_gateway_api" "the_game_api" {
-#   provider = google-beta
-#   project = var.project_id
-#   api_id = "the-game-api"
-#   display_name = "the-game-api"
-# }
+resource "google_api_gateway_api" "the_game_api" {
+  provider = google-beta
+  project = var.project_id
+  api_id = "the-game-api"
+  display_name = "the-game-api"
+}
 
-# resource "google_api_gateway_api_config" "the_game_api_cfg" {
-#   provider = google-beta
-#   project = var.project_id
-#   api = google_api_gateway_api.the_game_api.api_id
-#   api_config_id = "the-game-api-config"
+resource "google_api_gateway_api_config" "the_game_api_cfg" {
+  provider = google-beta
+  project = var.project_id
+  api = google_api_gateway_api.the_game_api.api_id
+  api_config_id = "the-game-api-config"
 
-#   openapi_documents {
-#     document {
-#       path = "the-game-api.yml"
-#       contents = filebase64("the-game-api.yml")
-#     }
-#   }
-#   lifecycle {
-#     create_before_destroy = true
-#   }
-# }
+  openapi_documents {
+    document {
+      path = "the-game-api.yml"
+      contents = filebase64("the-game-api.yml")
+    }
+  }
+  lifecycle {
+    create_before_destroy = true
+  }
+}
 
-# resource "google_api_gateway_gateway" "api_gw" {
-#   provider = google-beta
-#   project = var.project_id
-#   api_config = google_api_gateway_api_config.the_game_api_cfg.id
-#   gateway_id = "the-game-gateway"
-#   display_name = "the-game-gateway"
-#   region = var.region
-# }
+resource "google_api_gateway_gateway" "api_gw" {
+  provider = google-beta
+  project = var.project_id
+  api_config = google_api_gateway_api_config.the_game_api_cfg.id
+  gateway_id = "the-game-gateway"
+  display_name = "the-game-gateway"
+  region = var.region
+}
