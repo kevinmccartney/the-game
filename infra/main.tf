@@ -9,48 +9,47 @@
 
 locals {
   services_to_activate = toset([
-    "cloudasset.googleapis.com",
-    "compute.googleapis.com",
-    "cloudtrace.googleapis.com",
+    "apigateway.googleapis.com",
     "appengine.googleapis.com",
-    "cloudapis.googleapis.com",
     "bigquery.googleapis.com",
-    "bigquerystorage.googleapis.com",
-    "firebasedynamiclinks.googleapis.com",
     "bigquerymigration.googleapis.com",
-    "monitoring.googleapis.com",
-    "logging.googleapis.com",
+    "bigquerystorage.googleapis.com",
+    "cloudapis.googleapis.com",
     "cloudasset.googleapis.com",
-    "fcm.googleapis.com",
-    "servicemanagement.googleapis.com",
-    "cloudresourcemanager.googleapis.com",
-    "datastore.googleapis.com",
-    "storage-api.googleapis.com",
-    "firebaseremoteconfig.googleapis.com",
-    "domains.googleapis.com",
-    "storage-component.googleapis.com",
-    "sql-component.googleapis.com",
-    "runtimeconfig.googleapis.com",
-    "storage.googleapis.com",
-    "testing.googleapis.com",
-    "pubsub.googleapis.com",
-    "securetoken.googleapis.com",
-    "firebaseremoteconfigrealtime.googleapis.com",
+    "cloudasset.googleapis.com",
+    "cloudbuild.googleapis.com",
     "clouddebugger.googleapis.com",
-    "firebase.googleapis.com",
+    "cloudfunctions.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
+    "cloudtrace.googleapis.com",
+    "compute.googleapis.com",
+    "datastore.googleapis.com",
     "dns.googleapis.com",
-    "firebaserules.googleapis.com",
-    "identitytoolkit.googleapis.com",
+    "domains.googleapis.com",
+    "fcm.googleapis.com",
+    "firebase.googleapis.com",
+    "firebasedynamiclinks.googleapis.com",
     "firebasehosting.googleapis.com",
     "firebaseinstallations.googleapis.com",
-    "oslogin.googleapis.com",
-    "serviceusage.googleapis.com",
+    "firebaseremoteconfig.googleapis.com",
+    "firebaseremoteconfigrealtime.googleapis.com",
+    "firebaserules.googleapis.com",
     "iam.googleapis.com",
-    "cloudfunctions.googleapis.com",
-    "cloudbuild.googleapis.com",
-    "apigateway.googleapis.com",
+    "identitytoolkit.googleapis.com",
+    "logging.googleapis.com",
+    "monitoring.googleapis.com",
+    "oslogin.googleapis.com",
+    "pubsub.googleapis.com",
+    "runtimeconfig.googleapis.com",
+    "securetoken.googleapis.com",
+    "servicecontrol.googleapis.com",
     "servicemanagement.googleapis.com",
-    "servicecontrol.googleapis.com"
+    "serviceusage.googleapis.com",
+    "sql-component.googleapis.com",
+    "storage-api.googleapis.com",
+    "storage-component.googleapis.com",
+    "storage.googleapis.com",
+    "testing.googleapis.com",
   ])
 }
 
@@ -268,21 +267,21 @@ resource "google_cloudfunctions2_function" "ping" {
 
 # API Gateway
 resource "google_api_gateway_api" "the_game_api" {
-  provider = google-beta
-  project = var.project_id
-  api_id = "the-game-api"
+  provider     = google-beta
+  project      = var.project_id
+  api_id       = "the-game-api"
   display_name = "the-game-api"
 }
 
 resource "google_api_gateway_api_config" "the_game_api_cfg" {
-  provider = google-beta
-  project = var.project_id
-  api = google_api_gateway_api.the_game_api.api_id
+  provider      = google-beta
+  project       = var.project_id
+  api           = google_api_gateway_api.the_game_api.api_id
   api_config_id = "the-game-api-config"
 
   openapi_documents {
     document {
-      path = "the-game-api.yml"
+      path     = "the-game-api.yml"
       contents = filebase64("the-game-api.yml")
     }
   }
@@ -292,10 +291,10 @@ resource "google_api_gateway_api_config" "the_game_api_cfg" {
 }
 
 resource "google_api_gateway_gateway" "api_gw" {
-  provider = google-beta
-  project = var.project_id
-  api_config = google_api_gateway_api_config.the_game_api_cfg.id
-  gateway_id = "the-game-gateway"
+  provider     = google-beta
+  project      = var.project_id
+  api_config   = google_api_gateway_api_config.the_game_api_cfg.id
+  gateway_id   = "the-game-gateway"
   display_name = "the-game-gateway"
-  region = var.region
+  region       = var.region
 }
