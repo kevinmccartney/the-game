@@ -223,6 +223,10 @@ resource "google_project_iam_member" "firebase_admin_token_creator" {
 ####################
 # Cloud Function
 ####################
+
+# TODO: cloud run & artifact registry apis
+
+
 resource "google_storage_bucket" "cloud_function_source" {
   name                        = "${var.project_id}-gcf-source"
   location                    = "US"
@@ -241,7 +245,7 @@ resource "google_cloudfunctions2_function" "ping" {
   description = "A ping service for The Game API"
 
   build_config {
-    runtime     = "nodejs18"
+    runtime     = "python39"
     entry_point = "function_handler" # Set the entry point 
 
     source {
