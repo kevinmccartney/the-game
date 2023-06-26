@@ -281,8 +281,8 @@ resource "google_api_gateway_api_config" "the_game_api_cfg" {
 
   openapi_documents {
     document {
-      path     = "the-game-api.yml"
-      contents = filebase64("the-game-api.yml")
+      path     = "${path.module}/the-game-api.yml"
+      contents = filebase64("${path.module}/the-game-api.yml")
     }
   }
   lifecycle {
