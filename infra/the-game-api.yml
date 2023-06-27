@@ -1,18 +1,19 @@
-openapi: 3.0.0
+swagger: '2.0'
 info:
   title: The Game API
   description: Web services for The Game
-  version: 0.1.9
+  version: 0.1.0
+produces:
+  - application/json
 paths:
   /v1/ping:
     get:
+      operationId: ping
       summary: Returns pong.
       x-google-backend:
         address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-ping
       responses:
-        '200': # status code
+        '200':
           description: Just pong.
-          content:
-            application/json:
-              schema:
-                type: string
+          schema:
+            type: string
