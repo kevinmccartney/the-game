@@ -274,6 +274,9 @@ resource "google_api_gateway_api" "the_game_api" {
 }
 
 resource "google_api_gateway_api_config" "the_game_api_cfg" {
+  # TODO: Create service account for gw
+  # TODO: private/gw ingress
+  # TODO: scaling/other stuff?
   provider      = google-beta
   project       = var.project_id
   api           = google_api_gateway_api.the_game_api.api_id
