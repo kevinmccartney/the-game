@@ -57,6 +57,10 @@ resource "random_id" "bucket_prefix" {
   byte_length = 8 # TODO: change this to less bytes (4?)
 }
 
+resource "random_id" "api_config" {
+  byte_length = 4
+}
+
 resource "google_storage_bucket" "tf_state" {
   name          = "${random_id.bucket_prefix.hex}-bucket-tfstate"
   force_destroy = false
@@ -162,7 +166,7 @@ resource "google_compute_target_https_proxy" "the_game_lb_target_proxy" {
 }
 
 resource "google_compute_url_map" "the_game_lb" {
-  default_service = google_compute_backend_bucket.the_game_prod.self_link
+  default_service = google_compute_backend_bucket.the_game_client.self_link
   name            = "the-game-lb"
   project         = var.project_id
 
@@ -171,9 +175,25 @@ resource "google_compute_url_map" "the_game_lb" {
     path_matcher = "default-matcher"
   }
 
+
+  host_rule {
+    hosts        = ["api.the-game.kevinmccartney.dev"]
+    path_matcher = "api"
+  }
+
   path_matcher {
-    default_service = google_compute_backend_bucket.the_game_prod.self_link
+    default_service = google_compute_backend_bucket.the_game_client.self_link
     name            = "default-matcher"
+  }
+
+  path_matcher {
+    name            = "api"
+    default_service = google_compute_backend_service.the_game_api.self_link
+
+    # path_rule {
+    #   paths   = ["/home"]
+    #   service = google_compute_backend_bucket.static.id
+    # }
   }
 }
 
@@ -194,10 +214,33 @@ resource "google_compute_target_http_proxy" "the_game_lb_forwarding_rule_target_
   url_map = google_compute_url_map.the_game_lb_forwarding_rule_redirect.self_link
 }
 
-resource "google_compute_backend_bucket" "the_game_prod" {
+resource "google_compute_backend_bucket" "the_game_client" {
   bucket_name = google_storage_bucket.web_client.name
-  name        = "the-game-prod"
+  name        = "the-game-client"
   project     = var.project_id
+}
+
+resource "google_compute_backend_service" "the_game_api" {
+  name    = "the-game-api"
+  project = var.project_id
+
+  load_balancing_scheme = "EXTERNAL_MANAGED"
+  backend {
+    group       = google_compute_region_network_endpoint_group.the_game_api.id
+    description = "The API Gateway serving The Game"
+  }
+}
+
+resource "google_compute_region_network_endpoint_group" "the_game_api" {
+  provider = google-beta
+
+  name                  = "the-game-api-gw"
+  network_endpoint_type = "SERVERLESS"
+  region                = var.region
+  serverless_deployment {
+    platform = "apigateway.googleapis.com"
+    resource = google_api_gateway_gateway.the_game_api.gateway_id
+  }
 }
 
 ####################
@@ -265,7 +308,9 @@ resource "google_cloudfunctions2_function" "ping" {
   }
 }
 
+####################
 # API Gateway
+####################
 resource "google_api_gateway_api" "the_game_api" {
   provider     = google-beta
   project      = var.project_id
@@ -280,7 +325,7 @@ resource "google_api_gateway_api_config" "the_game_api_cfg" {
   provider      = google-beta
   project       = var.project_id
   api           = google_api_gateway_api.the_game_api.api_id
-  api_config_id = "the-game-api-config"
+  api_config_id = "the-game-api-config-${random_id.api_config.hex}"
 
   openapi_documents {
     document {
@@ -293,11 +338,24 @@ resource "google_api_gateway_api_config" "the_game_api_cfg" {
   }
 }
 
-resource "google_api_gateway_gateway" "api_gw" {
+resource "google_api_gateway_gateway" "the_game_api" {
   provider     = google-beta
   project      = var.project_id
   api_config   = google_api_gateway_api_config.the_game_api_cfg.id
   gateway_id   = "the-game-gateway"
   display_name = "the-game-gateway"
   region       = var.region
+}
+
+####################
+# Networking
+####################
+
+data "google_compute_network" "default" {
+  name = "default"
+}
+
+data "google_compute_subnetwork" "default" {
+  name   = "default"
+  region = var.region
 }
