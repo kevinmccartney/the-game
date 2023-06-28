@@ -58,7 +58,11 @@ resource "random_id" "bucket_prefix" {
 }
 
 resource "random_id" "api_config" {
-  byte_length = 4
+  byte_length = 4 # TODO: does this need a dependency to manage regeneration?
+}
+
+resource "random_id" "ssl_cert" {
+  byte_length = 4 # TODO: does this need a dependency to manage regeneration?
 }
 
 resource "google_storage_bucket" "tf_state" {
@@ -118,12 +122,15 @@ resource "google_storage_bucket" "web_client" {
 ########################################
 resource "google_compute_managed_ssl_certificate" "dev" {
   provider    = google-beta
-  name        = "the-game-cert"
+  name        = "the-game-cert-${random_id.ssl_cert.hex}"
   description = "cert for the game (including subdomains)"
   project     = var.project_id
 
   managed {
-    domains = ["the-game.kevinmccartney.dev"]
+    domains = ["the-game.kevinmccartney.dev", "api.the-game.kevinmccartney.dev"]
+  }
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
