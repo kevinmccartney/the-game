@@ -67,3 +67,6 @@ jobs:
       - name: Upload CF source
         run: |
           gsutil cp function_source.zip gs://the-game-388502-gcf-source/user-points-post
+
+      - name: Deploy Cloud Function
+        run: gcloud functions deploy the-game-user-points-post
