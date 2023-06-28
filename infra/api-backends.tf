@@ -1,9 +1,11 @@
-####################
-# Cloud Function
-####################
-
 # TODO: cloud run & artifact registry apis
 
+locals {
+  functions = {
+    ping : "A ping service for The Game API",
+    "user-points-post" : ""
+  }
+}
 
 resource "google_storage_bucket" "cloud_function_source" {
   name                        = "${var.project_id}-gcf-source"
@@ -11,18 +13,24 @@ resource "google_storage_bucket" "cloud_function_source" {
   uniform_bucket_level_access = true
 }
 
-resource "google_storage_bucket_object" "ping_source" {
-  name   = "ping/function_source.zip"
+resource "google_storage_bucket_object" "cf_source" {
+  for_each = local.functions
+
+  name   = "${each.key}/function_source.zip"
   bucket = google_storage_bucket.cloud_function_source.name
-  source = "function_source.zip" # Add path to the zipped function source code
+  source = "function_source.zip"
 }
 
-resource "google_cloudfunctions2_function" "ping" {
+
+resource "google_cloudfunctions2_function" "chatbot-api" {
   # TODO: private/lb ingress
   # TODO: scaling/other stuff?
-  name        = "the-game-ping"
-  location    = "us-central1"
-  description = "A ping service for The Game API"
+
+  for_each = local.functions
+
+  name        = "the-game-${each.key}"
+  location    = var.region
+  description = each.value
 
   build_config {
     runtime     = "python39"
@@ -31,7 +39,7 @@ resource "google_cloudfunctions2_function" "ping" {
     source {
       storage_source {
         bucket = google_storage_bucket.cloud_function_source.name
-        object = google_storage_bucket_object.ping_source.name
+        object = google_storage_bucket_object.cf_source[each.key].name
       }
     }
   }
