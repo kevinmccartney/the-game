@@ -46,3 +46,6 @@
 - [Static website examples and tips](https://cloud.google.com/storage/docs/static-website)
 - [Signing in users with Google](https://cloud.google.com/identity-platform/docs/web/google)
 - [Protected Routes In Next.Js](https://danishshakeel.me/protected-routes-in-nextjs/)
+- [🐛 [Storage] A required service account is missing necessary permissions.](https://github.com/firebase/flutterfire/issues/9588#issuecomment-1255055456)
+- [Addressing your API use cases: Choosing between Apigee, API Gateway, and Cloud Endpoints](https://cloud.google.com/blog/products/application-modernization/choosing-between-apigee-api-gateway-and-cloud-endpoints)
+- [Your Google Cloud database options, explained](https://cloud.google.com/blog/topics/developers-practitioners/your-google-cloud-database-options-explained)
