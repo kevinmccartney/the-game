@@ -1,16 +1,69 @@
-name: "Deploy API"
+name: 'Deploy API'
 
 on:
   workflow_dispatch:
   push:
+    paths:
+      - the-game-api/**/*
+      - .github/workflows/deploy-api.yml
     branches:
       - main
       - develop
 
+permissions:
+  contents: read
+
+# TODO: use a matrix to run these jobs over all CF source functions
 jobs:
-  deploy-infra:
+  deploy_client:
     runs-on: ubuntu-latest
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./the-game-api/user-points-post
     steps:
-      # For verification
-      - name: Show files changed
-        run: echo "hello, world"
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install pipenv
+        run: |
+          python -m pip install --upgrade pipenv wheel
+
+      # each
+      - id: cache-pipenv
+        uses: actions/cache@v1
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+
+      - name: Install dependencies
+        if: steps.cache-pipenv.outputs.cache-hit != 'true'
+        run: pipenv install --deploy --dev
+
+      - name: Enforce Deployment Folder Index
+        run: pipenv requirements > requirements.txt
+
+      - name: Zip deployment package
+        run: zip function_source.zip main.py requirements.txt
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
+
+      - name: Upload CF source
+        run: |
+          gsutil function_source.zip gs://the-game-388502-gcf-source/user-points-post
