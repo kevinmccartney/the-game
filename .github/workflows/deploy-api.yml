@@ -66,4 +66,4 @@ jobs:
 
       - name: Upload CF source
         run: |
-          gsutil function_source.zip gs://the-game-388502-gcf-source/user-points-post
+          gsutil cp function_source.zip gs://the-game-388502-gcf-source/user-points-post
