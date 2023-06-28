@@ -2,7 +2,8 @@
 # - Firewalls
 # - Project itself
 # - Logging sink
-# - firebase SAs (googlee-provuded) roles
+# - firebase SAs (googlee-provided) roles
+# - Firebase stuff in general
 # - Google Identity provider
 # - OAuth 2.0 Client ID
 # - Enable Identity Toolkit API
