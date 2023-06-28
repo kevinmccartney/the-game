@@ -4,6 +4,7 @@
 # - Logging sink
 # - firebase SAs (googlee-provided) roles
 # - Firebase stuff in general
+# - Ttighten up SAs in general
 # - Google Identity provider
 # - OAuth 2.0 Client ID
 # - Enable Identity Toolkit API
@@ -278,6 +279,7 @@ resource "google_project_iam_member" "firebase_admin_token_creator" {
 ####################
 
 # TODO: cloud run & artifact registry apis
+# TODO: private/lb ingress
 
 
 resource "google_storage_bucket" "cloud_function_source" {
