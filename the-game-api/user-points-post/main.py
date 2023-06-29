@@ -2,12 +2,21 @@ import os
 import json
 from uuid import uuid4
 from datetime import datetime
+import logging
+import traceback
 
 import functions_framework
 import firebase_admin
 
 from firebase_admin import firestore, auth
+from firebase_admin.auth import (
+    InvalidIdTokenError,
+    ExpiredIdTokenError,
+    RevokedIdTokenError,
+    UserDisabledError,
+)
 from google.cloud.firestore import Client as FirestoreClient
+from werkzeug.exceptions import BadRequest
 
 
 parsed_credential = json.loads(os.environ.get("SERVICE_WORKER_CREDENTIAL"))
@@ -28,24 +37,49 @@ def function_handler(request):
     """
     # TODO: validate request
     id_token = ""
+    user = {}
 
     try:
         id_token = request.authorization.token
-    except Exception as ex:
-        print(ex)
-        return "Not authed"  # TODO: return 400
 
-    user = auth.verify_id_token(id_token=id_token)
+        user = auth.verify_id_token(id_token=id_token)
+    except AttributeError:
+        logging.error(traceback.format_exc())
+        return {"code": 401, "message": "Unauthorized: Authorization not provided"}, 401
+    except (
+        InvalidIdTokenError,
+        ExpiredIdTokenError,
+        RevokedIdTokenError,
+        UserDisabledError,
+    ):
+        logging.error(traceback.format_exc())
+        return {
+            "code": 403,
+            "message": "Forbidden: Caller is not authorized to take this action",
+        }, 403
+    except Exception:
+        logging.error(traceback.format_exc())
+        return {"code": 500, "message": "Internal server error"}, 500
 
-    doc = {
-        "created_by_name": user["name"],
-        "created_by_uid": user["uid"],
-        "created_time": datetime.utcnow().isoformat(),
-        "subject": "tori_uuid",
-        "reason": request.json["reason"],
-        "points": request.json["points"],
-    }
+    try:
+        doc = {
+            "created_by_name": user["name"],
+            "created_by_uid": user["uid"],
+            "created_time": datetime.utcnow().isoformat(),
+            "subject": "tori_uuid",
+            "reason": request.json["reason"],
+            "points": request.json["points"],
+        }
 
-    db.collection("points").document(str(uuid4())).set(doc)
+        db.collection("points").document(str(uuid4())).set(doc)
+    except BadRequest:
+        logging.error(traceback.format_exc())
+        {
+            "code": 400,
+            "message": "Bad Request: Please double check API documentation to make sure you are passing the correct options",
+        }, 400
+    except Exception:
+        logging.error(traceback.format_exc())
+        return {"code": 500, "message": "Internal server error"}, 500
 
-    return "Pong"
+    return None, 201
