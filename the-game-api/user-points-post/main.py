@@ -4,6 +4,7 @@ from uuid import uuid4
 from datetime import datetime
 import logging
 import traceback
+import re
 
 import functions_framework
 import firebase_admin
@@ -17,6 +18,7 @@ from firebase_admin.auth import (
 )
 from google.cloud.firestore import Client as FirestoreClient
 from werkzeug.exceptions import BadRequest
+from flask import Response
 
 
 parsed_credential = json.loads(os.environ.get("SERVICE_WORKER_CREDENTIAL"))
@@ -62,11 +64,14 @@ def function_handler(request):
         return {"code": 500, "message": "Internal server error"}, 500
 
     try:
+        # request.path
+        pattern = re.compile(r"^\/api\/v1\/user\/(.*)\/points$")
+        subject_uid = pattern.sub(r"\1", request.path)
         doc = {
             "created_by_name": user["name"],
             "created_by_uid": user["uid"],
             "created_time": datetime.utcnow().isoformat(),
-            "subject": "tori_uuid",
+            "subject": subject_uid,
             "reason": request.json["reason"],
             "points": request.json["points"],
         }
@@ -82,4 +87,4 @@ def function_handler(request):
         logging.error(traceback.format_exc())
         return {"code": 500, "message": "Internal server error"}, 500
 
-    return None, 201
+    return Response(status=201)
