@@ -77,7 +77,8 @@ def function_handler(request: Request):
     try:
         # request.path
         pattern = re.compile(r"^\/api\/v1\/user\/(.*)\/points$")
-        subject_uid = pattern.sub(r"\1", request.path)
+        request_path = request.headers.get("x-envoy-original-path")
+        subject_uid = pattern.sub(r"\1", request_path)
         request_json = request.get_json(force=True)
         doc = {
             "created_by_name": user["name"],
