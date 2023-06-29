@@ -48,12 +48,6 @@ def function_handler(request: Request):
             "Bearer ", ""
         )
 
-        headers = dict(request.headers)
-
-        logging.info(id_token)
-        logging.info(request.path)
-        logging.info(json.dumps(headers))
-
         user = auth.verify_id_token(id_token=id_token)
     except AttributeError:
         logging.error(traceback.format_exc())
@@ -76,7 +70,7 @@ def function_handler(request: Request):
 
     try:
         # request.path
-        pattern = re.compile(r"^\/api\/v1\/user\/(.*)\/points$")
+        pattern = re.compile(r"^\/v1\/users\/(.*)\/points$")
         request_path = request.headers.get("x-envoy-original-path")
         subject_uid = pattern.sub(r"\1", request_path)
         request_json = request.get_json(force=True)
