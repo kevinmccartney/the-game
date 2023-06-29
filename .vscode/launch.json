@@ -5,12 +5,12 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Module",
+      "name": "Debug Cloud Function",
       "type": "python",
       "request": "launch",
       "module": "functions_framework",
       "args": ["--target=function_handler"],
-      "cwd": "${workspaceFolder}/the-game-api/user-points-post",
+      "cwd": "${workspaceFolder}/the-game-api/${input:pickFunction}",
       "justMyCode": true
     },
     {
@@ -28,6 +28,15 @@
       "console": "integratedTerminal",
       "justMyCode": true,
       "args": ["./the-game-client-next/out", "--ci"]
+    }
+  ],
+  "inputs": [
+    {
+      "id": "pickFunction",
+      "description": "Select Cloud Function to debug",
+      "type": "pickString",
+      "options": ["user-points-get", "user-points-post"],
+      "default": "user-points-post"
     }
   ]
 }
