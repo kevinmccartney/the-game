@@ -3,12 +3,16 @@ info:
   title: The Game API
   description: Web services for The Game
   version: 0.1.0
+host: the-game.kevinmccartney.is # TODO: this will need to be parameterized for other envs
+schemes: [https]
+consumes:
+  - application/json
 produces:
   - application/json
 paths:
   /v1/ping:
     get:
-      operationId: ping
+      operationId: ping-get
       summary: Returns pong.
       x-google-backend:
         address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-ping
@@ -17,6 +21,36 @@ paths:
           description: Just pong.
           schema:
             type: string
+  /v1/users/{userId}/points:
+    post:
+      operationId: user-points
+      summary: Assign points to a user.
+      x-google-backend:
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-points-post
+      parameters:
+        - in: path
+          name: userId
+          type: string
+          required: true
+          description: UID of the user to assign points to.
+        - in: body
+          name: point_post_request
+          description: The point to create
+          schema:
+            type: object
+            required:
+              - reason
+              - points
+            properties:
+              points:
+                type: integer
+              reason:
+                type: string
+      responses:
+        # TODO: add error codes
+        '201':
+          description: Created.
+
 security:
   - firebase: []
 securityDefinitions:
