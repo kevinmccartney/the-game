@@ -8,6 +8,7 @@
 # - Google Identity provider
 # - OAuth 2.0 Client ID
 # - Enable Identity Toolkit API
+# - SA for cloud functions
 
 locals {
   services_to_activate = toset([
