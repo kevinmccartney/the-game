@@ -16,9 +16,16 @@ resource "google_storage_bucket" "cloud_function_source" {
 resource "google_storage_bucket_object" "cf_source" {
   for_each = local.functions
 
-  name   = "${each.key}/function_source.zip"
-  bucket = google_storage_bucket.cloud_function_source.name
-  source = "function_source.zip"
+  name           = "${each.key}/function_source.zip"
+  bucket         = google_storage_bucket.cloud_function_source.name
+  source         = "function_source.zip"
+  detect_md5hash = ""
+
+  lifecycle {
+    ignore_changes = [
+      detect_md5hash,
+    ]
+  }
 }
 
 
