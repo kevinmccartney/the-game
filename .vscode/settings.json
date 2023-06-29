@@ -132,6 +132,7 @@
     "Chakra",
     "commitlint",
     "cprint",
+    "firestore",
     "postbuild",
     "roboto",
     "yaspin"

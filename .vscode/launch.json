@@ -5,6 +5,22 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Python: Module",
+      "type": "python",
+      "request": "launch",
+      "module": "functions_framework",
+      "args": ["--target=function_handler"],
+      "cwd": "${workspaceFolder}/the-game-api/user-points-post",
+      "justMyCode": true
+    },
+    {
+      "name": "Python: Attach using Process Id",
+      "type": "python",
+      "request": "attach",
+      "processId": "${command:pickProcess}",
+      "justMyCode": true
+    },
+    {
       "name": "Python: Current File",
       "type": "python",
       "request": "launch",
