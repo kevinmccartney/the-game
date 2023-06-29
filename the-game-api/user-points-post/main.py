@@ -44,7 +44,9 @@ def function_handler(request: Request):
     user = {}
 
     try:
-        id_token = request.headers.get("x_forwarded_authorization")
+        id_token = request.headers.get("x_forwarded_authorization").replace(
+            "Bearer ", ""
+        )
 
         logging.info(id_token)
         logging.info(request.headers.__dict__)
@@ -58,7 +60,8 @@ def function_handler(request: Request):
         ExpiredIdTokenError,
         RevokedIdTokenError,
         UserDisabledError,
-    ):
+    ) as ex:
+        print(ex)
         logging.error(traceback.format_exc())
         return {
             "code": 403,
