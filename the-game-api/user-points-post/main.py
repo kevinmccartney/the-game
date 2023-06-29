@@ -26,6 +26,7 @@ def function_handler(request):
     Returns:
         Pong.
     """
+    # TODO: validate request
     id_token = ""
 
     try:
@@ -41,8 +42,8 @@ def function_handler(request):
         "created_by_uid": user["uid"],
         "created_time": datetime.utcnow().isoformat(),
         "subject": "tori_uuid",
-        "reason": "more violence",
-        "points": -5,
+        "reason": request.json["reason"],
+        "points": request.json["points"],
     }
 
     db.collection("points").document(str(uuid4())).set(doc)
