@@ -75,17 +75,24 @@ def function_handler(request: Request):
         # request.path
         pattern = re.compile(r"^\/api\/v1\/user\/(.*)\/points$")
         subject_uid = pattern.sub(r"\1", request.path)
+        request_json = request.get_json(force=True)
         doc = {
             "created_by_name": user["name"],
             "created_by_uid": user["uid"],
             "created_time": datetime.utcnow().isoformat(),
             "subject": subject_uid,
-            "reason": request.json["reason"],
-            "points": request.json["points"],
+            "reason": request_json["reason"],
+            "points": request_json["points"],
         }
 
         db.collection("points").document(str(uuid4())).set(doc)
     except BadRequest:
+        logging.error(traceback.format_exc())
+        {
+            "code": 400,
+            "message": "Bad Request: Please double check API documentation to make sure you are passing the correct options",
+        }, 400
+    except KeyError:
         logging.error(traceback.format_exc())
         {
             "code": 400,
