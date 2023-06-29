@@ -20,10 +20,7 @@ from google.cloud.firestore import Client as FirestoreClient
 from werkzeug.exceptions import BadRequest
 from flask import Response
 
-
-parsed_credential = json.loads(os.environ.get("SERVICE_WORKER_CREDENTIAL"))
-credential = firebase_admin.credentials.Certificate(parsed_credential)
-firebase_admin.initialize_app(credential)
+firebase_admin.initialize_app()
 
 db: FirestoreClient = firestore.client()
 
