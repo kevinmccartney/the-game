@@ -51,7 +51,7 @@ def function_handler(request: Request):
         request_obj = vars(request)
 
         logging.info(id_token)
-        logging.info(json.dumps(request_obj))
+        logging.info(request.path)
 
         user = auth.verify_id_token(id_token=id_token)
     except AttributeError:
