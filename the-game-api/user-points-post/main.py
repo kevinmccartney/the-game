@@ -44,10 +44,10 @@ def function_handler(request: Request):
     user = {}
 
     try:
-        id_token = request.headers.get("x_apigateway_api_userinfo")
+        id_token = request.headers.get("x_forwarded_authorization")
 
-        logging.error(id_token)
-        logging.error(request.headers.__dict__)
+        logging.info(id_token)
+        logging.info(request.headers.__dict__)
 
         user = auth.verify_id_token(id_token=id_token)
     except AttributeError:
