@@ -23,7 +23,7 @@ paths:
             type: string
   /v1/users/{userId}/points:
     post:
-      operationId: user-points
+      operationId: user-points-post
       summary: Assign points to a user.
       x-google-backend:
         address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-points-post
@@ -50,6 +50,23 @@ paths:
         # TODO: add error codes
         '201':
           description: Created.
+    get:
+      operationId: user-points-get
+      summary: Get points for a user.
+      x-google-backend:
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-points-get
+      parameters:
+        - in: path
+          name: userId
+          type: string
+          required: true
+          description: UID of the user to assign points to.
+      responses:
+        # TODO: add error codes
+        '200':
+          description: Just pong.
+          schema:
+            type: string
 
 security:
   - firebase: []
