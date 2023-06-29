@@ -41,6 +41,8 @@ def function_handler(request):
     try:
         id_token = request.authorization.token
 
+        logging.info(id_token)
+
         user = auth.verify_id_token(id_token=id_token)
     except AttributeError:
         logging.error(traceback.format_exc())
