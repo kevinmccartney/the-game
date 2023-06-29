@@ -44,6 +44,7 @@ locals {
     "oslogin.googleapis.com",
     "pubsub.googleapis.com",
     "runtimeconfig.googleapis.com",
+    "secretmanager.googleapis.com",
     "securetoken.googleapis.com",
     "servicecontrol.googleapis.com",
     "servicemanagement.googleapis.com",
