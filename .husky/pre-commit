@@ -2,4 +2,14 @@
 . "$(dirname "$0")/_/husky.sh"
 
 npm run prettier:staged
-terraform fmt -write infra
+
+# TODO: write my own "terrform-quick"-like functionality that formats the files and adds them
+# https://gist.github.com/jamtur01/a567078b7ba545c3492f7cd32a65450d?permalink_comment_id=2359540#gistcomment-2359540
+# Formats any *.tf files according to the hashicorp convention
+files=$(git diff --cached --name-only)
+for f in $files
+do
+  if [ -e "$f" ] && [[ $f == *.tf ]]; then
+    terraform fmt -check=true $f
+  fi
+done
