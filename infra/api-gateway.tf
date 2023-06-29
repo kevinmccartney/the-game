@@ -1,5 +1,14 @@
+locals {
+  api_config_base64 = filebase64("${path.module}/the-game-api.yml")
+}
+
 resource "random_id" "api_config" {
   byte_length = 4 # TODO: does this need a dependency to manage regeneration?
+
+  keepers = {
+    # Generate a new id each time we switch to a new AMI id
+    config_base64 = local.api_config_base64
+  }
 }
 
 resource "google_api_gateway_api" "the_game_api" {
@@ -19,7 +28,7 @@ resource "google_api_gateway_api_config" "the_game_api_cfg" {
   openapi_documents {
     document {
       path     = "${path.module}/the-game-api.yml"
-      contents = filebase64("${path.module}/the-game-api.yml")
+      contents = local.api_config_base64
     }
   }
   lifecycle {
