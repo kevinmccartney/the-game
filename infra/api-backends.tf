@@ -7,6 +7,18 @@ locals {
   }
 }
 
+resource "google_service_account" "the_game_api" {
+  id = "the-game-api"
+  description = "SA for the Cloud Functions that comprise The Game API backend"
+  project = var.project_id
+}
+
+resource "google_project_iam_member" "the_game_api_sa_datastore_user" {
+  project = var.project_id
+  role    = "roles/datastore.user"
+  member  = "serviceAccount:${google_service_account.the_game_api.email}"
+}
+
 resource "google_storage_bucket" "cloud_function_source" {
   name                        = "${var.project_id}-gcf-source"
   location                    = "US"
@@ -55,5 +67,6 @@ resource "google_cloudfunctions2_function" "chatbot-api" {
     max_instance_count = 1
     available_memory   = "256M"
     timeout_seconds    = 60
+    service_account_email = google_service_account.the_game_api.email
   }
 }
