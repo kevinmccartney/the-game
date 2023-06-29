@@ -48,8 +48,10 @@ def function_handler(request: Request):
             "Bearer ", ""
         )
 
+        request_obj = vars(request)
+
         logging.info(id_token)
-        logging.info(vars(request))
+        logging.info(json.dumps(request_obj))
 
         user = auth.verify_id_token(id_token=id_token)
     except AttributeError:
