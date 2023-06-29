@@ -49,7 +49,7 @@ def function_handler(request: Request):
         )
 
         logging.info(id_token)
-        logging.info(request.__dict__)
+        logging.info(vars(request))
 
         user = auth.verify_id_token(id_token=id_token)
     except AttributeError:
