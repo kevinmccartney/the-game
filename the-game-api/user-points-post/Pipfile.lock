@@ -1,7 +1,7 @@
 {
   "_meta": {
     "hash": {
-      "sha256": "92063009f8a51dd0577c07ca171b89378c93023de52ceaa6963544bccad6382a"
+      "sha256": "ec83dad5ea625c7cba4df5cfcdaeb79ae20c5faf64ea254d473c1bbc14f49d33"
     },
     "pipfile-spec": 6,
     "requires": {
@@ -300,6 +300,22 @@
       ],
       "version": "==0.1.0"
     },
+    "google-cloud-appengine-logging": {
+      "hashes": [
+        "sha256:97272ed554c9077d666e045b6686b46cb67e9b072aab76726c5404d6098b52d2",
+        "sha256:d52f14e1e9a993797a086eff3d4772dea7908390c6ad612d26281341f17c9a49"
+      ],
+      "markers": "python_version >= '3.7'",
+      "version": "==1.3.0"
+    },
+    "google-cloud-audit-log": {
+      "hashes": [
+        "sha256:18b94d4579002a450b7902cd2e8b8fdcb1ea2dd4df3b41f8f82be6d9f7fcd746",
+        "sha256:86e2faba3383adc8fd04a5bd7fd4f960b3e4aedaa7ed950f2f891ce16902eb6b"
+      ],
+      "markers": "python_version >= '3.7'",
+      "version": "==0.2.5"
+    },
     "google-cloud-core": {
       "hashes": [
         "sha256:8417acf6466be2fa85123441696c4badda48db314c607cf1e5d543fa8bdc22fe",
@@ -313,8 +329,16 @@
         "sha256:7f7dfa86567c8d66c66c8dba8bc5ef85677c8532b4206055a339413f8071525d",
         "sha256:833019175b6c82727da71e2db2fdea9bf203d0b8239c696492f7e2b24566bb3e"
       ],
-      "markers": "platform_python_implementation != 'PyPy'",
+      "index": "pypi",
       "version": "==2.11.1"
+    },
+    "google-cloud-logging": {
+      "hashes": [
+        "sha256:def71f6a7bb6652ce8fee18f0cad8c32157ac606fe1512802254a471bcdfe5e8",
+        "sha256:f11544a21ea3556f70ebac7bc338ffa8a197913834ecdd8853d176b870823aaa"
+      ],
+      "index": "pypi",
+      "version": "==3.5.0"
     },
     "google-cloud-storage": {
       "hashes": [
@@ -413,6 +437,14 @@
       ],
       "markers": "python_version >= '3.7'",
       "version": "==1.59.1"
+    },
+    "grpc-google-iam-v1": {
+      "hashes": [
+        "sha256:2bc4b8fdf22115a65d751c9317329322602c39b7c86a289c9b72d228d960ef5f",
+        "sha256:5c10f3d8dc2d88678ab1a9b0cb5482735c5efee71e6c0cd59f872eef22913f5c"
+      ],
+      "markers": "python_version >= '3.7'",
+      "version": "==0.12.6"
     },
     "grpcio": {
       "hashes": [

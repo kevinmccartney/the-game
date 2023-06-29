@@ -2,7 +2,6 @@ import os
 import json
 from uuid import uuid4
 from datetime import datetime
-import logging
 import traceback
 import re
 
@@ -18,7 +17,13 @@ from firebase_admin.auth import (
 )
 from google.cloud.firestore import Client as FirestoreClient
 from werkzeug.exceptions import BadRequest
+from google.cloud.logging import Client as LoggingClient
 from flask import Response
+
+logging_client = LoggingClient()
+logging_client.setup_logging()
+
+import logging
 
 firebase_admin.initialize_app()
 
@@ -41,7 +46,7 @@ def function_handler(request):
     try:
         id_token = request.authorization.token
 
-        logging.info(id_token)
+        logging.error(id_token)
 
         user = auth.verify_id_token(id_token=id_token)
     except AttributeError:
