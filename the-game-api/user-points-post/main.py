@@ -44,7 +44,7 @@ def function_handler(request: Request):
     user = {}
 
     try:
-        id_token = request.authorization.token
+        id_token = request.headers.get("x_apigateway_api_userinfo")
 
         logging.error(id_token)
         logging.error(request.headers.__dict__)
