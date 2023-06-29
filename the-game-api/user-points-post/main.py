@@ -18,7 +18,7 @@ from firebase_admin.auth import (
 from google.cloud.firestore import Client as FirestoreClient
 from werkzeug.exceptions import BadRequest
 from google.cloud.logging import Client as LoggingClient
-from flask import Response
+from flask import Response, Request
 
 logging_client = LoggingClient()
 logging_client.setup_logging()
@@ -31,7 +31,7 @@ db: FirestoreClient = firestore.client()
 
 
 @functions_framework.http
-def function_handler(request):
+def function_handler(request: Request):
     """HTTP ping Cloud Function.
     Args:
         request (flask.Request): The request object.
@@ -47,6 +47,7 @@ def function_handler(request):
         id_token = request.authorization.token
 
         logging.error(id_token)
+        logging.error(request.headers.__dict__)
 
         user = auth.verify_id_token(id_token=id_token)
     except AttributeError:
