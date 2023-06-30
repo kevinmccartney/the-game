@@ -77,7 +77,8 @@ def function_handler(request: Request):
 
         results = query_ref.get()
 
-        points = [doc.to_dict() for doc in results]
+        # TODO: add id to response
+        points = [doc.to_dict() | {"id": doc.id} for doc in results]
 
         return (points, 200, headers)
     except Exception:
