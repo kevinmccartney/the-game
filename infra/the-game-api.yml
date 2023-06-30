@@ -81,7 +81,56 @@ paths:
           description: UID of the user the points belong to.
       responses:
         '200':
+          description: CORS headers.
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+              description: Allowed requester origin
+            Access-Control-Allow-Methods:
+              type: string
+              description: Methods allowed on resource
+            Access-Control-Allow-Headers:
+              type: string
+              description: Headers allowed on resource
+            Access-Control-Max-Age:
+              type: string
+              description: How long to cache the results of a preflight request
+  /v1/users/{userId}/scores:
+    get:
+      operationId: user-scores-get
+      summary: Get scores for a user.
+      x-google-backend:
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-scores-get
+      parameters:
+        - in: path
+          name: userId
+          type: string
+          required: true
+          description: UID of the user to get scores for.
+      responses:
+        # TODO: add error codes
+        '200':
           description: Just pong.
+          schema:
+            type: object
+            properties:
+              points:
+                type: integer
+    options:
+      operationId: user-scores-options
+      summary: CORS for the user scores resource
+      security: []
+      x-google-backend:
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-scores-options
+      parameters:
+        - in: path
+          name: userId
+          type: string
+          required: true
+          description: UID of the user to get points for.
+      responses:
+        '200':
+          description: CORS headers.
           headers:
             Access-Control-Allow-Origin:
               type: string
