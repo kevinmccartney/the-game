@@ -35,7 +35,13 @@
       "id": "pickFunction",
       "description": "Select Cloud Function to debug",
       "type": "pickString",
-      "options": ["user-points-get", "user-points-post"],
+      "options": [
+        "user-points-get",
+        "user-points-post",
+        "users-get",
+        "user-scores-get",
+        "user-scores-options"
+      ],
       "default": "user-points-post"
     }
   ]
