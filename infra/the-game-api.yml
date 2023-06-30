@@ -67,6 +67,33 @@ paths:
           description: Just pong.
           schema:
             type: string
+    options:
+      operationId: user-points-options
+      summary: CORS for the user points resource
+      x-google-backend:
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-points-options
+      parameters:
+        - in: path
+          name: userId
+          type: string
+          required: true
+          description: UID of the user the points belong to.
+      responses:
+        '200':
+          description: Just pong.
+          headers:
+            Access-Control-Allow-Origin:
+              schema: string
+              description: Allowed requester origin
+            Access-Control-Allow-Methods:
+              schema: string
+              description: Methods allowed on resource
+            Access-Control-Allow-Headers:
+              schema: string
+              description: Headers allowed on resource
+            Access-Control-Max-Age:
+              schema: string
+              description: How long to cache the results of a preflight request
 
 security:
   - firebase: []
