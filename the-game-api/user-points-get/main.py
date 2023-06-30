@@ -71,14 +71,29 @@ def function_handler(request: Request):
         subject_uid = pattern.sub(r"\1", request_path)
 
         points_ref = db.collection("points")
-        query_ref = points_ref.where(
+        points_query_ref = points_ref.where(
             filter=FieldFilter(field_path="subject", op_string="==", value=subject_uid)
         )
 
-        results = query_ref.get()
+        points_results = points_query_ref.get()
 
-        # TODO: add id to response
-        points = [doc.to_dict() | {"id": doc.id} for doc in results]
+        points_docs = [doc.to_dict() | {"id": doc.id} for doc in points_results]
+
+        points = []
+
+        for doc in points_docs:
+            users_ref = db.collection("users")
+            users_query_ref = users_ref.where(
+                filter=FieldFilter(
+                    field_path="uid", op_string="==", value=doc["created_by"]
+                )
+            )
+
+            users_results = users_query_ref.get()
+
+            created_by_user = users_results[0].to_dict()
+
+            points.append(doc | {"created_by": created_by_user})
 
         return (points, 200, headers)
     except Exception:
