@@ -4,7 +4,8 @@ locals {
   functions = {
     ping : "A ping service for The Game API",
     "user-points-post" : "Add or remove points on a user",
-    "user-points-get" : "Get points for a user"
+    "user-points-get" : "Get points for a user",
+    "user-points-options" : "CORS for user points resource"
   }
 }
 
