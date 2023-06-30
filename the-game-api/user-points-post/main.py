@@ -80,7 +80,8 @@ def function_handler(request: Request):
 
         doc = {
             "created_by": user["uid"],
-            "created_time": datetime.utcnow().isoformat(),
+            # TODO: is there a better way to do this?
+            "created_time": f"{datetime.utcnow().isoformat()}Z",
             "subject": subject_uid,
             "reason": request_json["reason"],
             "points": request_json["points"],
