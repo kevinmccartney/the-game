@@ -1,5 +1,3 @@
-import os
-import json
 from uuid import uuid4
 from datetime import datetime
 import traceback
@@ -29,6 +27,8 @@ firebase_admin.initialize_app()
 
 db: FirestoreClient = firestore.client()
 
+headers = {"Access-Control-Allow-Origin": "*"}
+
 
 @functions_framework.http
 def function_handler(request: Request):
@@ -57,16 +57,19 @@ def function_handler(request: Request):
         ExpiredIdTokenError,
         RevokedIdTokenError,
         UserDisabledError,
-    ) as ex:
-        print(ex)
+    ):
         logging.error(traceback.format_exc())
-        return {
-            "code": 403,
-            "message": "Forbidden: Caller is not authorized to take this action",
-        }, 403
+        return (
+            {
+                "code": 403,
+                "message": "Forbidden: Caller is not authorized to take this action",
+            },
+            403,
+            headers,
+        )
     except Exception:
         logging.error(traceback.format_exc())
-        return {"code": 500, "message": "Internal server error"}, 500
+        return ({"code": 500, "message": "Internal server error"}, 500, headers)
 
     try:
         # request.path
@@ -86,18 +89,26 @@ def function_handler(request: Request):
         db.collection("points").document(str(uuid4())).set(doc)
     except BadRequest:
         logging.error(traceback.format_exc())
-        {
-            "code": 400,
-            "message": "Bad Request: Please double check API documentation to make sure you are passing the correct options",
-        }, 400
+        (
+            {
+                "code": 400,
+                "message": "Bad Request: Please double check API documentation to make sure you are passing the correct options",
+            },
+            400,
+            headers,
+        )
     except KeyError:
         logging.error(traceback.format_exc())
-        {
-            "code": 400,
-            "message": "Bad Request: Please double check API documentation to make sure you are passing the correct options",
-        }, 400
+        (
+            {
+                "code": 400,
+                "message": "Bad Request: Please double check API documentation to make sure you are passing the correct options",
+            },
+            400,
+            headers,
+        )
     except Exception:
         logging.error(traceback.format_exc())
-        return {"code": 500, "message": "Internal server error"}, 500
+        return ({"code": 500, "message": "Internal server error"}, 500, headers)
 
-    return Response(status=201)
+    return Response(status=201, headers=headers)

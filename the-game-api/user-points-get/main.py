@@ -24,6 +24,8 @@ firebase_admin.initialize_app()
 
 db: FirestoreClient = firestore.client()
 
+headers = {"Access-Control-Allow-Origin": "*"}
+
 
 @functions_framework.http
 def function_handler(request: Request):
@@ -51,13 +53,17 @@ def function_handler(request: Request):
     ) as ex:
         print(ex)
         logging.error(traceback.format_exc())
-        return {
-            "code": 403,
-            "message": "Forbidden: Caller is not authorized to take this action",
-        }, 403
+        return (
+            {
+                "code": 403,
+                "message": "Forbidden: Caller is not authorized to take this action",
+            },
+            403,
+            headers,
+        )
     except Exception:
         logging.error(traceback.format_exc())
-        return {"code": 500, "message": "Internal server error"}, 500
+        return ({"code": 500, "message": "Internal server error"}, 500, headers)
 
     try:
         pattern = re.compile(r"^\/v1\/users\/(.*)\/points$")
@@ -73,7 +79,7 @@ def function_handler(request: Request):
 
         points = [doc.to_dict() for doc in results]
 
-        return points, 200
+        return (points, 200, headers)
     except Exception:
         logging.error(traceback.format_exc())
-        return {"code": 500, "message": "Internal server error"}, 500
+        return ({"code": 500, "message": "Internal server error"}, 500, headers)
