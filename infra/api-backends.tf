@@ -6,8 +6,8 @@ locals {
     "user-points-post" : "Add or remove points on a user",
     "user-points-get" : "Get points for a user",
     "user-points-options" : "CORS for user points resource",
-    "user-score-get": "Get score for a user",
-    "user-score-options" : "CORS for user score resource",
+    "user-scores-get" : "Get score for a user",
+    "user-scores-options" : "CORS for user score resource",
   }
 }
 
