@@ -18,7 +18,14 @@ jobs:
   deploy_cloud_function:
     strategy:
       matrix:
-        function: [user-points-get, user-points-post, user-points-options]
+        function:
+          [
+            user-points-get,
+            user-points-post,
+            user-points-options,
+            user-scores-get,
+            user-scores-options,
+          ]
       fail-fast: false
     runs-on: ubuntu-latest
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
