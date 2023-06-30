@@ -77,9 +77,9 @@ def function_handler(request: Request):
         request_path = request.headers.get("x-envoy-original-path")
         subject_uid = pattern.sub(r"\1", request_path)
         request_json = request.get_json(force=True)
+
         doc = {
-            "created_by_name": user["name"],
-            "created_by_uid": user["uid"],
+            "created_by": user["uid"],
             "created_time": datetime.utcnow().isoformat(),
             "subject": subject_uid,
             "reason": request_json["reason"],
