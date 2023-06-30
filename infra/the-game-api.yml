@@ -70,6 +70,7 @@ paths:
     options:
       operationId: user-points-options
       summary: CORS for the user points resource
+      security: []
       x-google-backend:
         address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-points-options
       parameters:
