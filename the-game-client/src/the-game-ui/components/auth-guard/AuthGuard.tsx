@@ -2,9 +2,6 @@
 
 import { Flex, Spinner } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-// import publicPaths from '../data/publicPaths';
-// import { useAppDispatch, useAppSelector } from '../hooks/storeHooks';
-// import { setRedirectLink } from '../redux/AuthSlice';
 import {
   JSXElementConstructor,
   ReactElement,
@@ -20,9 +17,6 @@ export const AuthGuard = (props: {
 
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
-  // const user = useAppSelector((state) => state.auth);
-
-  // const dispatch = useAppDispatch();
 
   useEffect(() => {
     const auth = getAuth();
@@ -30,8 +24,8 @@ export const AuthGuard = (props: {
     const authCheck = () => {
       if (!auth.currentUser) {
         setAuthorized(false);
-        // dispatch(setRedirectLink({ goto: router.asPath }));
-        void router.push({
+
+        router.push({
           pathname: '/unauthorized',
         });
       } else {

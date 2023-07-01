@@ -3,8 +3,8 @@
 import React from 'react';
 
 import { getAuth } from 'firebase/auth';
-import Dashboard from '@the-game/client/components/dashboard';
-import Splash from '@the-game/client/components/splash/Splash';
+import Dashboard from '@the-game/client/the-game-ui/pages/dashboard';
+import Splash from '@the-game/client/the-game-ui/pages/splash/Splash';
 
 const AppRoot = () => {
   const auth = getAuth();
