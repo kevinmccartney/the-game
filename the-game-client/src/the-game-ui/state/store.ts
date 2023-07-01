@@ -9,9 +9,9 @@ type AppState = {
 
 function loadFromLocalStorage(): AppState | null {
   try {
-    const serialisedState = localStorage.getItem('persistantState');
-    if (serialisedState === null) return null;
-    return JSON.parse(serialisedState);
+    const serializedState = localStorage.getItem('persistentState');
+    if (serializedState === null) return null;
+    return JSON.parse(serializedState);
   } catch (e) {
     console.warn(e);
     return null;
@@ -20,8 +20,8 @@ function loadFromLocalStorage(): AppState | null {
 
 function saveToLocalStorage(state: AppState) {
   try {
-    const serialisedState = JSON.stringify(state);
-    localStorage.setItem('persistantState', serialisedState);
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem('persistentState', serializedState);
   } catch (e) {
     console.warn(e);
   }

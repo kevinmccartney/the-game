@@ -3,7 +3,7 @@
 import React from 'react';
 
 import { Heading, VStack } from '@chakra-ui/react';
-import { DefaultLayout } from '@the-game/client/components/layouts';
+import { DefaultLayout } from '@the-game/client/the-game-ui/layouts';
 
 const Login = () => (
   <DefaultLayout>

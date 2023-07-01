@@ -12,9 +12,10 @@ import {
   signInWithPopup,
 } from 'firebase/auth';
 import { Provider, useDispatch } from 'react-redux';
-import store, { userSlice } from '@the-game/client/redux/store';
-import { Loading } from '@the-game/client/components';
+import store, { userSlice } from '@the-game/client/the-game-ui/state/store';
+import { Loading } from '@the-game/client/the-game-ui/components';
 import { useRouter } from 'next/router';
+import { Box } from '@chakra-ui/react';
 
 const provider = new GoogleAuthProvider();
 
@@ -72,7 +73,9 @@ export default function MyApp({
 
   return (
     <Provider store={store}>
-      {isInitialized ? <Component {...pageProps} /> : <Loading />}
+      <Box color="gray.700">
+        {isInitialized ? <Component {...pageProps} /> : <Loading />}
+      </Box>
     </Provider>
   );
 }
