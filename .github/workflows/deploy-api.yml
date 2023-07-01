@@ -38,6 +38,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Print working directory
+        run: pwd
+
+      - name: Contents of main.py
+        run: cat main.py
+
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
