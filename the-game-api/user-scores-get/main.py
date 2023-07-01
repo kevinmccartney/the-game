@@ -1,5 +1,7 @@
 import traceback
 import re
+import functools
+import os
 
 import functions_framework
 from flask import Request
@@ -51,7 +53,7 @@ def function_handler(request: Request):
         RevokedIdTokenError,
         UserDisabledError,
     ) as ex:
-        print(ex)
+        logging.error(ex)
         logging.error(traceback.format_exc())
         return (
             {
@@ -61,12 +63,13 @@ def function_handler(request: Request):
             403,
             headers,
         )
-    except Exception:
+    except Exception as ex:
+        logging.error(ex)
         logging.error(traceback.format_exc())
         return ({"code": 500, "message": "Internal server error"}, 500, headers)
 
     try:
-        pattern = re.compile(r"^\/v1\/users\/(.*)\/points$")
+        pattern = re.compile(r"^\/v1\/users\/(.*)\/scores$")
         request_path = request.headers.get("x-envoy-original-path")
         subject_uid = pattern.sub(r"\1", request_path)
 
@@ -76,26 +79,12 @@ def function_handler(request: Request):
         )
 
         points_results = points_query_ref.get()
+        points_docs = [doc.to_dict() for doc in points_results]
+        points_docs_points = [doc["points"] for doc in points_docs]
+        points_total = functools.reduce(lambda a, b: a + b, points_docs_points)
 
-        points_docs = [doc.to_dict() | {"id": doc.id} for doc in points_results]
-
-        points = []
-
-        for doc in points_docs:
-            users_ref = db.collection("users")
-            users_query_ref = users_ref.where(
-                filter=FieldFilter(
-                    field_path="uid", op_string="==", value=doc["created_by"]
-                )
-            )
-
-            users_results = users_query_ref.get()
-
-            created_by_user = users_results[0].to_dict()
-
-            points.append(doc | {"created_by": created_by_user})
-
-        return (points, 200, headers)
-    except Exception:
+        return ({"points": points_total}, 200, headers)
+    except Exception as ex:
+        logging.error(ex)
         logging.error(traceback.format_exc())
         return ({"code": 500, "message": "Internal server error"}, 500, headers)
