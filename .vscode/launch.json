@@ -38,9 +38,9 @@
       "options": [
         "user-points-get",
         "user-points-post",
-        "users-get",
         "user-scores-get",
-        "user-scores-options"
+        "users-get",
+        "users-get-all"
       ],
       "default": "user-points-post"
     }
