@@ -9,7 +9,7 @@ def function_handler(request: Request):
         request (flask.Request): The request object.
         <https://flask.palletsprojects.com/en/1.1.x/api/#incoming-request-data>
     Returns:
-        Pong.
+        CORS headers.
     """
     headers = {
         "Access-Control-Allow-Origin": "*",
