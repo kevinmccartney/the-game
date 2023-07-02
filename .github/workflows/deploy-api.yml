@@ -18,14 +18,15 @@ jobs:
   deploy_cloud_function:
     strategy:
       matrix:
-        function: [
+        function:
+          [
             user-points-get,
             user-points-post,
             user-points-options,
             user-scores-get,
             user-scores-options,
-            users-get
-            users-get-all
+            users-get,
+            users-get-all,
             users-get-options,
           ]
       fail-fast: false
