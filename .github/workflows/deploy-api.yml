@@ -26,7 +26,7 @@ jobs:
             user-scores-get,
             user-scores-options,
             users-get,
-            users-get-all,
+            users-get-entity,
             users-options,
           ]
       fail-fast: false
