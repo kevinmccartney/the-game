@@ -1,5 +1,4 @@
 import traceback
-import re
 
 import functions_framework
 from flask import Request
@@ -40,17 +39,45 @@ def function_handler(request: Request):
         id_token = request.headers.get("x_forwarded_authorization").replace(
             "Bearer ", ""
         )
+        name_param = None
 
         auth.verify_id_token(id_token=id_token)
 
-        pattern = re.compile(r"^\/v1\/users\/(.*)$")
-        request_path = request.headers.get("x-envoy-original-path")
-        subject_uid = pattern.sub(r"\1", request_path)
+        params = request.args.to_dict()
+
+        try:
+            name_param_value = params["name"]
+            name_param = name_param_value.lower()
+        except KeyError:
+            pass
 
         users_ref = db.collection("users")
-        # users_query_ref = users_ref.where(
-        #     filter=FieldFilter(field_path="uid", op_string="==", value=subject_uid)
-        # )
+
+        if name_param:
+            name_len = len(name_param)
+            name_front_code = name_param[0 : name_len - 1]
+            name_end_code = name_param[name_len - 1 : name_len]
+
+            start_code = name_param
+            end_code = name_front_code + chr(ord(name_end_code) + 1)
+
+            users_query_ref = users_ref.where(
+                filter=FieldFilter(
+                    field_path="display_name_normalized",
+                    op_string=">=",
+                    value=start_code,
+                )
+            ).where(
+                filter=FieldFilter(
+                    field_path="display_name_normalized", op_string="<", value=end_code
+                )
+            )
+
+            users_results = users_query_ref.get()
+
+            users = [doc.to_dict() for doc in users_results]
+
+            return (users, 200, headers)
 
         users_results = users_ref.get()
 
