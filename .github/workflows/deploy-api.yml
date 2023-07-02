@@ -27,7 +27,7 @@ jobs:
             user-scores-options,
             users-get,
             users-get-all,
-            users-get-options,
+            users-options,
           ]
       fail-fast: false
     runs-on: ubuntu-latest
