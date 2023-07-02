@@ -26,7 +26,7 @@ paths:
       operationId: users-get-all
       summary: Get all users.
       x-google-backend:
-        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-users-get-all
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-users-get
       responses:
         # TODO: add error codes
         '200':
@@ -43,7 +43,7 @@ paths:
       summary: CORS for the Users resource.
       security: []
       x-google-backend:
-        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-scores-options
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-users-options
       responses:
         '200':
           $ref: '#/responses/CORSSuccess'
@@ -58,7 +58,7 @@ paths:
       operationId: users-get
       summary: Get all users.
       x-google-backend:
-        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-users-get-all
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-users-get-entity
       responses:
         # TODO: add error codes
         '200':
@@ -73,7 +73,7 @@ paths:
       summary: CORS for the user scores resource
       security: []
       x-google-backend:
-        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-scores-options
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-users-options
       responses:
         '200':
           $ref: '#/responses/CORSSuccess'
