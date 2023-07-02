@@ -8,6 +8,9 @@ locals {
     "user-points-options" : "CORS for user points resource",
     "user-scores-get" : "Get score for a user",
     "user-scores-options" : "CORS for user score resource",
+    "users-get" : "Get a users",
+    "users-get-all" : "Get all users",
+    "users-options" : "CORS for users resource",
   }
 }
 
