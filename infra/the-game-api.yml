@@ -27,6 +27,11 @@ paths:
       summary: Get all users.
       x-google-backend:
         address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-users-get
+      parameters:
+        - in: query
+          name: name
+          type: string
+          description: The name of the user to search for.
       responses:
         # TODO: add error codes
         '200':
