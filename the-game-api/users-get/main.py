@@ -48,21 +48,15 @@ def function_handler(request: Request):
         subject_uid = pattern.sub(r"\1", request_path)
 
         users_ref = db.collection("users")
-        users_query_ref = users_ref.where(
-            filter=FieldFilter(field_path="uid", op_string="==", value=subject_uid)
-        )
+        # users_query_ref = users_ref.where(
+        #     filter=FieldFilter(field_path="uid", op_string="==", value=subject_uid)
+        # )
 
-        users_results = users_query_ref.get()
+        users_results = users_ref.get()
 
-        if len(users_results) == 0:
-            return (
-                {"code": 404, "message": "Not found: Resource can not be located"},
-                headers,
-            )
+        users = [doc.to_dict() for doc in users_results]
 
-        created_by_user = users_results[0].to_dict()
-
-        return (created_by_user, 200, headers)
+        return (users, 200, headers)
 
     except AttributeError as ex:
         logging.error(ex)
