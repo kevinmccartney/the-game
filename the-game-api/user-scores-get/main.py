@@ -46,7 +46,11 @@ def function_handler(request: Request):
         auth.verify_id_token(id_token=id_token)
     except AttributeError:
         logging.error(traceback.format_exc())
-        return {"code": 401, "message": "Unauthorized: Authorization not provided"}, 401
+        return (
+            {"code": 401, "message": "Unauthorized: Authorization not provided"},
+            401,
+            headers,
+        )
     except (
         InvalidIdTokenError,
         ExpiredIdTokenError,
