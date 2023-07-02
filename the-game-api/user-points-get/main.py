@@ -43,6 +43,7 @@ def function_handler(request: Request):
 
         auth.verify_id_token(id_token=id_token)
     except AttributeError:
+        logging.error(ex)
         logging.error(traceback.format_exc())
         return {"code": 401, "message": "Unauthorized: Authorization not provided"}, 401
     except (
@@ -51,7 +52,7 @@ def function_handler(request: Request):
         RevokedIdTokenError,
         UserDisabledError,
     ) as ex:
-        print(ex)
+        logging.error(ex)
         logging.error(traceback.format_exc())
         return (
             {
@@ -61,7 +62,8 @@ def function_handler(request: Request):
             403,
             headers,
         )
-    except Exception:
+    except Exception as ex:
+        logging.error(ex)
         logging.error(traceback.format_exc())
         return ({"code": 500, "message": "Internal server error"}, 500, headers)
 
@@ -95,7 +97,10 @@ def function_handler(request: Request):
 
             points.append(doc | {"created_by": created_by_user})
 
-        return (points, 200, headers)
-    except Exception:
+        sorted_points = sorted(points, key=lambda x: x["created_time"], reverse=True)
+
+        return (sorted_points, 200, headers)
+    except Exception as ex:
+        logging.error(ex)
         logging.error(traceback.format_exc())
         return ({"code": 500, "message": "Internal server error"}, 500, headers)
