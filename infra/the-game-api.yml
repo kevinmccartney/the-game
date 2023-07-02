@@ -21,18 +21,75 @@ paths:
           description: Just pong.
           schema:
             type: string
+  /v1/users:
+    get:
+      operationId: users-get-all
+      summary: Get all users.
+      x-google-backend:
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-users-get-all
+      responses:
+        # TODO: add error codes
+        '200':
+          description: A list of User object.
+          schema:
+            type: object
+            properties:
+              response:
+                type: array
+                items:
+                  $ref: '#/definitions/User'
+    options:
+      operationId: users-options
+      summary: CORS for the Users resource.
+      security: []
+      x-google-backend:
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-scores-options
+      responses:
+        '200':
+          $ref: '#/responses/CORSSuccess'
+  /v1/users/{userId}:
+    parameters:
+      - in: path
+        name: userId
+        type: string
+        required: true
+        description: UID of the user.
+    get:
+      operationId: users-get
+      summary: Get all users.
+      x-google-backend:
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-users-get-all
+      responses:
+        # TODO: add error codes
+        '200':
+          description: A User object.
+          schema:
+            type: object
+            properties:
+              response:
+                $ref: '#/definitions/User'
+    options:
+      operationId: users-get-options
+      summary: CORS for the user scores resource
+      security: []
+      x-google-backend:
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-scores-options
+      responses:
+        '200':
+          $ref: '#/responses/CORSSuccess'
   /v1/users/{userId}/points:
+    parameters:
+      - in: path
+        name: userId
+        type: string
+        required: true
+        description: UID of the user the points belong to.
     post:
       operationId: user-points-post
       summary: Assign points to a user.
       x-google-backend:
         address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-points-post
       parameters:
-        - in: path
-          name: userId
-          type: string
-          required: true
-          description: UID of the user to assign points to.
         - in: body
           name: point_post_request
           description: The point to create
@@ -55,58 +112,47 @@ paths:
       summary: Get points for a user.
       x-google-backend:
         address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-points-get
-      parameters:
-        - in: path
-          name: userId
-          type: string
-          required: true
-          description: UID of the user to assign points to.
       responses:
         # TODO: add error codes
         '200':
           description: Just pong.
           schema:
-            type: string
+            type: object
+            properties:
+              created_time:
+                type: string
+              id:
+                type: string
+              points:
+                type: integer
+              reason:
+                type: string
+              subject:
+                type: string
+              created_by:
+                $ref: '#/definitions/User'
+
     options:
       operationId: user-points-options
       summary: CORS for the user points resource
       security: []
       x-google-backend:
         address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-points-options
-      parameters:
-        - in: path
-          name: userId
-          type: string
-          required: true
-          description: UID of the user the points belong to.
       responses:
         '200':
-          description: CORS headers.
-          headers:
-            Access-Control-Allow-Origin:
-              type: string
-              description: Allowed requester origin
-            Access-Control-Allow-Methods:
-              type: string
-              description: Methods allowed on resource
-            Access-Control-Allow-Headers:
-              type: string
-              description: Headers allowed on resource
-            Access-Control-Max-Age:
-              type: string
-              description: How long to cache the results of a preflight request
+          $ref: '#/responses/CORSSuccess'
   /v1/users/{userId}/scores:
+    parameters:
+      - in: path
+        name: userId
+        type: string
+        required: true
+        description: UID of the user the scores belong to.
     get:
       operationId: user-scores-get
       summary: Get scores for a user.
       x-google-backend:
         address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-scores-get
-      parameters:
-        - in: path
-          name: userId
-          type: string
-          required: true
-          description: UID of the user to get scores for.
       responses:
         # TODO: add error codes
         '200':
@@ -117,34 +163,14 @@ paths:
               points:
                 type: integer
     options:
-      operationId: user-scores-options
+      operationId: user-get-scores-options
       summary: CORS for the user scores resource
       security: []
       x-google-backend:
         address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-scores-options
-      parameters:
-        - in: path
-          name: userId
-          type: string
-          required: true
-          description: UID of the user to get points for.
       responses:
         '200':
-          description: CORS headers.
-          headers:
-            Access-Control-Allow-Origin:
-              type: string
-              description: Allowed requester origin
-            Access-Control-Allow-Methods:
-              type: string
-              description: Methods allowed on resource
-            Access-Control-Allow-Headers:
-              type: string
-              description: Headers allowed on resource
-            Access-Control-Max-Age:
-              type: string
-              description: How long to cache the results of a preflight request
-
+          $ref: '#/responses/CORSSuccess'
 security:
   - firebase: []
 securityDefinitions:
@@ -156,3 +182,33 @@ securityDefinitions:
     x-google-issuer: 'https://securetoken.google.com/the-game-388502'
     x-google-jwks_uri: 'https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com'
     x-google-audiences: 'the-game-388502'
+responses:
+  CORSSuccess:
+    description: CORS headers.
+    headers:
+      Access-Control-Allow-Origin:
+        type: string
+        description: Allowed requester origin
+      Access-Control-Allow-Methods:
+        type: string
+        description: Methods allowed on resource
+      Access-Control-Allow-Headers:
+        type: string
+        description: Headers allowed on resource
+      Access-Control-Max-Age:
+        type: string
+        description: How long to cache the results of a preflight request
+definitions:
+  User:
+    type: object
+    properties:
+      display_name:
+        type: string
+      email:
+        type: string
+      phone_number:
+        type: string
+      photo_url:
+        type: string
+      uid:
+        type: string
