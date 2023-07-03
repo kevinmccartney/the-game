@@ -13,8 +13,6 @@ import { getAuth } from 'firebase/auth';
 export const AuthGuard = (props: {
   children: ReactElement<unknown, string | JSXElementConstructor<unknown>>;
 }) => {
-  const { children } = props;
-
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
 
@@ -47,7 +45,7 @@ export const AuthGuard = (props: {
   }, [router, router.events]);
 
   return authorized ? (
-    children
+    props?.children
   ) : (
     <Flex
       h="100vh"

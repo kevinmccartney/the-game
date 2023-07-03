@@ -30,7 +30,7 @@ export const DefaultLayout: FunctionComponent<{ children: any }> = (props) => {
             }}
             width="100%"
           >
-            {props.children}
+            {props?.children}
           </Box>
         </Flex>
         <Footer />
