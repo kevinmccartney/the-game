@@ -3,32 +3,40 @@
 import React, { useEffect, useState } from 'react';
 
 import {
-  Avatar,
   Box,
   Button,
-  Card,
-  CardBody,
-  CardHeader,
   Divider,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
   Flex,
   Heading,
   Text,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { getAuth } from 'firebase/auth';
-import { utcToZonedTime } from 'date-fns-tz';
-import { formatDistanceToNow } from 'date-fns';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock } from '@fortawesome/free-regular-svg-icons';
 
+import {
+  AssignPointsForm,
+  AuthGuard,
+  PointCard,
+} from '@the-game/client/the-game-ui/components';
 import { DefaultLayout } from '@the-game/client/the-game-ui/layouts';
-import { AuthGuard } from '@the-game/client/the-game-ui/components';
 import { Point } from '@the-game/client/the-game-ui/models';
-import { PointCard } from '@the-game/client/the-game-ui/components/point-card/PointCard';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const Dashboard = () => {
   const [userPoints, setUserPoints] = useState<Point[]>([]);
   const [userScore, setUserScore] = useState('-');
   const [userScoreColor, setUserScoreColor] = useState('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef<any>();
+
   const auth = getAuth();
 
   useEffect(() => {
@@ -144,6 +152,8 @@ const Dashboard = () => {
                 <Button
                   colorScheme="blue"
                   display={{ md: 'none' }}
+                  ref={btnRef}
+                  onClick={onOpen}
                 >
                   Assign Points
                 </Button>
@@ -154,7 +164,9 @@ const Dashboard = () => {
               borderBottomColor="gray.500"
               display={{ base: 'none', md: 'flex' }}
             />
-            <Box display={{ base: 'none', md: 'flex' }}>I&apos;m da form</Box>
+            <Box display={{ base: 'none', md: 'flex' }}>
+              <AssignPointsForm />
+            </Box>
             <Divider
               my={8}
               borderBottomColor="gray.500"
@@ -172,6 +184,34 @@ const Dashboard = () => {
             </Flex>
           </Flex>
         </Box>
+        <Drawer
+          isOpen={isOpen}
+          placement="right"
+          size="full"
+          onClose={onClose}
+          finalFocusRef={btnRef}
+        >
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton color="white">
+              <FontAwesomeIcon
+                icon={faXmark}
+                inverse
+                size="2x"
+              />
+            </DrawerCloseButton>
+            <DrawerHeader
+              backgroundColor="purple.500"
+              color="white"
+            >
+              Assign Points
+            </DrawerHeader>
+
+            <DrawerBody>
+              <AssignPointsForm onClose={onClose} />
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
       </DefaultLayout>
     </AuthGuard>
   );
