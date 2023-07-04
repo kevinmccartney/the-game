@@ -16,6 +16,7 @@ import store, { userSlice } from '@the-game/client/the-game-ui/state/store';
 import { Loading } from '@the-game/client/the-game-ui/components';
 import { useRouter } from 'next/router';
 import { Box } from '@chakra-ui/react';
+import { HelmetProvider } from 'react-helmet-async';
 
 const provider = new GoogleAuthProvider();
 
@@ -73,9 +74,11 @@ export default function MyApp({
 
   return (
     <Provider store={store}>
-      <Box color="gray.700">
-        {isInitialized ? <Component {...pageProps} /> : <Loading />}
-      </Box>
+      <HelmetProvider>
+        <Box color="gray.700">
+          {isInitialized ? <Component {...pageProps} /> : <Loading />}
+        </Box>
+      </HelmetProvider>
     </Provider>
   );
 }
