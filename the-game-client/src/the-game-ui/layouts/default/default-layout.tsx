@@ -11,8 +11,8 @@ export const DefaultLayout: FunctionComponent<{ children: any }> = (props) => {
   return (
     <ChakraProvider theme={theme}>
       <Flex
-        flexDirection="column"
         minHeight="100vh"
+        flexDirection="column"
       >
         <Navbar />
         <Flex
