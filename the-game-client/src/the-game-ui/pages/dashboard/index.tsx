@@ -34,6 +34,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useForm } from 'react-hook-form';
+import { Helmet } from 'react-helmet-async';
 
 const Dashboard = () => {
   const [userPoints, setUserPoints] = useState<Point[]>([]);
@@ -86,6 +87,9 @@ const Dashboard = () => {
   }, []);
   return (
     <AuthGuard>
+      <Helmet>
+        <title>The Game | Dashboard</title>
+      </Helmet>
       <DefaultLayout>
         <Box
           as="section"
