@@ -5,12 +5,13 @@ import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
+  Card,
+  CardBody,
   Divider,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   Flex,
@@ -26,22 +27,31 @@ import {
   PointCard,
 } from '@the-game/client/the-game-ui/components';
 import { DefaultLayout } from '@the-game/client/the-game-ui/layouts';
-import { Point } from '@the-game/client/the-game-ui/models';
+import {
+  AssignPointsForm as AssignPointsFormModel,
+  Point,
+} from '@the-game/client/the-game-ui/models';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { useForm } from 'react-hook-form';
 
 const Dashboard = () => {
   const [userPoints, setUserPoints] = useState<Point[]>([]);
-  const [userScore, setUserScore] = useState('-');
+  const [userScore, setUserScore] = useState('');
+  const [userScoreIsLoading, setUserScoreIsLoading] = useState(false);
   const [userScoreColor, setUserScoreColor] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef<any>();
+  const form = useForm<AssignPointsFormModel>({
+    // reValidateMode: 'onBlur'
+  });
 
   const auth = getAuth();
 
   useEffect(() => {
     const fetchUserPoints = async () => {
       const token = await auth.currentUser?.getIdToken();
+      setUserScoreIsLoading(true);
       const userPointsRes = await fetch(
         `https://api.the-game.kevinmccartney.dev/v1/users/${auth.currentUser?.uid}/points`,
         {
@@ -69,6 +79,7 @@ const Dashboard = () => {
       const colorForUserScore = userScore.points > 0 ? 'green.500' : 'red.500';
       setUserScoreColor(colorForUserScore);
       setUserScore(userScore.points);
+      setUserScoreIsLoading(false);
     };
 
     fetchUserPoints();
@@ -139,7 +150,14 @@ const Dashboard = () => {
                     color={userScoreColor}
                     textAlign="center"
                   >
-                    {userScore}
+                    {userScoreIsLoading ? (
+                      <FontAwesomeIcon
+                        icon={faSpinner}
+                        spin
+                      />
+                    ) : (
+                      userScore
+                    )}
                   </Text>
                   <Text
                     fontWeight={400}
@@ -159,17 +177,31 @@ const Dashboard = () => {
                 </Button>
               </Flex>
             </Flex>
-            <Divider
+            {/* <Divider
               my={8}
               borderBottomColor="gray.500"
               display={{ base: 'none', md: 'flex' }}
-            />
-            <Box display={{ base: 'none', md: 'flex' }}>
-              <AssignPointsForm />
-            </Box>
+            /> */}
+            <Card
+              display={{ base: 'none', md: 'flex' }}
+              justifyContent={{ md: 'center' }}
+              my={12}
+              // background="blue.500"
+              // borderRadius="2xl"
+              // padding={8}
+              // color="white"
+            >
+              <CardBody>
+                <AssignPointsForm
+                  form={form}
+                  inverse={true}
+                />
+              </CardBody>
+            </Card>
             <Divider
               my={8}
               borderBottomColor="gray.500"
+              display={{ md: 'none' }}
             />
             <Flex
               flexDirection="column"
@@ -208,7 +240,11 @@ const Dashboard = () => {
             </DrawerHeader>
 
             <DrawerBody>
-              <AssignPointsForm onClose={onClose} />
+              <AssignPointsForm
+                onClose={onClose}
+                form={form}
+                showCancel={true}
+              />
             </DrawerBody>
           </DrawerContent>
         </Drawer>
