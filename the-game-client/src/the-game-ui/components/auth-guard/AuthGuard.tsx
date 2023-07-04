@@ -11,7 +11,7 @@ import {
 import { getAuth } from 'firebase/auth';
 
 export const AuthGuard = (props: {
-  children: ReactElement<unknown, string | JSXElementConstructor<unknown>>;
+  children: ReactElement<unknown, string | JSXElementConstructor<unknown>>[];
 }) => {
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
