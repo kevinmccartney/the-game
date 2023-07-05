@@ -37,6 +37,11 @@ jobs:
         id: findChanges
         env:
           THE_GAME_API_PROJECTS: ${{vars.THE_GAME_API_PROJECTS}}
+        run: pipenv run python bin/find-changed"
+
+      - name: Set outputs
+        env:
+          THE_GAME_API_PROJECTS: ${{vars.THE_GAME_API_PROJECTS}}
         run: echo "changedApiProjects=$(pipenv run python bin/find-changed)" >> "$GITHUB_OUTPUT"
   print-changes:
     runs-on: ubuntu-latest
