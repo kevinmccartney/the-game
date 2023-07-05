@@ -62,7 +62,7 @@ jobs:
         run: |
           pipenv run python bin/find-changed-api-projects 
           cat the-game-changed-api-projects.json
-          echo "changedApiProjects=$(cat the-game-changed-api-projects.json | jq '.["changes"]' )" >> "$GITHUB_OUTPUT"
+          echo "changedApiProjects=$(cat the-game-changed-api-projects.json | jq -c '.["changes"]' )" >> "$GITHUB_OUTPUT"
       - name: Has changed
         id: hasChanged
         env:
