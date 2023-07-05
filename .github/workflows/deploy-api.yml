@@ -66,7 +66,7 @@ jobs:
           THE_GAME_API_PROJECTS: ${{ vars.THE_GAME_API_PROJECTS }}
         run: |
           changed_projects=$(pipenv run python bin/find-changed)
-          echo "hasChanged=$(pipenv run python bin/has-changed $changed_projects)">> "$GITHUB_OUTPUT"
+          echo "hasChanged=$(pipenv run python bin/has-changed $(echo changed_projects))">> "$GITHUB_OUTPUT"
 
   deploy_cloud_function:
     needs: find-changes
