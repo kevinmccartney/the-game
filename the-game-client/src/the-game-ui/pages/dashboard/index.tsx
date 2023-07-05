@@ -37,6 +37,7 @@ import { faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
 import { useGetPointsQuery } from '@the-game/client/the-game-ui/services/points';
+import { useGetScoresQuery } from '@the-game/client/the-game-ui/services/scores';
 
 const Dashboard = () => {
   const [userScore, setUserScore] = useState('');
@@ -48,13 +49,29 @@ const Dashboard = () => {
 
   const auth = getAuth();
   const {
-    data: points,
-    isLoading,
-    refetch,
+    data: pointsData,
+    isLoading: pointsIsLoading,
+    refetch: pointsRefetch,
   } = useGetPointsQuery(auth.currentUser?.uid || '');
 
+  const {
+    data: scoresData,
+    isLoading: scoresIsLoading,
+    refetch: scoresRefetch,
+  } = useGetScoresQuery(auth.currentUser?.uid || '');
+
   const onSubmitSuccess = () => {
-    refetch();
+    scoresRefetch();
+    pointsRefetch();
+  };
+
+  const getScoreColor = (score: { points: number } | undefined) => {
+    let color;
+    if (score) {
+      color = score.points > 0 ? 'green.500' : 'red.500';
+    }
+
+    return color;
   };
 
   useEffect(() => {
@@ -143,14 +160,19 @@ const Dashboard = () => {
                   >
                     You Have
                   </Text>
-                  <Text
-                    fontWeight={700}
-                    fontSize="4xl"
-                    color={userScoreColor}
-                    textAlign="center"
-                  >
-                    {userScoreIsLoading ? <Loading /> : userScore}
-                  </Text>
+                  {scoresIsLoading ? (
+                    <Loading />
+                  ) : (
+                    <Text
+                      fontWeight={700}
+                      fontSize="4xl"
+                      // color={userScoreColor}
+                      color={getScoreColor(scoresData)}
+                      textAlign="center"
+                    >
+                      {scoresData?.points}
+                    </Text>
+                  )}
                   <Text
                     fontWeight={400}
                     fontSize="xl"
@@ -192,7 +214,7 @@ const Dashboard = () => {
               flexDirection="column"
               gap={8}
             >
-              {isLoading && (
+              {pointsIsLoading && (
                 <Flex
                   p={8}
                   justifyContent="center"
@@ -200,7 +222,7 @@ const Dashboard = () => {
                   <Loading />
                 </Flex>
               )}
-              {points?.map((x) => (
+              {pointsData?.map((x) => (
                 <PointCard
                   key={x.id}
                   point={x}

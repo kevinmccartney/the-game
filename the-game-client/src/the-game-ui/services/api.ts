@@ -11,8 +11,6 @@ const baseQuery = fetchBaseQuery({
   // prepareHeaders: prepareAuthHeaders,
   credentials: 'same-origin',
   fetchFn: async (request: any) => {
-    console.log(request);
-
     const auth = getAuth();
 
     if (auth.currentUser) {
