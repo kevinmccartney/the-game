@@ -75,7 +75,7 @@ jobs:
 
   deploy_cloud_function:
     needs: find-changes
-    if: ${{ needs.find-changes.outputs.hasChanged }} == "yes"
+    if: ${{ needs.find-changes.outputs.changedApiProjects != '[]' && needs.find-changes.outputs.changedApiProjects != '' }}
     strategy:
       matrix:
         function: ${{ fromJson(needs.find-changes.outputs.changedApiProjects) }}
