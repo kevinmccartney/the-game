@@ -61,6 +61,7 @@ jobs:
           THE_GAME_API_PROJECTS: ${{ vars.THE_GAME_API_PROJECTS }}
         run: |
           pipenv run python bin/find-changed-api-projects 
+          cat the-game-changed-api-projects.json
           echo "changedApiProjects=$(cat the-game-changed-api-projects.json | jq '.["changes"]' )" >> "$GITHUB_OUTPUT"
       - name: Has changed
         id: hasChanged
