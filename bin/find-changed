@@ -14,14 +14,7 @@ diff = subprocess.run(
     text=True,
 )
 
-log = subprocess.run(
-    ["git", "log"],
-    stdout=subprocess.PIPE,
-    text=True,
-)
-
-print(diff)
-print(log)
+# print(diff.stdout)
 
 changes = diff.stdout.splitlines()
 
@@ -31,5 +24,7 @@ for project in api_projects:
     if len(res) > 0:
         changed_projects.append(project)
 
-
-print(changed_projects)
+if len(changed_projects) > 0:
+    print(changed_projects)
+else:
+    print(["__no-changes"])
