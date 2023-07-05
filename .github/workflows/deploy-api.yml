@@ -68,7 +68,7 @@ jobs:
           THE_GAME_API_PROJECTS: ${{ vars.THE_GAME_API_PROJECTS }}
         run: |
           changed_projects=$(cat the-game-changed-api-projects.json)
-          hasChanged=$(pipenv run python bin/has-changed ${changed_projects})
+          hasChanged=$(pipenv run python bin/has-changed-api-projects ${changed_projects})
           echo "hasChanged=${hasChanged}" >> "$GITHUB_OUTPUT"
 
   deploy_cloud_function:
