@@ -24,6 +24,8 @@ for project in api_projects:
         changed_projects.append(project)
 
 if len(changed_projects) > 0:
-    print(json.dumps({"changes": changed_projects}))
+    with open("the-game-changed-api-project.json", "w") as file:
+        file.write(json.dumps({"changes": changed_projects}))
 else:
-    print(json.dumps({"changes": ["__no-changes"]}))
+    with open("the-game-changed-api-project.json", "w") as file:
+        file.write(json.dumps({"changes": ["__no-changes"]}))
