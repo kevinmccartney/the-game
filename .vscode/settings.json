@@ -120,7 +120,8 @@
     "editor.suggest.insertMode": "replace"
   },
   "[terraform]": {
-    "editor.defaultFormatter": "hashicorp.terraform"
+    "editor.defaultFormatter": "hashicorp.terraform",
+    "editor.formatOnSave": true
   },
   "peacock.color": "#50FA7B",
   "indentRainbow.includedLanguages": ["python"],
@@ -129,11 +130,15 @@
   "prettier.configPath": "./.prettierrc.yml",
   "prettier.useEditorConfig": true,
   "cSpell.words": [
+    "Authed",
     "Chakra",
     "commitlint",
     "cprint",
     "firestore",
+    "fontawesome",
+    "fortawesome",
     "postbuild",
+    "reduxjs",
     "roboto",
     "yaspin"
   ],
