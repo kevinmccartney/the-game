@@ -37,7 +37,7 @@ jobs:
         id: findChanges
         env:
           THE_GAME_API_PROJECTS: ${{vars.THE_GAME_API_PROJECTS}}
-        run: pipenv run python bin/find-changed"
+        run: pipenv run python bin/find-changed
 
       - name: Set outputs
         env:
