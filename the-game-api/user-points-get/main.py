@@ -72,19 +72,40 @@ def function_handler(request: Request):
         return ({"code": 500, "message": "Internal server error"}, 500, headers)
 
     try:
-        pattern = re.compile(r"^\/v1\/users\/(.*)\/points$")
+        pattern = re.compile(r"^\/v1\/users\/(.*)\/points(\?.*)?$")
         request_path = request.headers.get("x-envoy-original-path")
         subject_uid = pattern.sub(r"\1", request_path)
 
+        type_param = "all"
+
+        # error if we don't pass in args?
+        params = request.args.to_dict()
+
+        try:
+            type_param_value = params["type"]
+            type_param = type_param_value.lower()
+        except KeyError:
+            pass
+
         points_ref = db.collection("points")
+        points_query_ref = None
 
-        filter_1 = FieldFilter("subject", "==", subject_uid)
-        filter_2 = FieldFilter("created_by", "==", subject_uid)
+        if type_param == "all":
+            filter_1 = FieldFilter("subject", "==", subject_uid)
+            filter_2 = FieldFilter("created_by", "==", subject_uid)
 
-        # Create the union filter of the two filters (queries)
-        or_filter = Or(filters=[filter_1, filter_2])
+            # Create the union filter of the two filters (queries)
+            or_filter = Or(filters=[filter_1, filter_2])
 
-        points_query_ref = points_ref.where(filter=or_filter)
+            points_query_ref = points_ref.where(filter=or_filter)
+        elif type_param == "sent":
+            filter = FieldFilter("created_by", "==", subject_uid)
+
+            points_query_ref = points_ref.where(filter=filter)
+        elif type_param == "received":
+            filter = FieldFilter("subject", "==", subject_uid)
+
+            points_query_ref = points_ref.where(filter=filter)
 
         points_results = points_query_ref.get()
 
