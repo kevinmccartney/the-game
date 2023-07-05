@@ -1,0 +1,16 @@
+name: "Test Changed"
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  deploy-infra:
+    runs-on: ubuntu-latest
+    steps:
+      # For verification
+      - name: Hello, world
+        run: echo "hello, world"
