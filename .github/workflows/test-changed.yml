@@ -50,3 +50,12 @@ jobs:
           OUTPUT1: ${{ needs.find-changes.outputs.changedApiProjects }}
           OUTPUT2: ${{ needs.find-changes.outputs.test }}
         run: echo "$OUTPUT1 $OUTPUT2"
+  run-changes:
+    runs-on: ubuntu-latest
+    needs: print-changes
+    strategy:
+      matrix:
+        function: ${{ fromJson(needs.find-changes.outputs.changedApiProjects) }}
+    steps:
+      - name: Print project name
+        run: echo ${{ matrix.function }}
