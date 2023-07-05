@@ -8,20 +8,13 @@ changed_projects = []
 api_projects_env_var = os.environ.get("THE_GAME_API_PROJECTS")
 api_projects = api_projects_env_var.split(",")
 
-# diff = subprocess.run(
-#     ["git", "diff", "--name-only", "HEAD", "HEAD~1"],
-#     stdout=subprocess.PIPE,
-#     text=True,
-# )
+diff = subprocess.run(
+    ["git", "diff", "--name-only", "HEAD", "HEAD~1"],
+    stdout=subprocess.PIPE,
+    text=True,
+)
 
-diff = [
-    "the-game-api/user-points-get/main.py",
-    "the-game-api/user-points-post/main.py",
-    "the-game-api/users-options/main.py",
-]
-
-# changes = diff.stdout.splitlines()
-changes = diff
+changes = diff.stdout.splitlines()
 
 for project in api_projects:
     res = [i for i in changes if project in i]
