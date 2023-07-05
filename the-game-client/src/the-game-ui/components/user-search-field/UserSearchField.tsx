@@ -28,6 +28,7 @@ import {
   UseFormReturn,
   UseFormSetValue,
 } from 'react-hook-form';
+import { Loading } from '@the-game/client/the-game-ui/components/loading';
 
 const getUsers = async (
   search: string,
@@ -68,13 +69,17 @@ export const UserSearchField = ({
   form: UseFormReturn<AssignPointsForm, any, undefined>;
 }) => {
   const [users, setUsers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
   const fieldRef = useRef(null);
   const auth = getAuth();
+
+  form.watch((value) => {
+    if (!value.subject && selectedUser) {
+      setSelectedUser(null);
+    }
+  });
 
   useEffect(() => {
     setIsLoading(true);
@@ -93,9 +98,9 @@ export const UserSearchField = ({
   const handleSelect = (user: User) => {
     setSelectedUser(user);
     setValue('subject', user.uid);
+    form.setValue('subjectDisplayName', user.display_name);
     form.trigger('subject');
 
-    setSearchTerm(user?.display_name ?? '');
     setSuggestionsOpen(false);
   };
 
@@ -119,14 +124,22 @@ export const UserSearchField = ({
 
   const clearSelectedUser = () => {
     setSelectedUser(null);
-    setSearchTerm('');
     setUsers([]);
-    inputRef.current?.focus();
+    // TODO: restore focus to subject diplay name field
+    // subjectDisplayNameRef.current?.focus(); //
     setSuggestionsOpen(true);
     setValue('subject', '');
+    setValue('subjectDisplayName', '');
     setIsLoading(true);
     getUsers('', auth, setUsers, setIsLoading);
   };
+
+  const {
+    onChange: subjectDisplayNameOnChange,
+    onBlur: subjectDisplayNameOnBlur,
+    name: subjectDisplayNameName,
+    ref: subjectDisplayNameRef,
+  } = register('subjectDisplayName');
 
   return (
     <FormControl
@@ -152,8 +165,8 @@ export const UserSearchField = ({
         )}
         <Input
           onChange={(event) => {
-            setSearchTerm(event.target.value);
             debouncedSearch(event.target.value, auth, setUsers, setIsLoading);
+            subjectDisplayNameOnChange(event);
           }}
           placeholder="Search for a friend..."
           _placeholder={{
@@ -161,14 +174,14 @@ export const UserSearchField = ({
           }}
           onFocus={handleFocus}
           onKeyDown={handleKeydown}
-          ref={inputRef}
-          value={searchTerm}
           backgroundColor={selectedUser ? 'green.100' : 'initial'}
           borderColor={errors.subject ? 'red.500' : 'gray.200'}
           className={errors.subject ? 'hover:border-red-500' : ''}
-          // p={6}
           size="lg"
           pl={selectedUser ? 12 : 6}
+          onBlur={subjectDisplayNameOnBlur}
+          name={subjectDisplayNameName}
+          ref={subjectDisplayNameRef}
         />
         <Input
           {...register('subject', { required: 'Required' })}
@@ -228,8 +241,17 @@ export const UserSearchField = ({
             })}
           </MenuList>
         )}
-        {users.length == 0 && !isLoading && <Text>No results</Text>}
-        {isLoading && <Text>Loading...</Text>}
+        {isLoading && (
+          <MenuList>
+            <MenuItem
+              icon={<Loading />}
+              mt={4}
+              isDisabled={true}
+            >
+              Loading...
+            </MenuItem>
+          </MenuList>
+        )}
       </Menu>
     </FormControl>
   );

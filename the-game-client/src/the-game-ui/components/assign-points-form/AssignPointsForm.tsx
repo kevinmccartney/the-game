@@ -21,10 +21,12 @@ export const AssignPointsForm = ({
   showCancel,
   onClose,
   form,
+  onSubmitSuccess,
 }: {
   showCancel?: boolean;
   onClose?: () => void;
   form: UseFormReturn<AssignPointsFormModel, any, undefined>;
+  onSubmitSuccess?: () => void;
 }) => {
   const {
     register,
@@ -33,11 +35,12 @@ export const AssignPointsForm = ({
     formState: { errors },
     watch,
     getValues,
+    reset,
   } = form;
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
   const auth = getAuth();
-  const onSubmit: SubmitHandler<AssignPointsFormModel> = () => {
+  const localOnSubmit: SubmitHandler<AssignPointsFormModel> = () => {
     setIsLoading(true);
     postPoint(toast);
   };
@@ -77,6 +80,12 @@ export const AssignPointsForm = ({
       onClose();
     }
 
+    if (onSubmitSuccess) {
+      onSubmitSuccess();
+    }
+
+    reset();
+
     toast({
       title: 'Point Created.',
       // description: "Point cre.",
@@ -88,9 +97,10 @@ export const AssignPointsForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(localOnSubmit)}>
       <Flex
-        gap={8}
+        rowGap={2}
+        columnGap={8}
         mt={{ base: 8, md: 0 }}
         flexDirection={{ base: 'column', md: 'row' }}
         flexWrap={{ md: 'wrap' }}

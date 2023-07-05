@@ -24,6 +24,7 @@ import { getAuth } from 'firebase/auth';
 import {
   AssignPointsForm,
   AuthGuard,
+  Loading,
   PointCard,
 } from '@the-game/client/the-game-ui/components';
 import { DefaultLayout } from '@the-game/client/the-game-ui/layouts';
@@ -35,36 +36,30 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
+import { useGetPointsQuery } from '@the-game/client/the-game-ui/services/points';
 
 const Dashboard = () => {
-  const [userPoints, setUserPoints] = useState<Point[]>([]);
   const [userScore, setUserScore] = useState('');
   const [userScoreIsLoading, setUserScoreIsLoading] = useState(false);
   const [userScoreColor, setUserScoreColor] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef<any>();
-  const form = useForm<AssignPointsFormModel>({
-    // reValidateMode: 'onBlur'
-  });
+  const form = useForm<AssignPointsFormModel>();
 
   const auth = getAuth();
+  const {
+    data: points,
+    isLoading,
+    refetch,
+  } = useGetPointsQuery(auth.currentUser?.uid || '');
+
+  const onSubmitSuccess = () => {
+    refetch();
+  };
 
   useEffect(() => {
     const fetchUserPoints = async () => {
       const token = await auth.currentUser?.getIdToken();
-      setUserScoreIsLoading(true);
-      const userPointsRes = await fetch(
-        `https://api.the-game.kevinmccartney.dev/v1/users/${auth.currentUser?.uid}/points`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      const userPoints = await userPointsRes.json();
-
-      setUserPoints(userPoints);
 
       const userScoreRes = await fetch(
         `https://api.the-game.kevinmccartney.dev/v1/users/${auth.currentUser?.uid}/scores`,
@@ -154,14 +149,7 @@ const Dashboard = () => {
                     color={userScoreColor}
                     textAlign="center"
                   >
-                    {userScoreIsLoading ? (
-                      <FontAwesomeIcon
-                        icon={faSpinner}
-                        spin
-                      />
-                    ) : (
-                      userScore
-                    )}
+                    {userScoreIsLoading ? <Loading /> : userScore}
                   </Text>
                   <Text
                     fontWeight={400}
@@ -181,24 +169,17 @@ const Dashboard = () => {
                 </Button>
               </Flex>
             </Flex>
-            {/* <Divider
-              my={8}
-              borderBottomColor="gray.500"
-              display={{ base: 'none', md: 'flex' }}
-            /> */}
+
             <Card
               display={{ base: 'none', md: 'flex' }}
               justifyContent={{ md: 'center' }}
               my={12}
-              // background="blue.500"
-              // borderRadius="2xl"
-              // padding={8}
-              // color="white"
             >
               <CardBody>
                 <AssignPointsForm
                   form={form}
                   inverse={true}
+                  onSubmitSuccess={onSubmitSuccess}
                 />
               </CardBody>
             </Card>
@@ -211,7 +192,15 @@ const Dashboard = () => {
               flexDirection="column"
               gap={8}
             >
-              {userPoints.map((x) => (
+              {isLoading && (
+                <Flex
+                  p={8}
+                  justifyContent="center"
+                >
+                  <Loading />
+                </Flex>
+              )}
+              {points?.map((x) => (
                 <PointCard
                   key={x.id}
                   point={x}
@@ -248,6 +237,7 @@ const Dashboard = () => {
                 onClose={onClose}
                 form={form}
                 showCancel={true}
+                onSubmitSuccess={onSubmitSuccess}
               />
             </DrawerBody>
           </DrawerContent>
