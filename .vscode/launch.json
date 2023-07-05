@@ -14,19 +14,13 @@
       "justMyCode": true
     },
     {
-      "name": "Python: Attach using Process Id",
-      "type": "python",
-      "request": "attach",
-      "processId": "${command:pickProcess}",
-      "justMyCode": true
-    },
-    {
       "name": "Debug Script",
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/bin/${input:pickScript}",
       "console": "integratedTerminal",
-      "justMyCode": true
+      "justMyCode": true,
+      "args": ["['__no-changes']"]
     }
   ],
   "inputs": [
@@ -47,7 +41,7 @@
       "id": "pickScript",
       "description": "Select script to debug",
       "type": "pickString",
-      "options": ["edfi", "find-changed"],
+      "options": ["edfi", "find-changed", "has-changed"],
       "default": "find-changed"
     }
   ]
