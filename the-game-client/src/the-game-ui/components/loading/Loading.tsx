@@ -1,12 +1,19 @@
-import { Flex, Spinner } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export const Loading = () => (
-  <Flex
-    h="100vh"
-    w="100vw"
-    justifyContent="center"
-    alignItems="center"
+export const Loading = ({ size }: { size: string }) => (
+  <Box
+    color="purple.500"
+    fontSize={size}
   >
-    <Spinner size="xl" />
-  </Flex>
+    <FontAwesomeIcon
+      icon={faSpinner}
+      spin
+    />
+  </Box>
 );
+
+Loading.defaultProps = {
+  size: '4xl',
+};

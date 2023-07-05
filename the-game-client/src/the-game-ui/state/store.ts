@@ -1,6 +1,7 @@
 'use client';
 
 import { PayloadAction, configureStore, createSlice } from '@reduxjs/toolkit';
+import { api } from '@the-game/client/the-game-ui/services/api';
 import { User } from 'firebase/auth';
 
 type AppState = {
@@ -43,7 +44,12 @@ export const userSelector = (state: any) => state.user;
 const store = configureStore({
   reducer: {
     user: userSlice.reducer,
+    [api.reducerPath]: api.reducer,
   },
+  // Adding the api middleware enables caching, invalidation, polling,
+  // and other useful features of `rtk-query`.
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(api.middleware),
 });
 
 store.subscribe(() => saveToLocalStorage(store.getState()));
