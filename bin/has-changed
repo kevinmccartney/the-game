@@ -12,7 +12,7 @@ print(type(changed_arg))
 
 changed = json.loads(changed_arg)
 
-if len(changed) > 0 and "__no-changes" not in changed:
+if len(changed["changes"]) > 0 and "__no-changes" not in changed["changes"]:
     print("yes")
 else:
     print("no")

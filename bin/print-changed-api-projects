@@ -2,6 +2,7 @@
 
 import subprocess
 import os
+import json
 
 changed_projects = []
 
@@ -14,8 +15,6 @@ diff = subprocess.run(
     text=True,
 )
 
-# print(diff.stdout)
-
 changes = diff.stdout.splitlines()
 
 for project in api_projects:
@@ -25,6 +24,6 @@ for project in api_projects:
         changed_projects.append(project)
 
 if len(changed_projects) > 0:
-    print(changed_projects)
+    print(json.dumps({"changes": changed_projects}))
 else:
-    print(["__no-changes"])
+    print(json.dumps({"changes": ["__no-changes"]}))
