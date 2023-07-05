@@ -41,8 +41,12 @@
       "id": "pickScript",
       "description": "Select script to debug",
       "type": "pickString",
-      "options": ["edfi", "find-changed", "has-changed"],
-      "default": "find-changed"
+      "options": [
+        "edfi",
+        "find-changed-api-projects",
+        "has-changed-api-projects"
+      ],
+      "default": "find-changed-api-projects"
     }
   ]
 }
