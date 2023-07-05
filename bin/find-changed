@@ -30,4 +30,4 @@ for project in api_projects:
         changed_projects.append(project)
 
 
-print(changes)
+print(changed_projects)
