@@ -3,7 +3,12 @@
 import sys
 import json
 
+print(sys.argv[0])
+print(sys.argv[1])
+
 changed_arg = sys.argv[1]
+
+print(type(changed_arg))
 
 changed = json.loads(changed_arg)
 
