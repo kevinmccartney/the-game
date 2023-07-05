@@ -8,7 +8,8 @@ jobs:
   find-changes:
     runs-on: ubuntu-latest
     outputs:
-      changedApiProjects: ${{ steps.findChanges.outputs.changedApiProjects }}}
+      changedApiProjects: ${{ steps.findChanges.outputs.changedApiProjects }}
+      test: ${{ steps.findTestChanges.outputs.test }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -36,17 +37,16 @@ jobs:
       - name: Find changes
         id: findChanges
         env:
-          THE_GAME_API_PROJECTS: ${{vars.THE_GAME_API_PROJECTS}}
+          THE_GAME_API_PROJECTS: ${{ vars.THE_GAME_API_PROJECTS }}
         run: pipenv run python bin/find-changed
-
-      - name: Set outputs
-        env:
-          THE_GAME_API_PROJECTS: ${{vars.THE_GAME_API_PROJECTS}}
-        run: echo "changedApiProjects=$(pipenv run python bin/find-changed)" >> "$GITHUB_OUTPUT"
+      - name: Set test outputs
+        id: findTestChanges
+        run: echo "test=foo" >> "$GITHUB_OUTPUT"
   print-changes:
     runs-on: ubuntu-latest
     needs: find-changes
     steps:
       - env:
-          OUTPUT1: ${{needs.find-changes.outputs.changedApiProjects}}
-        run: echo "$OUTPUT1"
+          OUTPUT1: ${{ needs.find-changes.outputs.changedApiProjects }}
+          OUTPUT2: ${{ needs.find-changes.outputs.test }}
+        run: echo "$OUTPUT1 $OUTPUT2"
