@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       changedApiProjects: ${{ steps.findChanges.outputs.changedApiProjects }}
+      hasChanged: ${{ steps.hasChanged.outputs.hasChanged }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -44,6 +45,11 @@ jobs:
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: pipenv install --deploy --dev
 
+      - name: Git diff
+        env:
+          THE_GAME_API_PROJECTS: ${{ vars.THE_GAME_API_PROJECTS }}
+        run: git diff --name-only HEAD HEAD~1
+
       - name: Print changes
         env:
           THE_GAME_API_PROJECTS: ${{ vars.THE_GAME_API_PROJECTS }}
@@ -54,9 +60,15 @@ jobs:
         env:
           THE_GAME_API_PROJECTS: ${{ vars.THE_GAME_API_PROJECTS }}
         run: echo "changedApiProjects=$(pipenv run python bin/find-changed)" >> "$GITHUB_OUTPUT"
+      - name: Has changed
+        id: hasChanged
+        env:
+          THE_GAME_API_PROJECTS: ${{ vars.THE_GAME_API_PROJECTS }}
+        run: echo "hasChanged=$(pipenv run python bin/has-changed)" >> "$GITHUB_OUTPUT"
 
   deploy_cloud_function:
     needs: find-changes
+    if: ${{ needs.find-changes.outputs.hasChanged }} == "yes"
     strategy:
       matrix:
         function: ${{ fromJson(needs.find-changes.outputs.changedApiProjects) }}
