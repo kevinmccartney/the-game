@@ -32,4 +32,5 @@ if len(changed_projects) > 0:
 else:
     print("No changes")
     with open("the-game-changed-api-projects.json", "w") as file:
-        file.write(json.dumps({"changes": ["__no-changes"]}))
+        # file.write(json.dumps({"changes": ["__no-changes"]}))
+        file.write(json.dumps({"changes": []}))
