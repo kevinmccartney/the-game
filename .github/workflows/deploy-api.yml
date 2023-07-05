@@ -70,6 +70,7 @@ jobs:
         run: |
           changed_projects=$(cat the-game-changed-api-projects.json)
           hasChanged=$(pipenv run python bin/has-changed-api-projects ${changed_projects})
+          echo $hasChanged
           echo "hasChanged=${hasChanged}" >> "$GITHUB_OUTPUT"
 
   deploy_cloud_function:
