@@ -13,7 +13,7 @@ from firebase_admin.auth import (
     RevokedIdTokenError,
     UserDisabledError,
 )
-from google.cloud.firestore_v1.base_query import FieldFilter
+from google.cloud.firestore_v1.base_query import FieldFilter, Or
 
 logging_client = LoggingClient()
 logging_client.setup_logging()
@@ -77,9 +77,14 @@ def function_handler(request: Request):
         subject_uid = pattern.sub(r"\1", request_path)
 
         points_ref = db.collection("points")
-        points_query_ref = points_ref.where(
-            filter=FieldFilter(field_path="subject", op_string="==", value=subject_uid)
-        )
+
+        filter_1 = FieldFilter("subject", "==", subject_uid)
+        filter_2 = FieldFilter("created_by", "==", subject_uid)
+
+        # Create the union filter of the two filters (queries)
+        or_filter = Or(filters=[filter_1, filter_2])
+
+        points_query_ref = points_ref.where(filter=or_filter)
 
         points_results = points_query_ref.get()
 
