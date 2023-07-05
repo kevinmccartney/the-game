@@ -8,7 +8,7 @@ jobs:
   find-changes:
     runs-on: ubuntu-latest
     outputs:
-      changedApiProjects: ${{ steps.findChanges.outputs.test }}
+      changedApiProjects: ${{ steps.findChanges.outputs.changedApiProjects }}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
