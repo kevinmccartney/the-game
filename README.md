@@ -60,3 +60,6 @@
 - [python pip - install from local dir](https://stackoverflow.com/a/41537134)
 - [🤯 HEAD](https://htmlhead.dev/)
 - [How to query with multiple parameters #1028](https://github.com/reduxjs/redux-toolkit/issues/1028#issuecomment-830058161)
+- [Defining outputs for jobs](https://docs.github.com/en/actions/using-jobs/defining-outputs-for-jobs)
+- [Checkout V3 | Fetch all history for all tags and branches](https://github.com/actions/checkout#Fetch-all-history-for-all-tags-and-branches)
+- [How to handle empty matrix #66](https://github.com/dorny/paths-filter/issues/66#issuecomment-778267385)
