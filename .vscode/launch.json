@@ -21,13 +21,12 @@
       "justMyCode": true
     },
     {
-      "name": "Python: Current File",
+      "name": "Debug Script",
       "type": "python",
       "request": "launch",
-      "program": "${file}",
+      "program": "${workspaceFolder}/bin/${input:pickScript}",
       "console": "integratedTerminal",
-      "justMyCode": true,
-      "args": ["./the-game-client-next/out", "--ci"]
+      "justMyCode": true
     }
   ],
   "inputs": [
@@ -40,9 +39,16 @@
         "user-points-post",
         "user-scores-get",
         "users-get",
-        "users-get-all"
+        "users-get-entity"
       ],
       "default": "user-points-post"
+    },
+    {
+      "id": "pickScript",
+      "description": "Select script to debug",
+      "type": "pickString",
+      "options": ["edfi", "find-changed"],
+      "default": "find-changed"
     }
   ]
 }
