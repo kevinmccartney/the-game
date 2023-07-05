@@ -14,7 +14,14 @@ diff = subprocess.run(
     text=True,
 )
 
+log = subprocess.run(
+    ["git", "log"],
+    stdout=subprocess.PIPE,
+    text=True,
+)
+
 print(diff)
+print(log)
 
 changes = diff.stdout.splitlines()
 
