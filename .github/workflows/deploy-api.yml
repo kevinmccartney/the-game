@@ -53,19 +53,19 @@ jobs:
       - name: Print changes
         env:
           THE_GAME_API_PROJECTS: ${{ vars.THE_GAME_API_PROJECTS }}
-        run: pipenv run python bin/print-changed-api-projects
+        run: pipenv run python bin/find-changed-api-projects
 
       - name: Find changes
         id: findChanges
         env:
           THE_GAME_API_PROJECTS: ${{ vars.THE_GAME_API_PROJECTS }}
-        run: echo "changedApiProjects=$(pipenv run python bin/print-changed-api-projects)" >> "$GITHUB_OUTPUT"
+        run: echo "changedApiProjects=$(pipenv run python bin/find-changed-api-projects)" >> "$GITHUB_OUTPUT"
       - name: Has changed
         id: hasChanged
         env:
           THE_GAME_API_PROJECTS: ${{ vars.THE_GAME_API_PROJECTS }}
         run: |
-          changed_projects=$(pipenv run python bin/print-changed-api-projects)
+          changed_projects=$(pipenv run python bin/find-changed-api-projects)
           hasChanged=$(pipenv run python bin/has-changed ${changed_projects})
           echo "hasChanged=${hasChanged}" >> "$GITHUB_OUTPUT"
 
