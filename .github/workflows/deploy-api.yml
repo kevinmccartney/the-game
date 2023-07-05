@@ -65,7 +65,7 @@ jobs:
         env:
           THE_GAME_API_PROJECTS: ${{ vars.THE_GAME_API_PROJECTS }}
         run: |
-          changed_projects=$(pipenv run python bin/find-changed-api-projects)
+          changed_projects=$(cat the-game-changed-api-projects.json)
           hasChanged=$(pipenv run python bin/has-changed ${changed_projects})
           echo "hasChanged=${hasChanged}" >> "$GITHUB_OUTPUT"
 
