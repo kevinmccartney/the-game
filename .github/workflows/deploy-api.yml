@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - the-game-api/**/*
+      - projects/**/*
       - .github/workflows/deploy-api.yml
     branches:
       - main
@@ -85,7 +85,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./the-game-api/${{ matrix.function }}
+        working-directory: ./projects/api/${{ matrix.function }}
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
