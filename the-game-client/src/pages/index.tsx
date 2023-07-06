@@ -1,11 +1,10 @@
+/* eslint-disable react/react-in-jsx-scope */
+
 'use client';
 
-import React from 'react';
-
 import { getAuth } from 'firebase/auth';
-import Dashboard from '@the-game/client/the-game-ui/pages/dashboard';
-import Splash from '@the-game/client/the-game-ui/pages/splash/Splash';
-import { Flex } from '@chakra-ui/react';
+
+import { Dashboard, Splash } from '@the-game/ui/pages';
 
 const AppRoot = () => {
   const auth = getAuth();
@@ -14,3 +13,4 @@ const AppRoot = () => {
 };
 
 export default AppRoot;
+/* eslint-enable react/react-in-jsx-scope */

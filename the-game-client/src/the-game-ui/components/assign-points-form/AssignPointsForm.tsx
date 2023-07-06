@@ -1,5 +1,6 @@
 import {
   Button,
+  CreateToastFnReturn,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -7,70 +8,65 @@ import {
   Input,
   useToast,
 } from '@chakra-ui/react';
-
-import { UserSearchField } from '@the-game/client/the-game-ui/components';
-import { AssignPointsForm as AssignPointsFormModel } from '@the-game/client/the-game-ui/models';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getAuth } from 'firebase/auth';
 import { noop } from 'lodash-es';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SubmitHandler, UseFormReturn } from 'react-hook-form';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faS, faSpinner } from '@fortawesome/free-solid-svg-icons';
+
+import { UserSearchField } from '@the-game/ui/components/user-search-field';
+import { AssignPointsForm as AssignPointsFormModel } from '@the-game/ui/models';
+import { useGetUsersQuery } from '@the-game/ui/services/users';
 
 export const AssignPointsForm = ({
-  showCancel,
-  onClose,
   form,
+  onClose,
   onSubmitSuccess,
-}: {
-  showCancel?: boolean;
+  showCancel,
+}: Readonly<{
+  form: Readonly<UseFormReturn<AssignPointsFormModel, any, undefined>>;
   onClose?: () => void;
-  form: UseFormReturn<AssignPointsFormModel, any, undefined>;
-  onSubmitSuccess?: () => void;
-}) => {
+  onSubmitSuccess?: () => Promise<void>;
+  showCancel?: boolean;
+}>) => {
   const {
-    register,
-    handleSubmit,
-    setValue,
     formState: { errors },
-    watch,
     getValues,
+    handleSubmit,
+    register,
     reset,
+    watch,
   } = form;
   const [isLoading, setIsLoading] = useState(false);
-  const toast = useToast();
+  const toast: CreateToastFnReturn = useToast();
   const auth = getAuth();
-  const localOnSubmit: SubmitHandler<AssignPointsFormModel> = () => {
-    setIsLoading(true);
-    postPoint(toast);
-  };
   const [values, setValues] = useState(getValues());
-
   useEffect(() => {
     const subscription = watch(() => {
-      const values = getValues();
+      const formValues = getValues();
 
-      setValues(values);
+      setValues(formValues);
     });
 
     return () => subscription.unsubscribe();
   });
 
-  const postPoint = async (toast: any) => {
-    const token = await auth.currentUser?.getIdToken();
+  const postPoint = async (toastFn: CreateToastFnReturn) => {
+    const token = (await auth.currentUser?.getIdToken()) || '';
 
     await fetch(
       `https://api.the-game.kevinmccartney.dev/v1/users/${values.subject}/points`,
       {
-        method: 'POST',
+        body: JSON.stringify({
+          // value from number field comes through as a string
+          points: parseInt(values.points as unknown as string, 10),
+          reason: values.reason,
+        }),
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          reason: values.reason,
-          // value from number field comes through as a string
-          points: parseInt(values.points as unknown as string),
-        }),
+        method: 'POST',
       },
     );
 
@@ -81,77 +77,76 @@ export const AssignPointsForm = ({
     }
 
     if (onSubmitSuccess) {
-      onSubmitSuccess();
+      void onSubmitSuccess();
     }
 
     reset();
 
-    toast({
-      title: 'Point Created.',
-      // description: "Point cre.",
-      status: 'success',
+    toastFn({
       duration: 9000,
       isClosable: true,
+      status: 'success',
+      title: 'Point Created.',
       variant: 'top-accent',
     });
   };
 
+  const localOnSubmit: SubmitHandler<AssignPointsFormModel> = () => {
+    setIsLoading(true);
+    void postPoint(toast);
+  };
+
   return (
-    <form onSubmit={handleSubmit(localOnSubmit)}>
+    <form onSubmit={void handleSubmit(localOnSubmit)}>
       <Flex
-        rowGap={2}
         columnGap={8}
-        mt={{ base: 8, md: 0 }}
         flexDirection={{ base: 'column', md: 'row' }}
         flexWrap={{ md: 'wrap' }}
+        mt={{ base: 8, md: 0 }}
+        rowGap={2}
       >
         <UserSearchField
-          register={register}
-          setValue={setValue}
-          errors={errors}
           containerProps={{ width: { md: '75%' } }}
+          errors={errors}
           form={form}
         />
         <FormControl
-          width={{ md: '45%' }}
           isInvalid={!!errors.reason}
+          width={{ md: '45%' }}
         >
           <FormLabel>Reason</FormLabel>
           <Input
             {...register('reason', { required: 'Required' })}
-            placeholder="So good at making websites 🤗"
             _placeholder={{
               color: errors.reason ? 'red.500' : 'gray.400',
             }}
             borderColor={errors.reason ? 'red.500' : 'gray.200'}
             className={errors.reason ? 'hover:border-red-500' : ''}
             colorScheme="red"
+            placeholder="So good at making websites 🤗"
           />
           {errors.reason && (
             <FormErrorMessage>{errors.reason.message}</FormErrorMessage>
           )}
         </FormControl>
         <FormControl
-          width={{ md: '45%' }}
           isInvalid={!!errors.points}
+          width={{ md: '45%' }}
         >
           <FormLabel>Points</FormLabel>
           {/* <NumberInput> */}
           <Input
-            placeholder="50"
             _placeholder={{
               color: errors.points ? 'red.500' : 'gray.400',
             }}
             borderColor={errors.points ? 'red.500' : 'gray.200'}
             className={errors.points ? 'hover:border-red-500' : ''}
+            placeholder="50"
             {...register('points', {
               required: 'Required',
-              validate: (value) => {
-                return (
-                  !isNaN(parseInt(value as any)) ||
-                  'Must be a positive or negative number'
-                );
-              },
+              validate: (value) =>
+                !Number.isNaN(parseInt(value as unknown as string, 10)) ||
+                'Must be a positive or negative number',
             })}
             inputMode="numeric"
           />
@@ -162,31 +157,31 @@ export const AssignPointsForm = ({
         </FormControl>
       </Flex>
       <Flex
-        mt={8}
         justifyContent="flex-end"
+        mt={8}
       >
         {showCancel && (
           <Button
-            variant="outline"
             mr={3}
             onClick={onClose || noop}
+            variant="outline"
           >
             Cancel
           </Button>
         )}
 
         <Button
-          type="submit"
-          colorScheme={isLoading ? 'gray' : 'blue'}
-          disabled={isLoading}
           leftIcon={
             isLoading ? (
               <FontAwesomeIcon
                 icon={faSpinner}
-                spin
+                spin={true}
               />
             ) : undefined
           }
+          colorScheme={isLoading ? 'gray' : 'blue'}
+          disabled={isLoading}
+          type="submit"
         >
           {isLoading ? 'Loading...' : 'Submit'}
         </Button>
@@ -196,7 +191,7 @@ export const AssignPointsForm = ({
 };
 
 AssignPointsForm.defaultProps = {
-  showCancel: false,
-  onClose: () => {},
   inverse: false,
+  onClose: () => {},
+  showCancel: false,
 };

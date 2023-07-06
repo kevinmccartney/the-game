@@ -20,7 +20,8 @@
       }
     ],
     "paths": {
-      "@the-game/client/*": ["./src/*"]
+      "@the-game/ui/*": ["./src/the-game-ui/*"],
+      "@the-game/pages/*": ["./src/pages/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

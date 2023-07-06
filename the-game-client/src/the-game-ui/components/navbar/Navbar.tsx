@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
   Button,
   Flex,
@@ -7,16 +6,17 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser, faDice } from '@fortawesome/free-solid-svg-icons';
-import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   GoogleAuthProvider,
   getAuth,
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 
 export const Navbar = () => {
   const auth = getAuth();
@@ -25,63 +25,69 @@ export const Navbar = () => {
   const provider = new GoogleAuthProvider();
   const router = useRouter();
 
-  const logout = async () => {
-    try {
-      const result = await signOut(auth);
-      console.log(result);
-      setIsAuthed(false);
-      router.push('/');
-    } catch (error) {
-      console.error(error);
-    }
+  const logout = () => {
+    const requestSignout = async () => {
+      try {
+        await signOut(auth);
+
+        setIsAuthed(false);
+        void router.push('/');
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    void requestSignout();
   };
 
-  const login = async () => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      console.log(result);
-      setIsAuthed(true);
-      router.push('/');
-    } catch (error) {
-      console.error(error);
-    }
+  const login = () => {
+    const requestLogin = async () => {
+      try {
+        await signInWithPopup(auth, provider);
+
+        setIsAuthed(true);
+        void router.push('/');
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    void requestLogin();
   };
 
   return (
     <Flex
       bg="purple.500"
+      justifyContent="space-between"
       p="4"
       role="navigation"
-      justifyContent="space-between"
     >
       <Link href="/">
         <FontAwesomeIcon
           icon={faDice}
-          inverse
+          inverse={true}
           size="2x"
         />
       </Link>
-      {
-        <Menu>
-          <MenuButton
-            as={Button}
-            colorScheme="transparent"
-          >
-            <FontAwesomeIcon
-              icon={faCircleUser}
-              inverse
-              size="2x"
-            />
-          </MenuButton>
-          <MenuList>
-            {isAuthed ? (
-              <MenuItem onClick={logout}>Logout</MenuItem>
-            ) : (
-              <MenuItem onClick={login}>Login</MenuItem>
-            )}
-          </MenuList>
-        </Menu>
-      }
+      <Menu>
+        <MenuButton
+          as={Button}
+          colorScheme="transparent"
+        >
+          <FontAwesomeIcon
+            icon={faCircleUser}
+            inverse={true}
+            size="2x"
+          />
+        </MenuButton>
+        <MenuList>
+          {isAuthed ? (
+            <MenuItem onClick={logout}>Logout</MenuItem>
+          ) : (
+            <MenuItem onClick={login}>Login</MenuItem>
+          )}
+        </MenuList>
+      </Menu>
     </Flex>
   );
 };

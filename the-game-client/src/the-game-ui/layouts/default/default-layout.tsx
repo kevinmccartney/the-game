@@ -1,38 +1,36 @@
-import { Box, ChakraProvider, Flex } from '@chakra-ui/react';
-import { config } from '@fortawesome/fontawesome-svg-core';
+import { Box, Flex } from '@chakra-ui/react';
+// eslint-disable-next-line import/no-unassigned-import
 import '@fortawesome/fontawesome-svg-core/styles.css';
-import theme from '@the-game/client/the-game-ui/theme';
-import { Footer, Navbar } from '@the-game/client/the-game-ui/components';
-import { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 
-config.autoAddCss = false;
+import { Footer, Navbar } from '@the-game/ui/components';
 
-export const DefaultLayout: FunctionComponent<{ children: any }> = (props) => {
-  return (
+export const DefaultLayout: FunctionComponent<{ children: any }> = (props) => (
+  <Flex
+    flexDirection="column"
+    minHeight="100vh"
+  >
+    <Navbar />
     <Flex
-      minHeight="100vh"
+      alignItems="center"
+      backgroundColor="gray.50"
       flexDirection="column"
+      flexGrow={1}
+      justifyContent="center"
+      px={6}
+      role="main"
     >
-      <Navbar />
-      <Flex
-        role="main"
-        px={6}
-        flexGrow={1}
-        justifyContent="center"
-        backgroundColor="gray.50"
+      <Box
+        maxW={{
+          lg: 'container.lg',
+          md: 'container.md',
+          sm: 'container.sm',
+        }}
+        width="100%"
       >
-        <Box
-          maxW={{
-            sm: 'container.sm',
-            md: 'container.md',
-            lg: 'container.lg',
-          }}
-          width="100%"
-        >
-          {props?.children}
-        </Box>
-      </Flex>
-      <Footer />
+        {props?.children}
+      </Box>
     </Flex>
-  );
-};
+    <Footer />
+  </Flex>
+);

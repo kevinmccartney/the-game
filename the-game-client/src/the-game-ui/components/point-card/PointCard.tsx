@@ -9,11 +9,13 @@ import {
 } from '@chakra-ui/react';
 import { faClock } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Point } from '@the-game/client/the-game-ui/models';
 import { formatDistanceToNow } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
+import React from 'react';
 
-export const PointCard = ({ point }: { point: Point }) => {
+import { Point } from '@the-game/ui/models';
+
+export const PointCard = ({ point }: Readonly<{ point: Readonly<Point> }>) => {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const utcZonedTime = utcToZonedTime(point.created_time, timezone);
   const formattedDistance = formatDistanceToNow(utcZonedTime);
@@ -22,15 +24,15 @@ export const PointCard = ({ point }: { point: Point }) => {
 
   return (
     <Card
-      key={point.id}
-      flexDirection="row"
       boxShadow="lg"
+      flexDirection="row"
+      key={point.id}
     >
       <CardHeader>
         <Avatar
           name={point.created_by.display_name}
-          src={point.created_by.photo_url || ''}
           referrerPolicy="no-referrer"
+          src={point.created_by.photo_url || ''}
         />
       </CardHeader>
       <CardBody>
@@ -41,8 +43,8 @@ export const PointCard = ({ point }: { point: Point }) => {
             fontWeight={400}
           >
             <Text
-              fontWeight={700}
               as="span"
+              fontWeight={700}
             >
               {point.created_by.display_name}
             </Text>{' '}
@@ -65,10 +67,10 @@ export const PointCard = ({ point }: { point: Point }) => {
             <FontAwesomeIcon icon={faClock} /> {formattedDistance} Ago
           </Heading>
           <Text
-            mt={4}
-            ml={4}
             fontSize="xl"
             fontStyle="italic"
+            ml={4}
+            mt={4}
           >
             &ldquo;{point.reason}&ldquo;
           </Text>

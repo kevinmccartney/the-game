@@ -142,5 +142,11 @@
     "roboto",
     "yaspin"
   ],
-  "python.defaultInterpreterPath": "\"/Users/kevinmccartney/.local/share/virtualenvs/the-game-YZQVw8on/bin/python\""
+  "eslint.format.enable": true,
+  "eslint.workingDirectories": [
+    {
+      "pattern": "the-game-client"
+    }
+  ],
+  "eslint.execArgv": ["-c", "${workspaceFolder}/the-game-client/.eslintrc.json"]
 }
