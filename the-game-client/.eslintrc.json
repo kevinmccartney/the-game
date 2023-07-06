@@ -1,3 +1,107 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "eslint:recommended",
+    "plugin:eslint-comments/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "plugin:functional/recommended",
+    "plugin:functional/stylistic",
+    "next/core-web-vitals",
+    "plugin:react-redux/recommended",
+    "plugin:perfectionist/recommended-natural",
+    "airbnb",
+    "airbnb-typescript",
+    "prettier"
+  ],
+  "plugins": [
+    "write-good-comments",
+    "functional",
+    "eslint-comments",
+    "@typescript-eslint",
+    "import",
+    "perfectionist",
+    "deprecation",
+    "react-redux"
+  ],
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true,
+        "project": "./"
+      }
+    }
+  },
+  "parserOptions": {
+    "tsconfigRootDir": "./",
+    "project": "./tsconfig.json",
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "rules": {
+    "import/order": "off",
+    "import/no-mutable-exports": "error",
+    "import/no-self-import": "error",
+    "import/no-cycle": "error",
+    "import/no-named-default": "error",
+    "import/no-anonymous-default-export": "error",
+    "import/no-commonjs": "error",
+    "import/no-amd": "error",
+    "import/no-duplicates": "error",
+    "import/first": "error",
+    "import/no-absolute-path": "error",
+    "import/no-nodejs-modules": "error",
+    "import/no-webpack-loader-syntax": "error",
+    "import/newline-after-import": "error",
+    "import/no-unassigned-import": "error",
+    "import/no-useless-path-segments": "error",
+    "import/no-import-module-exports": "error",
+    "import/exports-last": "off",
+    "import/prefer-default-export": "off",
+    "import/no-extraneous-dependencies": "off",
+    "@typescript-eslint/no-unused-vars": "error",
+    "no-unused-vars": "off",
+    "write-good-comments/write-good-comments": "warn",
+    "eslint-comments/no-unused-disable": "error",
+    "functional/no-expression-statements": "off",
+    "functional/no-return-void": "off",
+    "functional/functional-parameters": "off",
+    "functional/no-conditional-statements": "off",
+    "functional/immutable-data": [
+      "error",
+      {
+        "ignoreAccessorPattern": "**.defaultProps.**"
+      }
+    ],
+    "perfectionist/sort-imports": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index"
+        ],
+        "type": "alphabetical",
+        "order": "asc",
+        "internal-pattern": ["@the-game/**"],
+        "newlines-between": "always",
+        "read-tsconfig": true
+      }
+    ],
+    "react/function-component-definition": [
+      "error",
+      { "namedComponents": "arrow-function" }
+    ],
+    "no-nested-ternary": "off",
+    "react/jsx-boolean-value": ["error", "always"],
+    "no-void": "off",
+    "react/jsx-props-no-spreading": "off",
+    "deprecation/deprecation": "error"
+  }
 }

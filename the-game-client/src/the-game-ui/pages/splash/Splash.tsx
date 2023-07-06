@@ -1,12 +1,12 @@
 'use client';
 
-import React from 'react';
-
 import { Heading, VStack } from '@chakra-ui/react';
-import { DefaultLayout } from '@the-game/client/the-game-ui/layouts';
+import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
-const Splash = () => (
+import { DefaultLayout } from '@the-game/ui/layouts';
+
+export const Splash = () => (
   <DefaultLayout>
     <Helmet>
       <title>The Game</title>
@@ -14,25 +14,23 @@ const Splash = () => (
     <header className="App-header">
       <VStack>
         <Heading
-          size="4xl"
-          color="purple.500"
-          className="font-bold"
           as="h1"
+          className="font-bold"
+          color="purple.500"
+          size="4xl"
           textAlign="center"
         >
           The Game
         </Heading>
         <Heading
-          size="2xl"
-          color="purple.500"
           className="font-light"
+          color="purple.500"
+          size="2xl"
           textAlign="center"
         >
-          It{"'"}s all about points baby
+          It&apos;s all about points baby
         </Heading>
       </VStack>
     </header>
   </DefaultLayout>
 );
-
-export default Splash;

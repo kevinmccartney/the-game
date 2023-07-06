@@ -1,44 +1,37 @@
+/* eslint-disable react/react-in-jsx-scope */
+
 'use client';
 
-import { useEffect, useState } from 'react';
-import './globals.css';
+import { Box, ChakraProvider, Flex } from '@chakra-ui/react';
+import { config as fontAwesomeConfig } from '@fortawesome/fontawesome-svg-core';
 import { initializeApp } from 'firebase/app';
 import {
-  GoogleAuthProvider,
   browserLocalPersistence,
   getAuth,
-  onAuthStateChanged,
   setPersistence,
-  signInWithPopup,
 } from 'firebase/auth';
-import { Provider, useDispatch } from 'react-redux';
-import store, { userSlice } from '@the-game/client/the-game-ui/state/store';
-import { Loading } from '@the-game/client/the-game-ui/components';
-import { useRouter } from 'next/router';
-import { Box, ChakraProvider, Flex } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
-import theme from '@the-game/client/the-game-ui/theme';
+import { Provider } from 'react-redux';
 
-const provider = new GoogleAuthProvider();
+import { Loading } from '@the-game/ui/components';
+import store from '@the-game/ui/state/store';
+import theme from '@the-game/ui/theme';
 
-export default function MyApp({
+// eslint-disable-next-line import/no-unassigned-import
+import './globals.css';
+
+// eslint-disable-next-line functional/immutable-data
+fontAwesomeConfig.autoAddCss = false;
+
+const MyApp = ({
   Component,
   pageProps,
-}: {
+}: Readonly<{
   Component: any;
   pageProps: any;
-}) {
+}>) => {
   const [isInitialized, setIsInitialized] = useState(false);
-  // https://github.com/vercel/next.js/issues/5354#issuecomment-520305040
-  // const hasWindow = () => {
-  //   return typeof window !== 'undefined';
-  // };
-
-  // if (hasWindow()) {
-
-  // }
-
-  const router = useRouter();
 
   useEffect(() => {
     const initialize = async () => {
@@ -47,10 +40,11 @@ export default function MyApp({
         const url = window.location.href;
 
         if (url.includes('index.html')) {
+          // eslint-disable-next-line functional/immutable-data
           window.location.href = url.replace('index.html', '');
         }
 
-        var config = {
+        const config = {
           apiKey: 'AIzaSyDurKKzRP9h_692StW7-SvcTpVZN0oCRE4',
           authDomain: 'the-game-388502.firebaseapp.com',
         };
@@ -64,13 +58,9 @@ export default function MyApp({
       }
     };
 
-    initialize();
-
-    const auth = getAuth();
-
-    // onAuthStateChanged(auth, () => {
-    //   router.push('/');
-    // });
+    initialize().catch((e) => {
+      console.log(e);
+    });
   });
 
   return (
@@ -82,10 +72,10 @@ export default function MyApp({
               <Component {...pageProps} />
             ) : (
               <Flex
-                h="100vh"
-                w="100vw"
-                justifyContent="center"
                 alignItems="center"
+                h="100vh"
+                justifyContent="center"
+                w="100vw"
               >
                 <Loading />
               </Flex>
@@ -95,4 +85,7 @@ export default function MyApp({
       </HelmetProvider>
     </Provider>
   );
-}
+};
+
+export default MyApp;
+/* eslint-enable react/react-in-jsx-scope */

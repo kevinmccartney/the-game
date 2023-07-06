@@ -1,3 +1,3 @@
-import store from '@the-game/client/the-game-ui/state/store';
+import store from '@the-game/ui/state/store';
 
-export type AppState = ReturnType<typeof store.getState>;
+export type AppState = Readonly<ReturnType<typeof store.getState>>;

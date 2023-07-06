@@ -1,19 +1,19 @@
 'use client';
 
+import { Heading, VStack } from '@chakra-ui/react';
 import React from 'react';
 
-import { Heading, VStack } from '@chakra-ui/react';
-import { DefaultLayout } from '@the-game/client/the-game-ui/layouts';
+import { DefaultLayout } from '@the-game/ui/layouts';
 
 const Unauthorized = () => (
   <DefaultLayout>
     <header className="App-header">
       <VStack>
         <Heading
-          size="4xl"
-          color="purple.500"
-          className="font-bold"
           as="h1"
+          className="font-bold"
+          color="purple.500"
+          size="4xl"
         >
           Unauthorized
         </Heading>

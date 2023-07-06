@@ -1,18 +1,22 @@
 'use client';
 
 import { Flex, Spinner } from '@chakra-ui/react';
+import { getAuth } from 'firebase/auth';
 import { useRouter } from 'next/router';
-import {
+import React, {
   JSXElementConstructor,
   ReactElement,
   useEffect,
   useState,
 } from 'react';
-import { getAuth } from 'firebase/auth';
 
-export const AuthGuard = (props: {
-  children: ReactElement<unknown, string | JSXElementConstructor<unknown>>[];
-}) => {
+export const AuthGuard = (
+  props: Readonly<{
+    children: Readonly<
+      ReactElement<unknown, JSXElementConstructor<unknown> | string>[]
+    >;
+  }>,
+) => {
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
 
@@ -23,7 +27,8 @@ export const AuthGuard = (props: {
       if (!auth.currentUser) {
         setAuthorized(false);
 
-        router.push({
+        // TODO: can there be an error thrown from this? fire & forget appropriate?
+        void router.push({
           pathname: '/unauthorized',
         });
       } else {
@@ -48,10 +53,10 @@ export const AuthGuard = (props: {
     props?.children
   ) : (
     <Flex
-      h="100vh"
-      w="100vw"
-      justifyContent="center"
       alignItems="center"
+      h="100vh"
+      justifyContent="center"
+      w="100vw"
     >
       <Spinner size="xl" />
     </Flex>

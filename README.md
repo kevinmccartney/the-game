@@ -63,3 +63,6 @@
 - [Defining outputs for jobs](https://docs.github.com/en/actions/using-jobs/defining-outputs-for-jobs)
 - [Checkout V3 | Fetch all history for all tags and branches](https://github.com/actions/checkout#Fetch-all-history-for-all-tags-and-branches)
 - [How to handle empty matrix #66](https://github.com/dorny/paths-filter/issues/66#issuecomment-778267385)
+- [import/default issues with React / ReactDOM #1800](https://github.com/import-js/eslint-plugin-import/issues/1800#issuecomment-781652008)
+- [Why use the void keyword? [duplicate]](https://stackoverflow.com/a/15231708)
+- [Awesome ESLint](https://github.com/dustinspecker/awesome-eslint)
