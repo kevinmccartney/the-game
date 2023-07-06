@@ -23,7 +23,7 @@ paths:
             type: string
   /v1/users:
     get:
-      operationId: users-get-all
+      operationId: users-get
       summary: Get all users.
       x-google-backend:
         address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-users-get
@@ -35,7 +35,7 @@ paths:
       responses:
         # TODO: add error codes
         '200':
-          description: A list of User object.
+          description: A list of User objects.
           schema:
             type: object
             properties:
@@ -60,8 +60,8 @@ paths:
         required: true
         description: UID of the user.
     get:
-      operationId: users-get
-      summary: Get all users.
+      operationId: users-get-entity
+      summary: Get a specific user.
       x-google-backend:
         address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-users-get-entity
       responses:
@@ -120,7 +120,7 @@ paths:
       responses:
         # TODO: add error codes
         '200':
-          description: Just pong.
+          description: Points for a user.
           schema:
             type: object
             properties:
@@ -133,7 +133,7 @@ paths:
               reason:
                 type: string
               subject:
-                type: string
+                $ref: '#/definitions/User'
               created_by:
                 $ref: '#/definitions/User'
 
@@ -161,7 +161,7 @@ paths:
       responses:
         # TODO: add error codes
         '200':
-          description: Just pong.
+          description: The User Score.
           schema:
             type: object
             properties:
