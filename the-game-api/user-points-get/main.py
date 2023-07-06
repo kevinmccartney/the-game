@@ -88,6 +88,7 @@ def function_handler(request: Request):
             pass
 
         points_ref = db.collection("points")
+        users_ref = db.collection("users")
         points_query_ref = None
 
         if type_param == "all":
@@ -112,20 +113,35 @@ def function_handler(request: Request):
         points_docs = [doc.to_dict() | {"id": doc.id} for doc in points_results]
 
         points = []
+        uids = []
+        users = {}
 
         for doc in points_docs:
-            users_ref = db.collection("users")
-            users_query_ref = users_ref.where(
-                filter=FieldFilter(
-                    field_path="uid", op_string="==", value=doc["created_by"]
-                )
+            uids.append(doc["subject"])
+            uids.append(doc["created_by"])
+
+        uids = list(set(uids))
+
+        filters = [FieldFilter("uid", "==", uid) for uid in uids]
+        or_filter = Or(filters=filters)
+        users_query_ref = users_ref.where(filter=or_filter)
+        users_results = users_query_ref.get()
+
+        users_docs = [doc.to_dict() for doc in users_results]
+
+        users = {}
+
+        for doc in users_docs:
+            users[doc["uid"]] = doc
+
+        for doc in points_docs:
+            points.append(
+                doc
+                | {
+                    "created_by": users[doc["created_by"]],
+                    "subject": users[doc["subject"]],
+                }
             )
-
-            users_results = users_query_ref.get()
-
-            created_by_user = users_results[0].to_dict()
-
-            points.append(doc | {"created_by": created_by_user})
 
         sorted_points = sorted(points, key=lambda x: x["created_time"], reverse=True)
 
