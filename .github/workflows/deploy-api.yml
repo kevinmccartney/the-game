@@ -85,7 +85,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: projects/api/${{ matrix.function }}
+        working-directory: projects/api/the_game_api/${{ matrix.function }}
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
