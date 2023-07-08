@@ -122,18 +122,28 @@ jobs:
 
       - name: Zip deployment package
         run: |
+          echo "current dir:"
           pwd
+          echo "current dir contents:"
           ls -la
+          echo "matrix.function:"
           echo ${{ matrix.function }}
           cd ${{ matrix.function }}
+          echo "current dir:"
           pwd
+          echo "current dir contents:"
           ls -la
           zip function-source.zip main.py requirements.txt
+          echo "current dir contents with zip:"
           ls -la
           mkdir temp && mv function-source.zip temp && cd temp
-          unzip function-source.zip
-          ls -la
+           echo "current dir:"
           pwd
+          echo "current dir contents:"
+          ls -la
+          unzip function-source.zip
+          echo "current dir contents with unzipped zip:"
+          ls -la
 
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
@@ -143,15 +153,19 @@ jobs:
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1'
 
-      - name: 'Use gcloud CLI'
-        run: 'gcloud info'
-
       - name: Upload CF source
         run: |
+          echo "current dir:"
           pwd
+          echo "current dir contents:"
           ls -la
-          echo {{ matrix.function }}
+          echo "matrix.function:"
+          echo ${{ matrix.function }}
           cf_name=$(echo ${{ matrix.function }} | tr '_' '-')
+          echo "cf_name:"
+          echo $cf_name
+          echo "contentents of ${{ matrix.function }}/temp"
+          ls -la ${{ matrix.function }}/temp
           gsutil cp ${{ matrix.function }}/temp/function-source.zip gs://the-game-388502-gcf-source/${cf_name}
 
       - name: Deploy Cloud Function
