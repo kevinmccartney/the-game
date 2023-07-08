@@ -133,15 +133,15 @@ jobs:
           pwd
           echo "current dir contents:"
           ls -la
-          zip function-source.zip main.py requirements.txt
+          zip function_source.zip main.py requirements.txt
           echo "current dir contents with zip:"
           ls -la
-          mkdir temp && mv function-source.zip temp && cd temp
+          mkdir temp && mv function_source.zip temp && cd temp
            echo "current dir:"
           pwd
           echo "current dir contents:"
           ls -la
-          unzip function-source.zip
+          unzip function_source.zip
           echo "current dir contents with unzipped zip:"
           ls -la
 
@@ -166,7 +166,7 @@ jobs:
           echo $cf_name
           echo "contentents of ${{ matrix.function }}/temp"
           ls -la ${{ matrix.function }}/temp
-          gsutil cp ${{ matrix.function }}/temp/function-source.zip gs://the-game-388502-gcf-source/${cf_name}
+          gsutil cp ${{ matrix.function }}/temp/function_source.zip gs://the-game-388502-gcf-source/${cf_name}
 
       - name: Deploy Cloud Function
         run: |
