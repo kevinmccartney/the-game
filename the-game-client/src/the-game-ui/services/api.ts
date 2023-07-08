@@ -6,8 +6,9 @@ const baseQuery = fetchBaseQuery({
   baseUrl: 'https://api.the-game.kevinmccartney.dev/v1/',
   // prepareHeaders: prepareAuthHeaders,
   credentials: 'same-origin',
+
   fetchFn: async (req: Readonly<RequestInfo>) => {
-    const request = req as Request;
+    const request = (req as Request).clone();
     const auth = getAuth();
 
     if (auth.currentUser) {
@@ -16,12 +17,30 @@ const baseQuery = fetchBaseQuery({
       request?.headers.set('Authorization', `Bearer ${token}`);
     }
 
-    return fetch(request?.url, {
+    const baseOptions: RequestInit = {
       credentials: 'same-origin',
       headers: request.headers,
       method: request.method,
       mode: 'cors',
-    });
+    };
+
+    if (request.body) {
+      const body = (await request.json()) as BodyInit;
+
+      return fetch(
+        request?.url,
+        request.method === 'POST'
+          ? { ...baseOptions, body: JSON.stringify(body) }
+          : baseOptions,
+      );
+    }
+
+    return fetch(
+      request?.url,
+      request.method === 'POST'
+        ? { ...baseOptions, body: request.body }
+        : baseOptions,
+    );
   },
 });
 
