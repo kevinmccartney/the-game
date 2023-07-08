@@ -35,13 +35,14 @@ jobs:
           python -m pip install --upgrade pipenv wheel
 
       # each
-      - id: cache-pipenv
+      - name: Cache pipenv
+        id: cache-pipenv
         uses: actions/cache@v1
         with:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
 
-      - name: Install dependencies
+      - name: Pipenv install
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: pipenv install --deploy --dev
 
@@ -100,14 +101,14 @@ jobs:
         run: |
           python -m pip install --upgrade pipenv wheel
 
-      # each
-      - id: cache-pipenv
+      - name: Cache pipenv
+        id: cache-pipenv
         uses: actions/cache@v1
         with:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
 
-      - name: Install dependencies
+      - name: Pipenv install
         if: steps.cache-pipenv.outputs.cache-hit != 'true'
         run: pipenv install --deploy --dev
 
@@ -122,42 +123,20 @@ jobs:
 
       - name: Zip deployment package
         run: |
-          echo "current dir:"
-          pwd
-          echo "current dir contents:"
-          ls -la
-          echo "matrix.function:"
-          echo ${{ matrix.function }}
           cd ${{ matrix.function }}
-          echo "current dir:"
-          pwd
-          echo "current dir contents:"
-          ls -la
           zip function_source.zip main.py requirements.txt
-          echo "current dir contents with zip:"
-          ls -la
 
-      - id: 'auth'
+      - name: GCP auth
         uses: 'google-github-actions/auth@v1'
         with:
           credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
 
-      - name: 'Set up Cloud SDK'
+      - name: Set up Cloud SDK
         uses: 'google-github-actions/setup-gcloud@v1'
 
       - name: Upload CF source
         run: |
-          echo "current dir:"
-          pwd
-          echo "current dir contents:"
-          ls -la
-          echo "matrix.function:"
-          echo ${{ matrix.function }}
           cf_name=$(echo ${{ matrix.function }} | tr '_' '-')
-          echo "cf_name:"
-          echo $cf_name
-          echo "contentents of ${{ matrix.function }}"
-          ls -la ${{ matrix.function }}
           gsutil cp ${{ matrix.function }}/function_source.zip gs://the-game-388502-gcf-source/${cf_name}
 
       - name: Deploy Cloud Function
