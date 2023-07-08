@@ -1,6 +1,6 @@
 'use client';
 
-import { Flex, Spinner } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { getAuth } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import React, {
@@ -9,6 +9,8 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+
+import { Loading } from '@the-game/ui/components/loading';
 
 export const AuthGuard = (
   props: Readonly<{
@@ -58,7 +60,7 @@ export const AuthGuard = (
       justifyContent="center"
       w="100vw"
     >
-      <Spinner size="xl" />
+      <Loading />
     </Flex>
   );
 };

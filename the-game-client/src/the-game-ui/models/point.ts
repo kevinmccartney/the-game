@@ -6,5 +6,5 @@ export type Point = {
   id: string;
   points: number;
   reason: string;
-  subject: string;
+  subject: User;
 };

@@ -10,14 +10,13 @@ import {
 } from '@chakra-ui/react';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getAuth } from 'firebase/auth';
 import { noop } from 'lodash-es';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, UseFormReturn } from 'react-hook-form';
 
 import { UserSearchField } from '@the-game/ui/components/user-search-field';
 import { AssignPointsForm as AssignPointsFormModel } from '@the-game/ui/models';
-import { useGetUsersQuery } from '@the-game/ui/services/users';
+import { usePostPointsMutation } from '@the-game/ui/services';
 
 export const AssignPointsForm = ({
   form,
@@ -38,10 +37,9 @@ export const AssignPointsForm = ({
     reset,
     watch,
   } = form;
-  const [isLoading, setIsLoading] = useState(false);
   const toast: CreateToastFnReturn = useToast();
-  const auth = getAuth();
   const [values, setValues] = useState(getValues());
+  const [usePostPoints, { isLoading }] = usePostPointsMutation();
   useEffect(() => {
     const subscription = watch(() => {
       const formValues = getValues();
@@ -53,31 +51,21 @@ export const AssignPointsForm = ({
   });
 
   const postPoint = async (toastFn: CreateToastFnReturn) => {
-    const token = (await auth.currentUser?.getIdToken()) || '';
-
-    await fetch(
-      `https://api.the-game.kevinmccartney.dev/v1/users/${values.subject}/points`,
-      {
-        body: JSON.stringify({
-          // value from number field comes through as a string
-          points: parseInt(values.points as unknown as string, 10),
-          reason: values.reason,
-        }),
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        method: 'POST',
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    await usePostPoints({
+      body: {
+        points: parseInt(values.points as unknown as string, 10),
+        reason: values.reason,
       },
-    );
-
-    setIsLoading(false);
+      userId: values.subject,
+    });
 
     if (onClose) {
       onClose();
     }
 
     if (onSubmitSuccess) {
-      void onSubmitSuccess();
+      await onSubmitSuccess();
     }
 
     reset();
@@ -91,13 +79,13 @@ export const AssignPointsForm = ({
     });
   };
 
-  const localOnSubmit: SubmitHandler<AssignPointsFormModel> = () => {
-    setIsLoading(true);
-    void postPoint(toast);
+  const localOnSubmit: SubmitHandler<AssignPointsFormModel> = async () => {
+    await postPoint(toast);
   };
 
   return (
-    <form onSubmit={void handleSubmit(localOnSubmit)}>
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    <form onSubmit={handleSubmit(localOnSubmit)}>
       <Flex
         columnGap={8}
         flexDirection={{ base: 'column', md: 'row' }}

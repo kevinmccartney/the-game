@@ -1,6 +1,8 @@
 'use client';
 
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
   Card,
@@ -58,10 +60,8 @@ export const Dashboard = () => {
     await pointsRefetch();
   };
 
-  const getScoreColor = (
-    score: Readonly<{ points: number }> | undefined,
-  ): string | undefined =>
-    score ? (score?.points > 0 ? 'green.500' : 'red.500') : undefined;
+  const getScoreColor = (score: number | undefined): string | undefined =>
+    score ? (score > 0 ? 'green.500' : 'red.500') : undefined;
 
   return (
     <AuthGuard>
@@ -136,7 +136,7 @@ export const Dashboard = () => {
                       fontWeight={700}
                       textAlign="center"
                     >
-                      {scoresData?.points}
+                      {scoresData}
                     </Text>
                   )}
                   <Text
@@ -167,7 +167,7 @@ export const Dashboard = () => {
                 <AssignPointsForm
                   form={form}
                   inverse={true}
-                  onSubmitSuccess={void onSubmitSuccess}
+                  onSubmitSuccess={onSubmitSuccess}
                 />
               </CardBody>
             </Card>
@@ -194,6 +194,24 @@ export const Dashboard = () => {
                   point={x}
                 />
               ))}
+              {pointsData?.length === 0 && (
+                <Flex
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Alert status="info">
+                    <AlertIcon />
+                    No points found
+                  </Alert>
+                  {/* <Heading
+                    as="h4"
+                    fontSize="2xl"
+                    fontWeight={400}
+                  >
+                    No points found
+                  </Heading> */}
+                </Flex>
+              )}
             </Flex>
           </Flex>
         </Box>
@@ -224,7 +242,7 @@ export const Dashboard = () => {
               <AssignPointsForm
                 form={form}
                 onClose={onClose}
-                onSubmitSuccess={void onSubmitSuccess}
+                onSubmitSuccess={onSubmitSuccess}
                 showCancel={true}
               />
             </DrawerBody>
