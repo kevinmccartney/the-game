@@ -5,7 +5,10 @@ import json as _json
 import os as _os
 
 import functions_framework as _functions_framework
-from flask import Request as _Request, Response as _Response
+from flask import (
+    Request as _Request,
+    Response as _Response,
+)
 from firebase_admin import initialize_app as _initialize_app
 from google.cloud.logging import Client as _LoggingClient
 from google.cloud.firestore import (
@@ -34,7 +37,10 @@ import logging as _logging
 
 _db: _FirestoreClient = _firestore_client()
 
-_headers = {"Access-Control-Allow-Origin": "*"}
+_headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "application/json; charset=utf-8",
+}
 
 
 @_functions_framework.http
@@ -56,9 +62,9 @@ def function_handler(request: _Request) -> _Response:
         _logging.error(ex)
         _logging.error(_traceback.format_exc())
         return _Response(
-            _json.dumps(
-                {"code": 401, "message": "Unauthorized: Authorization not provided"}
-            ),
+            # _json.dumps(
+            {"code": 401, "message": "Unauthorized: Authorization not provided"},
+            # ),
             401,
             _headers,
         )
@@ -71,12 +77,12 @@ def function_handler(request: _Request) -> _Response:
         _logging.error(ex)
         _logging.error(_traceback.format_exc())
         return _Response(
-            _json.dumps(
-                {
-                    "code": 403,
-                    "message": "Forbidden: Caller is not authorized to take this action",
-                }
-            ),
+            # _json.dumps(
+            {
+                "code": 403,
+                "message": "Forbidden: Caller is not authorized to take this action",
+            },
+            # ),
             403,
             _headers,
         )
@@ -84,9 +90,11 @@ def function_handler(request: _Request) -> _Response:
         _logging.error(ex)
         _logging.error(_traceback.format_exc())
         return _Response(
-            _json.dumps(
-                {"code": 500, "message": "Internal server error"}, 500, _headers
-            )
+            # _json.dumps(
+            {"code": 500, "message": "Internal server error"},
+            500,
+            _headers
+            # )
         )
 
     try:
@@ -131,7 +139,13 @@ def function_handler(request: _Request) -> _Response:
         points_docs = [doc.to_dict() | {"id": doc.id} for doc in points_results]
 
         if len(points_docs) == 0:
-            return _Response(_json.dumps({"data": []}), 200, _headers)
+            return _Response(
+                # _json.dumps(
+                {"data": []},
+                # ),
+                200,
+                _headers,
+            )
 
         points = []
         uids = []
@@ -166,13 +180,21 @@ def function_handler(request: _Request) -> _Response:
 
         sorted_points = sorted(points, key=lambda x: x["created_time"], reverse=True)
 
-        return _Response(_json.dumps({"data": sorted_points}), 200, _headers)
+        return _Response(
+            _json.dumps(
+                {"data": sorted_points},
+            ),
+            200,
+            _headers,
+        )
     except Exception as ex:
         _logging.error(ex)
         _logging.error(_traceback.format_exc())
 
         return _Response(
-            _json.dumps({"code": 500, "message": "Internal server error"}),
+            # _json.dumps(
+            {"code": 500, "message": "Internal server error"},
+            # ),
             500,
             _headers,
         )
