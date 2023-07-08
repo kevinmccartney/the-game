@@ -122,7 +122,13 @@ jobs:
 
       - name: Zip deployment package
         run: |
-          cd ${{ matrix.function }} && zip function_source.zip main.py requirements.txt
+          pwd
+          ls -la
+          echo ${{ matrix.function }}
+          cd ${{ matrix.function }}
+          pwd
+          ls -la
+          zip function_source.zip main.py requirements.txt
 
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
