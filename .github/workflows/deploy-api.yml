@@ -148,7 +148,7 @@ jobs:
           ls -la
           echo {{ matrix.function }}
           cf_name=$(echo ${{ matrix.function }} | tr '_' '-')
-          gsutil cp ${{ matrix.function }}/function-source.zip gs://gcf-v2-sources-181007178788-us-central/${cf_name}
+          gsutil cp ${{ matrix.function }}/function-source.zip gs://gcf-v2-sources-181007178788-us-central1/${cf_name}
 
       - name: Deploy Cloud Function
         run: |
