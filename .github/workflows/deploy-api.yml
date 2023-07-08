@@ -171,4 +171,4 @@ jobs:
       - name: Deploy Cloud Function
         run: |
           cf_name=$(echo ${{ matrix.function }} | tr '_' '-')
-          gcloud functions deploy the-game-${cf_name}
+          gcloud functions deploy the-game-${cf_name} --source gs://the-game-388502-gcf-source/${cf_name}/function_source.zip
