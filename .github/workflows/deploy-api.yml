@@ -145,4 +145,4 @@ jobs:
           cf_name=$(echo ${{ matrix.function }} | tr '_' '-')
           echo ${cf_name}
           echo the-game-${cf_name}
-          gcloud functions deploy the-game-$cf-name
+          gcloud functions deploy the-game-${cf_name}
