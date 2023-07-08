@@ -16,6 +16,7 @@ def function_handler(request: _Request):
         "Access-Control-Allow-Methods": "GET,POST",
         "Access-Control-Allow-Headers": "Content-Type,Authorization",
         "Access-Control-Max-Age": "3600",
+        "Content-Type": "application/json; charset=utf-8",
     }
 
     return _Response("", 204, headers)

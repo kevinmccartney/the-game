@@ -62,9 +62,9 @@ def function_handler(request: _Request) -> _Response:
         _logging.error(ex)
         _logging.error(_traceback.format_exc())
         return _Response(
-            # _json.dumps(
-            {"code": 401, "message": "Unauthorized: Authorization not provided"},
-            # ),
+            _json.dumps(
+                {"code": 401, "message": "Unauthorized: Authorization not provided"}
+            ),
             401,
             _headers,
         )
@@ -77,12 +77,12 @@ def function_handler(request: _Request) -> _Response:
         _logging.error(ex)
         _logging.error(_traceback.format_exc())
         return _Response(
-            # _json.dumps(
-            {
-                "code": 403,
-                "message": "Forbidden: Caller is not authorized to take this action",
-            },
-            # ),
+            _json.dumps(
+                {
+                    "code": 403,
+                    "message": "Forbidden: Caller is not authorized to take this action",
+                },
+            ),
             403,
             _headers,
         )
@@ -90,11 +90,9 @@ def function_handler(request: _Request) -> _Response:
         _logging.error(ex)
         _logging.error(_traceback.format_exc())
         return _Response(
-            # _json.dumps(
-            {"code": 500, "message": "Internal server error"},
-            500,
-            _headers
-            # )
+            _json.dumps(
+                {"code": 500, "message": "Internal server error"}, 500, _headers
+            )
         )
 
     try:
@@ -140,9 +138,9 @@ def function_handler(request: _Request) -> _Response:
 
         if len(points_docs) == 0:
             return _Response(
-                # _json.dumps(
-                {"data": []},
-                # ),
+                _json.dumps(
+                    {"data": []},
+                ),
                 200,
                 _headers,
             )
@@ -192,9 +190,9 @@ def function_handler(request: _Request) -> _Response:
         _logging.error(_traceback.format_exc())
 
         return _Response(
-            # _json.dumps(
-            {"code": 500, "message": "Internal server error"},
-            # ),
+            _json.dumps(
+                {"code": 500, "message": "Internal server error"},
+            ),
             500,
             _headers,
         )

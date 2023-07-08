@@ -34,7 +34,10 @@ import logging as _logging
 
 _db: _FirestoreClient = _firestore_client()
 
-_headers = {"Access-Control-Allow-Origin": "*"}
+_headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "application/json; charset=utf-8",
+}
 
 
 @_functions_framework.http
