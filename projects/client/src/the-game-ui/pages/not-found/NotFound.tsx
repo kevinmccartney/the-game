@@ -11,7 +11,7 @@ export const NotFound = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('/not-found', undefined, { shallow: true }).catch(() => {});
+    window.history.pushState({}, '', '/not-found');
   });
 
   const handleClick = () => {
