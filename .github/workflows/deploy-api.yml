@@ -85,7 +85,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: projects/api/the_game_api
+        working-directory: projects/api
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
@@ -118,7 +118,7 @@ jobs:
         run: |
           mkdir ${{ matrix.function }} && \
           mv requirements.txt ${{ matrix.function }} && \
-          mv ${{ matrix.function }}.py ${{ matrix.function }}/main.py
+          mv the_game_api/${{ matrix.function }}.py ${{ matrix.function }}/main.py
 
       - name: Zip deployment package
         run: |
