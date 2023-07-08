@@ -129,6 +129,7 @@ jobs:
           pwd
           ls -la
           zip function_source.zip main.py requirements.txt
+          ls -la
 
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
@@ -143,6 +144,9 @@ jobs:
 
       - name: Upload CF source
         run: |
+          pwd
+          ls -la
+          echo {{ matrix.function }}
           cf_name=$(echo ${{ matrix.function }} | tr '_' '-')
           gsutil cp ${{ matrix.function }}/function_source.zip gs://the-game-388502-gcf-source/${cf_name}
 
