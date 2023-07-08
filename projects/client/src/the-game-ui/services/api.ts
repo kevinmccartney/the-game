@@ -3,7 +3,7 @@ import { getAuth } from 'firebase/auth';
 
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://api.the-game.kevinmccartney.local:5000/v1',
+  baseUrl: 'https://api.the-game.kevinmccartney.dev/v1',
   // prepareHeaders: prepareAuthHeaders,
   credentials: 'same-origin',
 
