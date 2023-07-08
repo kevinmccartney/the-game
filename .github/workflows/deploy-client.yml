@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - the-game-client/**/*
+      - projects/client/**/*
       - .github/workflows/deploy-client.yml
     branches:
       - main
@@ -20,7 +20,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./the-game-client
+        working-directory: ./projects/client
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
@@ -69,19 +69,14 @@ jobs:
       - name: Enforce Deployment Folder Index
         run: pipenv run python ../bin/edfi ./out --ci
 
-      - name: show build contents
-        run: ls -la out
-
-      - id: 'auth'
+      - name: GCP auth
+        id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
           credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
 
-      - name: 'Set up Cloud SDK'
+      - name: Set up Cloud SDK
         uses: 'google-github-actions/setup-gcloud@v1'
-
-      - name: 'Use gcloud CLI'
-        run: 'gcloud info'
 
       - name: Upload react app
         run: |
