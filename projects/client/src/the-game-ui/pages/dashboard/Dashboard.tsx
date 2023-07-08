@@ -22,13 +22,14 @@ import {
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getAuth } from 'firebase/auth';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 
 import {
   AssignPointsForm,
   AuthGuard,
+  ChoiceChips,
   Loading,
   PointCard,
 } from '@the-game/ui/components';
@@ -39,6 +40,7 @@ import { useGetScoresQuery } from '@the-game/ui/services/scores';
 
 export const Dashboard = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const [pointsFilter, setPointsFilter] = useState('all');
   const btnRef = useRef<any>();
   const form = useForm<AssignPointsFormModel>();
 
@@ -47,7 +49,10 @@ export const Dashboard = () => {
     data: pointsData,
     isLoading: pointsIsLoading,
     refetch: pointsRefetch,
-  } = useGetPointsQuery(auth.currentUser?.uid || '');
+  } = useGetPointsQuery({
+    type: pointsFilter,
+    userId: auth.currentUser?.uid || '',
+  });
 
   const {
     data: scoresData,
@@ -58,6 +63,10 @@ export const Dashboard = () => {
   const onSubmitSuccess = async () => {
     await scoresRefetch();
     await pointsRefetch();
+  };
+
+  const onPointsFilterChange = (value: string) => {
+    setPointsFilter(value);
   };
 
   const getScoreColor = (score: number | undefined): string | undefined =>
@@ -180,6 +189,7 @@ export const Dashboard = () => {
               flexDirection="column"
               gap={8}
             >
+              <ChoiceChips onChange={onPointsFilterChange} />
               {pointsIsLoading && (
                 <Flex
                   justifyContent="center"
@@ -203,13 +213,6 @@ export const Dashboard = () => {
                     <AlertIcon />
                     No points found
                   </Alert>
-                  {/* <Heading
-                    as="h4"
-                    fontSize="2xl"
-                    fontWeight={400}
-                  >
-                    No points found
-                  </Heading> */}
                 </Flex>
               )}
             </Flex>
