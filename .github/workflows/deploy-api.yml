@@ -130,7 +130,10 @@ jobs:
           ls -la
           zip function-source.zip main.py requirements.txt
           ls -la
+          mkdir temp && mv function-source.zip temp && cd temp
           unzip function-source.zip
+          ls -la
+          pwd
 
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
