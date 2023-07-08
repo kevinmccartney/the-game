@@ -3,6 +3,7 @@ import traceback as _traceback
 import re as _re
 import os as _os
 import json as _json
+from urllib.parse import urlparse as _urlparse
 
 import functions_framework as _functions_framework
 from flask import Request as _Request, Response as _Response
@@ -55,9 +56,11 @@ def function_handler(request: _Request):
 
         _verify_id_token(id_token=id_token)
 
-        pattern = _re.compile(r"^\/v1\/users\/(.*)$")
         request_path = request.headers.get("x-envoy-original-path")
-        subject_uid = pattern.sub(r"\1", request_path)
+        parsed_url = _urlparse(request_path)
+        pattern = _re.compile(r"^\/v1\/users\/(.*)$")
+
+        subject_uid = pattern.sub(r"\1", parsed_url.path)
 
         users_ref = _db.collection("users")
         users_query_ref = users_ref.where(
@@ -71,6 +74,7 @@ def function_handler(request: _Request):
                 _json.dumps(
                     {"code": 404, "message": "Not found: Resource can not be located"}
                 ),
+                404,
                 _headers,
             )
 

@@ -3,6 +3,7 @@ import traceback as _traceback
 import re as _re
 import json as _json
 import os as _os
+from urllib.parse import urlparse as _urlparse
 
 import functions_framework as _functions_framework
 from flask import (
@@ -96,9 +97,11 @@ def function_handler(request: _Request) -> _Response:
         )
 
     try:
-        pattern = _re.compile(r"^\/v1\/users\/(.*)\/points(\?.*)?$")
         request_path = request.headers.get("x-envoy-original-path")
-        subject_uid = pattern.sub(r"\1", request_path)
+        parsed_url = _urlparse(request_path)
+        pattern = _re.compile(r"^\/v1\/users\/(.*)/points$")
+
+        subject_uid = pattern.sub(r"\1", parsed_url.path)
 
         type_param = "all"
 

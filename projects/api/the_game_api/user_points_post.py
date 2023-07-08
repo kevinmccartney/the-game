@@ -5,6 +5,7 @@ import traceback as _traceback
 import re as _re
 import os as _os
 import json as _json
+from urllib.parse import urlparse as _urlparse
 
 import functions_framework as _functions_framework
 from firebase_admin import initialize_app as _initialize_app
@@ -98,10 +99,11 @@ def function_handler(request: _Request):
         )
 
     try:
-        # request.path
-        pattern = _re.compile(r"^\/v1\/users\/(.*)\/points$")
         request_path = request.headers.get("x-envoy-original-path")
-        subject_uid = pattern.sub(r"\1", request_path)
+        parsed_url = _urlparse(request_path)
+        pattern = _re.compile(r"^\/v1\/users\/(.*)/points$")
+
+        subject_uid = pattern.sub(r"\1", parsed_url.path)
         request_json = request.get_json(force=True)
 
         doc = {

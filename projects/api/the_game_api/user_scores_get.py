@@ -4,6 +4,7 @@ import re as _re
 import functools as _functools
 import os as _os
 import json as _json
+from urllib.parse import urlparse as _urlparse
 
 import functions_framework as _functions_framework
 from flask import Request as _Request, Response as _Response
@@ -93,9 +94,11 @@ def function_handler(request: _Request):
         )
 
     try:
-        pattern = _re.compile(r"^\/v1\/users\/(.*)\/scores$")
         request_path = request.headers.get("x-envoy-original-path")
-        subject_uid = pattern.sub(r"\1", request_path)
+        parsed_url = _urlparse(request_path)
+        pattern = _re.compile(r"^\/v1\/users\/(.*)$")
+
+        subject_uid = pattern.sub(r"\1", parsed_url.path)
 
         points_ref = _db.collection("points")
         points_query_ref = points_ref.where(
