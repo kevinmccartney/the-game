@@ -136,14 +136,6 @@ jobs:
           zip function_source.zip main.py requirements.txt
           echo "current dir contents with zip:"
           ls -la
-          mkdir temp && mv function_source.zip temp && cd temp
-           echo "current dir:"
-          pwd
-          echo "current dir contents:"
-          ls -la
-          unzip function_source.zip
-          echo "current dir contents with unzipped zip:"
-          ls -la
 
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
@@ -164,9 +156,9 @@ jobs:
           cf_name=$(echo ${{ matrix.function }} | tr '_' '-')
           echo "cf_name:"
           echo $cf_name
-          echo "contentents of ${{ matrix.function }}/temp"
-          ls -la ${{ matrix.function }}/temp
-          gsutil cp ${{ matrix.function }}/temp/function_source.zip gs://the-game-388502-gcf-source/${cf_name}
+          echo "contentents of ${{ matrix.function }}"
+          ls -la ${{ matrix.function }}
+          gsutil cp ${{ matrix.function }}/function_source.zip gs://the-game-388502-gcf-source/${cf_name}
 
       - name: Deploy Cloud Function
         run: |
