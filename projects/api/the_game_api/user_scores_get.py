@@ -96,7 +96,7 @@ def function_handler(request: _Request):
     try:
         request_path = request.headers.get("x-envoy-original-path")
         parsed_url = _urlparse(request_path)
-        pattern = _re.compile(r"^\/v1\/users\/(.*)$")
+        pattern = _re.compile(r"^\/v1\/users\/(.*)/scores$")
 
         subject_uid = pattern.sub(r"\1", parsed_url.path)
 
