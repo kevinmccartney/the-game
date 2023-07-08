@@ -1,7 +1,6 @@
 'use client';
 
 import { Button, Heading, VStack } from '@chakra-ui/react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
