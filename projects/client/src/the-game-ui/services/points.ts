@@ -4,13 +4,16 @@ import { api } from './api';
 
 export const pointsApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getPoints: build.query<Point[], string>({
-      providesTags: () => [{ type: 'Points' }], // TODO: look into providing ID
-      query: (id: string) => `users/${id}/points`,
-      transformResponse(baseQueryReturnValue) {
-        return (baseQueryReturnValue as { data: Point[] }).data;
+    getPoints: build.query<Point[], Readonly<{ type: string; userId: string }>>(
+      {
+        providesTags: () => [{ type: 'Points' }], // TODO: look into providing ID
+        query: (config: Readonly<{ type: string; userId: string }>) =>
+          `users/${config.userId}/points?type=${config.type}`,
+        transformResponse(baseQueryReturnValue) {
+          return (baseQueryReturnValue as { data: Point[] }).data;
+        },
       },
-    }),
+    ),
     postPoints: build.mutation<void, { body: Partial<Point>; userId: string }>({
       invalidatesTags: ['Points'],
       query: (config) => ({
