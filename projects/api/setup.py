@@ -10,4 +10,12 @@ setup(
     author_email="hello@kevinmccartney.is",
     url="https://the-game.kevinmccartney.dev",
     py_modules=find_packages(),
+    install_requires=[
+        "functions-framework",
+        "flask",
+        "firebase-admin",
+        "werkzeug",
+        "google-cloud-logging",
+        "google-cloud-firestore",
+    ],
 )

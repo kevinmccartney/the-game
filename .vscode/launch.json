@@ -21,6 +21,22 @@
       "console": "integratedTerminal",
       "justMyCode": true,
       "args": ["['__no-changes']"]
+    },
+    {
+      "name": "Debug API dev server",
+      "type": "python",
+      "request": "attach",
+      "module": "debugpy",
+      "justMyCode": true,
+      "args": [
+        "--listen",
+        "5678",
+        "--wait-for-client",
+        "-m",
+        "flask",
+        "--app",
+        "${workspaceFolder}/projects/api-dev-server/main.py"
+      ]
     }
   ],
   "inputs": [

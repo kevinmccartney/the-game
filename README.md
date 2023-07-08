@@ -25,6 +25,8 @@
 | the-game.{your-domain}. | A                    | 300 seconds (5 minutes) | {your-lb-frontend-ip} |
 
 - Set up Oauth consent screen
+- ...IAP stuff not in TF
+- (Optional) To set up a local pretty URL, add `127.0.0.1 api.the-game.kevinmccartney.local`. You will still need to call it with the port the server is running on (IE `http://api.the-game.kevinmcccartney.local:5000/v1/ping`)
 
 # Reference
 

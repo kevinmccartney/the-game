@@ -8,4 +8,6 @@ python_version = "3.9"
 
 [packages]
 flask = "*"
-the-game-api = {editable = true, path = "./../../the-game-api"}
+the-game-api = {editable = true, path = "./../api"}
+debugpy = "*"
+flask-cors = "*"
