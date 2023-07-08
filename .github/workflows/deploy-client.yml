@@ -62,12 +62,14 @@ jobs:
           path: ~/.local/share/virtualenvs
           key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
 
-      - name: Install dependencies
+      - name: Install Pythton dependencies
         run: |
-          cd ../ && pipenv install --deploy --dev
+          cd ${{ github.workspace }}
+          pipenv install --deploy --dev
 
       - name: Enforce Deployment Folder Index
-        run: pipenv run python ../bin/edfi ./out --ci
+        run: |
+          pipenv run python ${{ github.workspace }}/bin/edfi ./out --ci
 
       - name: GCP auth
         id: 'auth'
