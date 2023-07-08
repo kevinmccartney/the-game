@@ -1,3 +1,4 @@
+# TODO: can this be shared across resources somehow?
 import functions_framework as _functions_framework
 from flask import Request as _Request, Response as _Response
 
