@@ -1,9 +1,9 @@
-import functions_framework
-from flask import Request
+import functions_framework as _functions_framework
+from flask import Request as _Request, Response as _Response
 
 
-@functions_framework.http
-def function_handler(request: Request):
+@_functions_framework.http
+def function_handler(request: _Request):
     """HTTP ping Cloud Function.
     Args:
         request (flask.Request): The request object.
@@ -18,4 +18,4 @@ def function_handler(request: Request):
         "Access-Control-Max-Age": "3600",
     }
 
-    return ("", 204, headers)
+    return _Response("", 204, headers)

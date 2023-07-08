@@ -85,17 +85,11 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: projects/api/the_game_api/${{ matrix.function }}
+        working-directory: projects/api/the_game_api
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Print working directory
-        run: pwd
-
-      - name: Contents of main.py
-        run: cat main.py
 
       - name: Setup Python
         uses: actions/setup-python@v2
@@ -120,8 +114,15 @@ jobs:
       - name: Generate requirements.txt
         run: pipenv requirements > requirements.txt
 
+      - name: Make deployment dir
+        run: |
+          mkdir ${{ matrix.function }} && \
+          mv requirements.txt ${{ matrix.function }} && \
+          mv ${{ matrix.function }}.py ${{ matrix.function }}/main.py
+
       - name: Zip deployment package
-        run: zip function_source.zip main.py requirements.txt
+        run: |
+          cd ${{ matrix.function }} && zip function_source.zip main.py requirements.txt
 
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
@@ -136,7 +137,7 @@ jobs:
 
       - name: Upload CF source
         run: |
-          gsutil cp function_source.zip gs://the-game-388502-gcf-source/${{ matrix.function }}
+          gsutil cp ${{ matrix.function }}/function_source.zip gs://the-game-388502-gcf-source/${{ matrix.function }}
 
       - name: Deploy Cloud Function
         run: gcloud functions deploy the-game-${{ matrix.function }}
