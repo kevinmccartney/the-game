@@ -140,4 +140,6 @@ jobs:
           gsutil cp ${{ matrix.function }}/function_source.zip gs://the-game-388502-gcf-source/${{ matrix.function }}
 
       - name: Deploy Cloud Function
-        run: gcloud functions deploy the-game-${{ matrix.function }}
+        run: |
+          cf_name=$(echo ${{ matrix.function }} | tr '-' '_')
+          gcloud functions deploy the-game-$cf-name
