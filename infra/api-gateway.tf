@@ -12,7 +12,6 @@ resource "random_id" "api_config" {
 }
 
 resource "google_api_gateway_api" "the_game_api" {
-  # tesing formatting
   provider     = google-beta
   project      = var.project_id
   api_id       = "the-game-api"

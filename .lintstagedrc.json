@@ -1,5 +1,4 @@
 {
   "*": "prettier --write",
-  "*.{ts,tsx}": "eslint --fix -c ./projects/client/.eslintrc.json",
   "*.tf": "terraform fmt -write=true"
 }
