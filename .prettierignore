@@ -17,3 +17,4 @@ package-lock.json
 *.tf
 *.hcl
 *.zip
+Makefile

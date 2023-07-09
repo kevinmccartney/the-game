@@ -26,50 +26,53 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18'
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: '18'
 
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: npm-${{ hashFiles('package-lock.json') }}
-          restore-keys: npm-
+      # - name: Cache dependencies
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ~/.npm
+      #     key: npm-${{ hashFiles('package-lock.json') }}
+      #     restore-keys: npm-
 
-      - name: npm install
-        run: npm install
+      # - name: npm install
+      #   run: npm install
 
-      - name: npm build
-        run: npm run build
+      # - name: npm build
+      #   run: npm run build
 
-      - name: Export next app
-        run: npx next export
+      # - name: Export next app
+      #   run: npx next export
 
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.9'
+      # - name: Setup Python
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: '3.9'
 
-      - name: Install pipenv
-        run: |
-          python -m pip install --upgrade pipenv wheel
+      # - name: Install pipenv
+      #   run: |
+      #     python -m pip install --upgrade pipenv wheel
 
-      - id: cache-pipenv
-        uses: actions/cache@v1
-        with:
-          path: ~/.local/share/virtualenvs
-          key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+      # - id: cache-pipenv
+      #   uses: actions/cache@v1
+      #   with:
+      #     path: ~/.local/share/virtualenvs
+      #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
 
-      - name: Install Pythton dependencies
-        run: |
-          cd ${{ github.workspace }}
-          pipenv install --deploy --dev
+      # - name: Install Pythton dependencies
+      #   run: |
+      #     cd ${{ github.workspace }}
+      #     pipenv install --deploy --dev
 
-      - name: Enforce Deployment Folder Index
-        run: |
-          pipenv run python ${{ github.workspace }}/bin/edfi ./out --ci
+      # - name: Enforce Deployment Folder Index
+      #   run: |
+      #     pipenv run python ${{ github.workspace }}/bin/edfi ./out --ci
+
+      - name: Build Docker image
+        run: docker build -t the-game .
 
       - name: GCP auth
         id: 'auth'
@@ -80,7 +83,7 @@ jobs:
       - name: Set up Cloud SDK
         uses: 'google-github-actions/setup-gcloud@v1'
 
-      - name: Upload react app
-        run: |
-          gsutil -m -o GSUtil:parallel_composite_upload_threshold=150M cp -r out/* \
-          gs://the-game.kevinmccartney.dev/
+      # - name: Upload react app
+      #   run: |
+      #     gsutil -m -o GSUtil:parallel_composite_upload_threshold=150M cp -r out/* \
+      #     gs://the-game.kevinmccartney.dev/
