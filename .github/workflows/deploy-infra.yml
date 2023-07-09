@@ -3,7 +3,9 @@ name: 'Deploy infrastructure'
 on:
   workflow_dispatch:
   push:
-    paths: infra/**/*
+    paths:
+      - projects/infra/**/*
+      - .github/workflows/deploy-infra.yml
     branches:
       - main
       - develop
@@ -18,7 +20,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./infra
+        working-directory: ./projects/infra
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
@@ -30,7 +32,7 @@ jobs:
 
       - name: Setup terraform variables
         id: vars
-        run: |-
+        run: |
           cat > pipeline.auto.tfvars <<EOF
           region="${{ vars.GCP_REGION }}" 
           project_id="${{ vars.GCP_PROJECT_ID }}" 
@@ -77,10 +79,6 @@ jobs:
           project_id="${{ vars.GCP_PROJECT_ID }}" 
           EOF
 
-      - name: Setup terraform variables
-        run: cat pipeline.auto.tfvars
-
-      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
         run: terraform init
         env:
