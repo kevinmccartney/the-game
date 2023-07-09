@@ -3,6 +3,7 @@ export * from './choice-chips';
 export * from './auth-guard';
 export * from './footer';
 export * from './loading';
+export * from './maybe-linked';
 export * from './navbar';
 export * from './point-card';
 export * from './user-search-field';
