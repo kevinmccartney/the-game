@@ -6,6 +6,8 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  NumberInput,
+  NumberInputField,
   useToast,
 } from '@chakra-ui/react';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -122,23 +124,23 @@ export const AssignPointsForm = ({
           width={{ md: '45%' }}
         >
           <FormLabel>Points</FormLabel>
-          {/* <NumberInput> */}
-          <Input
-            _placeholder={{
-              color: errors.points ? 'red.500' : 'gray.400',
-            }}
-            borderColor={errors.points ? 'red.500' : 'gray.200'}
-            className={errors.points ? 'hover:border-red-500' : ''}
-            placeholder="50"
-            {...register('points', {
-              required: 'Required',
-              validate: (value) =>
-                !Number.isNaN(parseInt(value as unknown as string, 10)) ||
-                'Must be a positive or negative number',
-            })}
-            inputMode="numeric"
-          />
-          {/* </NumberInput> */}
+          <NumberInput>
+            <NumberInputField
+              _placeholder={{
+                color: errors.points ? 'red.500' : 'gray.400',
+              }}
+              borderColor={errors.points ? 'red.500' : 'gray.200'}
+              className={errors.points ? 'hover:border-red-500' : ''}
+              placeholder="50"
+              {...register('points', {
+                required: 'Required',
+                validate: (value) =>
+                  !Number.isNaN(parseInt(value as unknown as string, 10)) ||
+                  'Must be a positive or negative number',
+              })}
+              pattern="-?[0-9]*"
+            />
+          </NumberInput>
           {errors.points && (
             <FormErrorMessage>{errors.points.message}</FormErrorMessage>
           )}
