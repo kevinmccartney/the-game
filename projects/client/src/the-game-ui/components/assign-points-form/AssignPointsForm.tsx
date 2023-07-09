@@ -131,14 +131,16 @@ export const AssignPointsForm = ({
               }}
               borderColor={errors.points ? 'red.500' : 'gray.200'}
               className={errors.points ? 'hover:border-red-500' : ''}
+              inputMode={undefined}
+              pattern="-?[0-9]*"
               placeholder="50"
+              type="number"
               {...register('points', {
                 required: 'Required',
                 validate: (value) =>
                   !Number.isNaN(parseInt(value as unknown as string, 10)) ||
                   'Must be a positive or negative number',
               })}
-              pattern="-?[0-9]*"
             />
           </NumberInput>
           {errors.points && (
