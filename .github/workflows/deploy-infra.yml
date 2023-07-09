@@ -56,7 +56,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./infra
+        working-directory: ./projects/infra
 
     environment: 'prod'
 
