@@ -12,8 +12,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { formatDistanceToNow } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { getAuth } from 'firebase/auth';
+import Link from 'next/link';
 import React from 'react';
 
+import { MaybeLinked } from '@the-game/ui/components/maybe-linked';
 import { Point } from '@the-game/ui/models';
 import { useGetUserEntityQuery } from '@the-game/ui/services';
 
@@ -35,19 +37,27 @@ export const PointCard = ({ point }: Readonly<{ point: Readonly<Point> }>) => {
       key={point.id}
     >
       <CardHeader>
-        <Avatar
-          name={
+        <Link
+          href={`/users/${
             currentUserData?.uid === point.created_by.uid
-              ? point.subject.display_name
-              : point.created_by.display_name
-          }
-          src={
-            currentUserData?.uid === point.created_by.uid
-              ? point.subject.photo_url || ''
-              : point.created_by.photo_url || ''
-          }
-          referrerPolicy="no-referrer"
-        />
+              ? point.subject.uid
+              : point.created_by.uid
+          }/profile`}
+        >
+          <Avatar
+            name={
+              currentUserData?.uid === point.created_by.uid
+                ? point.subject.display_name
+                : point.created_by.display_name
+            }
+            src={
+              currentUserData?.uid === point.created_by.uid
+                ? point.subject.photo_url || ''
+                : point.created_by.photo_url || ''
+            }
+            referrerPolicy="no-referrer"
+          />
+        </Link>
       </CardHeader>
       <CardBody>
         <Box flexDirection="column">
@@ -57,17 +67,36 @@ export const PointCard = ({ point }: Readonly<{ point: Readonly<Point> }>) => {
             fontWeight={400}
           >
             <Text
+              fontWeight={
+                point.created_by.uid !== currentUserData?.uid ? 700 : 400
+              }
               as="span"
-              fontWeight={700}
             >
-              {currentUserData?.uid === point.created_by.uid
-                ? 'You'
-                : point.created_by.display_name}
+              <MaybeLinked
+                href={`/users/${point.created_by.uid}/profile`}
+                isLinked={point.created_by.uid !== currentUserData?.uid}
+              >
+                {currentUserData?.uid === point.created_by.uid
+                  ? 'You'
+                  : point.created_by.display_name}
+              </MaybeLinked>
             </Text>{' '}
             gave{' '}
-            {currentUserData?.uid === point.subject.uid
-              ? 'You'
-              : point.subject.display_name}
+            <MaybeLinked
+              href={`/users/${point.subject.uid}/profile`}
+              isLinked={point.subject.uid !== currentUserData?.uid}
+            >
+              <Text
+                fontWeight={
+                  point.subject.uid !== currentUserData?.uid ? 700 : 400
+                }
+                as="span"
+              >
+                {currentUserData?.uid === point.subject.uid
+                  ? 'You'
+                  : point.subject.display_name}
+              </Text>
+            </MaybeLinked>
             <Box
               as="span"
               color={pointsColor}

@@ -70,6 +70,7 @@
     "functional/no-return-void": "off",
     "functional/functional-parameters": "off",
     "functional/no-conditional-statements": "off",
+    "functional/prefer-immutable-types": "off",
     "functional/immutable-data": [
       "error",
       {
