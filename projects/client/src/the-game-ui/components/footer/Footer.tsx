@@ -3,16 +3,14 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
-// testing formatting and linting
-export const Footer = () => {
-    return (
+export const Footer = () => (
   <Flex
     bg="gray.800"
     justifyContent="center"
     p="4"
     role="contentinfo"
   >
-         <Text color="white">Made with</Text>
+    <Text color="white">Made with</Text>
     <Text
       color="red.400"
       ml={1}
@@ -34,4 +32,4 @@ export const Footer = () => {
       Kevin McCartney
     </Link>
   </Flex>
-)};
+);
