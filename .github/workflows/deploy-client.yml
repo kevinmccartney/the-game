@@ -74,9 +74,6 @@ jobs:
       - name: Build Docker image
         run: docker build -t the-game .
 
-      - name: Print Docker config
-        run: cat ~/.docker/config.json
-
       - name: GCP auth
         id: 'auth'
         uses: 'google-github-actions/auth@v1'
@@ -85,6 +82,12 @@ jobs:
 
       - name: Set up Cloud SDK
         uses: 'google-github-actions/setup-gcloud@v1'
+
+      - name: Set GCP Docker auth
+        run: yes | gcloud auth configure-docker
+
+      - name: Print Docker config
+        run: cat ~/.docker/config.json
 
       # - name: Upload react app
       #   run: |
