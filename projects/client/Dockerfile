@@ -18,4 +18,4 @@ RUN npm i --verbose --timeout=60000
 
 RUN npm run build
 
-CMD npx next start -p 8080
+CMD node docker-entry.mjs
