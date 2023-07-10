@@ -30,3 +30,29 @@ resource "google_storage_bucket" "web_client" {
     enabled = false
   }
 }
+
+resource "google_cloud_run_service" "web_app" {
+  project  = var.project_id
+  name     = "the-game-client"
+  location = "us-central1"
+
+  template {
+    spec {
+      containers {
+        image = "gcr.io/google-samples/hello-app:1.0"
+      }
+    }
+  }
+
+  traffic {
+    percent         = 100
+    latest_revision = true
+  }
+}
+
+resource "google_cloud_run_service_iam_member" "run_all_users" {
+  service  = google_cloud_run_service.web_app.name
+  location = google_cloud_run_service.web_app.location
+  role     = "roles/run.invoker"
+  member   = "allUsers"
+}
