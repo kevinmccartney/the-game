@@ -39,7 +39,7 @@ resource "google_cloud_run_service" "web_app" {
   template {
     spec {
       containers {
-        image = "gcr.io/google-samples/hello-app:1.0"
+        image = "us-central1-docker.pkg.dev/the-game-388502/the-game-docker/client:latest"
       }
     }
   }
