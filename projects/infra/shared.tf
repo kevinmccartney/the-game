@@ -4,9 +4,5 @@ resource "google_artifact_registry_repository" "my-repo" {
   repository_id = "the-game-docker"
   description   = "The Game Docker repo"
   format        = "DOCKER"
-
-  docker_config {
-    immutable_tags = true
-  }
 }
 
