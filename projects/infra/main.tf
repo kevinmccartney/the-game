@@ -12,6 +12,7 @@
 
 locals {
   services_to_activate = toset([
+    "artifactregistry.googleapis.com",
     "apigateway.googleapis.com",
     "appengine.googleapis.com",
     "bigquery.googleapis.com",
