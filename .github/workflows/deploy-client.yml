@@ -72,7 +72,10 @@ jobs:
       #     pipenv run python ${{ github.workspace }}/bin/edfi ./out --ci
 
       - name: Build Docker image
-        run: docker build -t the-game .
+        run: docker build -t the-game-client .
+
+      - name: Tag Docker image
+        run: docker tag client us-central1-docker.pkg.dev/the-game-388502/the-game-docker/client:latest
 
       - name: GCP auth
         id: 'auth'
@@ -84,10 +87,13 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v1'
 
       - name: Set GCP Docker auth
-        run: yes | gcloud auth configure-docker
+        run: gcloud auth configure-docker
 
       - name: Print Docker config
         run: cat ~/.docker/config.json
+
+      - name: Push Docker image to GCP
+        run: docker push us-central1-docker.pkg.dev/the-game-388502/the-game-docker/client
 
       # - name: Upload react app
       #   run: |
