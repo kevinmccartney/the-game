@@ -80,6 +80,9 @@ jobs:
       - name: Set up Cloud SDK
         uses: 'google-github-actions/setup-gcloud@v1'
 
+      - name: Gcloud auth list
+        run: gcloud auth list
+
       - name: Set GCP Docker auth
         run: gcloud auth configure-docker
 
