@@ -18,4 +18,4 @@ RUN npm i --verbose --timeout=60000
 
 RUN npm run build
 
-CMD node docker-entry.mjs
+CMD npx next start -p ${PORT:-8080}
