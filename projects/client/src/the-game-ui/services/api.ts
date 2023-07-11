@@ -1,9 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getAuth } from 'firebase/auth';
+// import getConfig from 'next/config';
+
+// type TheGameNextConfig = {
+//   publicRuntimeConfig: { API_BASE_URL: string };
+// };
+
+// const { publicRuntimeConfig } = getConfig() as TheGameNextConfig;
 
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://api.the-game.kevinmccartney.dev/v1',
+  baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
   // prepareHeaders: prepareAuthHeaders,
   credentials: 'same-origin',
 
