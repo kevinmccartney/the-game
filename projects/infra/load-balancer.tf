@@ -27,7 +27,7 @@ resource "google_compute_target_https_proxy" "the_game_lb_target_proxy" {
 }
 
 resource "google_compute_url_map" "the_game_lb" {
-  default_service = google_compute_backend_bucket.the_game_client.self_link
+  default_service = google_compute_backend_service.the_game_client.self_link
   name            = "the-game-lb"
   project         = var.project_id
 
@@ -43,18 +43,13 @@ resource "google_compute_url_map" "the_game_lb" {
   }
 
   path_matcher {
-    default_service = google_compute_backend_bucket.the_game_client.self_link
+    default_service = google_compute_backend_service.the_game_client.self_link
     name            = "default-matcher"
   }
 
   path_matcher {
     name            = "api"
     default_service = google_compute_backend_service.the_game_api.self_link
-
-    # path_rule {
-    #   paths   = ["/home"]
-    #   service = google_compute_backend_bucket.static.id
-    # }
   }
 }
 
@@ -75,10 +70,15 @@ resource "google_compute_target_http_proxy" "the_game_lb_forwarding_rule_target_
   url_map = google_compute_url_map.the_game_lb_forwarding_rule_redirect.self_link
 }
 
-resource "google_compute_backend_bucket" "the_game_client" {
-  bucket_name = google_storage_bucket.web_client.name
-  name        = "the-game-client"
-  project     = var.project_id
+resource "google_compute_backend_service" "the_game_client" {
+  name    = "the-game-client"
+  project = var.project_id
+
+  load_balancing_scheme = "EXTERNAL_MANAGED"
+  backend {
+    group       = google_compute_region_network_endpoint_group.the_game_client.id
+    description = "The Next.js instance serving The Game client"
+  }
 }
 
 resource "google_compute_backend_service" "the_game_api" {
@@ -89,6 +89,17 @@ resource "google_compute_backend_service" "the_game_api" {
   backend {
     group       = google_compute_region_network_endpoint_group.the_game_api.id
     description = "The API Gateway serving The Game"
+  }
+}
+
+resource "google_compute_region_network_endpoint_group" "the_game_client" {
+  provider = google-beta
+
+  name                  = "the-game-client"
+  network_endpoint_type = "SERVERLESS"
+  region                = var.region
+  cloud_run {
+    service = google_cloud_run_service.web_app.name
   }
 }
 
