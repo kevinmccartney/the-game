@@ -48,6 +48,12 @@ resource "google_cloud_run_service" "web_app" {
     percent         = 100
     latest_revision = true
   }
+
+  metadata {
+    annotations = {
+      "run.googleapis.com/ingress" = "internal-and-cloud-load-balancing"
+    }
+  }
 }
 
 resource "google_cloud_run_service_iam_member" "run_all_users" {
