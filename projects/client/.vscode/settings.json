@@ -1,4 +1,4 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "prettier.configPath": "../../.prettierrc.yml",
+  "prettier.prettierPath": "../../node_modules/prettier"
 }
