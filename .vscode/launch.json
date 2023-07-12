@@ -5,26 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug Api Dev Server",
-      "type": "python",
-      "request": "attach",
-      "connect": { "host": "localhost", "port": 5678 },
-      // "pathMappings": [
-      //   { "localRoot": "${workspaceFolder}", "remoteRoot": "." }
-      // ],
-      "justMyCode": true
-    },
-    {
-      "name": "Debug Cloud Function",
-      "type": "python",
-      "request": "launch",
-      "module": "functions_framework",
-      "args": ["--target=function_handler"],
-      "cwd": "${workspaceFolder}/the-game-api/${input:pickFunction}",
-      "justMyCode": true
-    },
-    {
-      "name": "Debug Script",
+      "name": "Debug bin script",
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/bin/${input:pickScript}",
@@ -32,37 +13,8 @@
       "justMyCode": true,
       "args": ["['__no-changes']"]
     }
-    // {
-    //   "name": "Debug API dev server",
-    //   "type": "python",
-    //   "request": "attach",
-    //   "module": "debugpy",
-    //   "justMyCode": true,
-    //   "args": [
-    //     "--listen",
-    //     "5678",
-    //     "--wait-for-client",
-    //     "-m",
-    //     "flask",
-    //     "--app",
-    //     "${workspaceFolder}/projects/api-dev-server/main.py"
-    //   ]
-    // }
   ],
   "inputs": [
-    {
-      "id": "pickFunction",
-      "description": "Select Cloud Function to debug",
-      "type": "pickString",
-      "options": [
-        "user-points-get",
-        "user-points-post",
-        "user-scores-get",
-        "users-get",
-        "users-get-entity"
-      ],
-      "default": "user-points-post"
-    },
     {
       "id": "pickScript",
       "description": "Select script to debug",
