@@ -58,7 +58,7 @@ export const UserProfile = () => {
           <Flex flexDirection="column">
             <Card
               alignItems="center"
-              flexDirection="row"
+              flexDirection={{ base: 'column', md: 'row' }}
               my={16}
               w="100%"
             >
@@ -78,7 +78,7 @@ export const UserProfile = () => {
               <CardBody
                 alignItems="center"
                 display="flex"
-                flexDirection="row"
+                flexDirection={{ base: 'column', md: 'row' }}
                 justifyContent="space-between"
               >
                 <Skeleton isLoaded={!userIsLoading}>
