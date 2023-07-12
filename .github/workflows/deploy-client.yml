@@ -46,4 +46,4 @@ jobs:
         run: docker push us-central1-docker.pkg.dev/the-game-388502/the-game-docker/client
 
       - name: Deploy Cloud Run
-        run: gcloud run deploy the-game-client --image=us-central1-docker.pkg.dev/the-game-388502/the-game-docker/client:latest
+        run: gcloud run deploy the-game-client --region=us-central1 --image=us-central1-docker.pkg.dev/the-game-388502/the-game-docker/client:latest
