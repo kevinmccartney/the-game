@@ -55,12 +55,20 @@ export const Navbar = () => {
     void requestLogin();
   };
 
+  const profileHandler = () => {
+    void router.push(`/users/${auth.currentUser?.uid || ''}/profile`);
+  };
+
   return (
     <Flex
       bg="purple.500"
+      boxShadow="lg"
       justifyContent="space-between"
       p="4"
+      position="sticky"
       role="navigation"
+      top={0}
+      zIndex="sticky"
     >
       <Link href="/">
         <FontAwesomeIcon
@@ -82,7 +90,10 @@ export const Navbar = () => {
         </MenuButton>
         <MenuList>
           {isAuthed ? (
-            <MenuItem onClick={logout}>Logout</MenuItem>
+            <>
+              <MenuItem onClick={profileHandler}>Profile</MenuItem>
+              <MenuItem onClick={logout}>Logout</MenuItem>
+            </>
           ) : (
             <MenuItem onClick={login}>Login</MenuItem>
           )}
