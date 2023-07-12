@@ -1,0 +1,238 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "./projects/api"
+    },
+    {
+      "path": "./projects/api-dev-server"
+    },
+    {
+      "path": "./projects/client"
+    },
+    {
+      "path": "./projects/infra"
+    }
+  ],
+  "extensions": {
+    "recommendations": [
+      "ue.alphabetical-sorter",
+      "kisstkondoros.vscode-codemetrics",
+      "streetsidesoftware.code-spell-checker",
+      "eamodio.gitlens",
+      "Gruntfuggly.todo-tree",
+      "deerawan.vscode-faker",
+      "aaron-bond.better-comments",
+      "nhoizey.gremlins",
+      "esbenp.prettier-vscode",
+      "dracula-theme.theme-dracula",
+      "PKief.material-icon-theme",
+      "johnpapa.vscode-peacock",
+      "oderwat.indent-rainbow",
+      "accessibility-snippets.accessibility-snippets",
+      "stylelint.vscode-stylelint",
+      "kamikillerto.vscode-colorize",
+      "bradlc.vscode-tailwindcss",
+      "dbaeumer.vscode-eslint",
+      "dsznajder.es7-react-js-snippets",
+      "formulahendry.auto-rename-tag",
+      "ms-python.vscode-pylance",
+      "ms-python.python",
+      "hashicorp.terraform",
+      "bungcip.better-toml",
+      "GitHub.vscode-github-actions",
+      "tonybaloney.vscode-pets"
+    ]
+  },
+  "settings": {
+    "workbench.colorCustomizations": {
+      "activityBar.activeBackground": "#82fba0",
+      "activityBar.background": "#82fba0",
+      "activityBar.foreground": "#15202b",
+      "activityBar.inactiveForeground": "#15202b99",
+      "activityBarBadge.background": "#a183fb",
+      "activityBarBadge.foreground": "#15202b",
+      "commandCenter.border": "#15202b99",
+      "sash.hoverBorder": "#82fba0",
+      "statusBar.background": "#50fa7b",
+      "statusBar.foreground": "#15202b",
+      "statusBarItem.hoverBackground": "#1ef956",
+      "statusBarItem.remoteBackground": "#50fa7b",
+      "statusBarItem.remoteForeground": "#15202b",
+      "titleBar.activeBackground": "#50fa7b",
+      "titleBar.activeForeground": "#15202b",
+      "titleBar.inactiveBackground": "#50fa7b99",
+      "titleBar.inactiveForeground": "#15202b99"
+    },
+    "editor.acceptSuggestionOnEnter": "off",
+    "editor.cursorBlinking": "phase",
+    "editor.cursorStyle": "block",
+    "editor.lineNumbers": "on",
+    "editor.minimap.enabled": false,
+    "editor.renderWhitespace": "all",
+    "explorer.fileNesting.enabled": false,
+    "diffEditor.codeLens": true,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "git.closeDiffOnOperation": true,
+    "editor.rulers": [
+      { "column": 80, "color": "rgba(255, 121, 198, 1)" } // Dracula pink
+    ],
+    "editor.scrollBeyondLastLine": false,
+    "editor.suggestSelection": "first",
+    "editor.tabCompletion": "on",
+    "editor.tabSize": 2,
+    "editor.fontFamily": "'FiraCode Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.insertSpaces": true,
+    "editor.linkedEditing": true,
+    "editor.trimAutoWhitespace": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+    "breadcrumbs.enabled": false,
+    "debug.console.acceptSuggestionOnEnter": "on",
+    "debug.toolBarLocation": "docked",
+    "eslint.format.enable": true,
+    "eslint.workingDirectories": [
+      {
+        "pattern": "the-game-client"
+      }
+    ],
+    "explorer.autoReveal": true,
+    "explorer.confirmDelete": false,
+    "explorer.confirmDragAndDrop": false,
+    "explorer.decorations.badges": true,
+    "files.autoSave": "onWindowChange",
+    "indentRainbow.colors": [
+      "rgba(139, 233, 253, 0.7)",
+      "rgba(80, 250, 123, 0.7)",
+      "rgba(255, 184, 108, 0.7)",
+      "rgba(255, 121, 198, 0.7)",
+      "rgba(189, 147, 249, 0.7)",
+      "rgba(255, 85, 85, 0.7)",
+      "rgba(241, 250, 140, 0.7)"
+    ],
+    "material-icon-theme.activeIconPack": "react_redux",
+    "peacock.color": "#50FA7B",
+    "peacock.favoriteColors": [
+      {
+        "name": "Dracula Cyan",
+        "value": "#8BE9FD"
+      },
+      {
+        "name": "Dracula Green",
+        "value": "#50FA7B"
+      },
+      {
+        "name": "Dracula Orange",
+        "value": "#FFB86C"
+      },
+      {
+        "name": "Dracula Pink",
+        "value": "#FF79C6"
+      },
+      {
+        "name": "Dracula Purple",
+        "value": "#BD93F9"
+      },
+      {
+        "name": "Dracula Red",
+        "value": "#FF5555"
+      },
+      {
+        "name": "Dracula Yellow",
+        "value": "#F1FA8C"
+      }
+    ],
+    "peacock.surpriseMeFromFavoritesOnly": true,
+    "peacock.surpriseMeOnStartup": true,
+    "terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.enableBell": true,
+    "todo-tree.highlights.backgroundColourScheme": [
+      "#FF5555",
+      "#FFB86C",
+      "#F1FA8C",
+      "#50FA7B",
+      "#8BE9FD",
+      "#FF79C6",
+      "#BD93F9"
+    ],
+    "todo-tree.tree.buttons.scanMode": true,
+    "todo-tree.tree.showCountsInTree": true,
+    "vscode-pets.petSize": "medium",
+    "vscode-pets.position": "explorer",
+    "vscode-pets.theme": "forest",
+    "window.zoomLevel": 1,
+    "workbench.colorTheme": "Dracula",
+    "workbench.iconTheme": "material-icon-theme",
+    "indentRainbow.includedLanguages": ["python"],
+    "prettier.requireConfig": true,
+    "prettier.prettierPath": "./node_modules/prettier",
+    "prettier.configPath": "./.prettierrc.yml",
+    "prettier.useEditorConfig": true,
+    "git.pruneOnFetch": true,
+    "cSpell.words": [
+      "Apigee",
+      "artifactregistry",
+      "authed",
+      "bradlc",
+      "bungcip",
+      "chakra",
+      "cicd",
+      "cloudresourcemanager",
+      "codemetrics",
+      "Colour",
+      "commitlint",
+      "cprint",
+      "dbaeumer",
+      "debugpy",
+      "deerawan",
+      "dsznajder",
+      "eamodio",
+      "esbenp",
+      "Fira",
+      "firestore",
+      "fontawesome",
+      "formulahendry",
+      "fortawesome",
+      "gcloud",
+      "Gruntfuggly",
+      "johnpapa",
+      "kamikillerto",
+      "kevinmccartney",
+      "kisstkondoros",
+      "Menlo",
+      "nhoizey",
+      "oderwat",
+      "overscrolling",
+      "Pipenv",
+      "postbuild",
+      "pylance",
+      "Pyright",
+      "reduxjs",
+      "rgba",
+      "roboto",
+      "serviceusage",
+      "stylelint",
+      "tailwindcss",
+      "terrraform",
+      "tonybaloney",
+      "uids",
+      "werkzeug",
+      "yaspin"
+    ],
+    "markdown.extension.print.theme": "dark",
+
+    "scm.alwaysShowActions": false,
+
+    "[css]": {
+      "editor.suggest.insertMode": "replace"
+    },
+    "[terraform]": {
+      "editor.defaultFormatter": "hashicorp.terraform",
+      "editor.formatOnSave": true
+    }
+  }
+}
