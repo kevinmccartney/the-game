@@ -30,8 +30,9 @@ import {
   AssignPointsForm,
   AuthGuard,
   ChoiceChips,
-  Loading,
   PointCard,
+  Score,
+  SkeletonPointCard,
 } from '@the-game/ui/components';
 import { DefaultLayout } from '@the-game/ui/layouts';
 import { AssignPointsForm as AssignPointsFormModel } from '@the-game/ui/models';
@@ -54,11 +55,9 @@ export const Dashboard = () => {
     userId: auth.currentUser?.uid || '',
   });
 
-  const {
-    data: scoresData,
-    isLoading: scoresIsLoading,
-    refetch: scoresRefetch,
-  } = useGetScoresQuery(auth.currentUser?.uid || '');
+  const { refetch: scoresRefetch } = useGetScoresQuery(
+    auth.currentUser?.uid || '',
+  );
 
   const onSubmitSuccess = async () => {
     await scoresRefetch();
@@ -68,9 +67,6 @@ export const Dashboard = () => {
   const onPointsFilterChange = (value: string) => {
     setPointsFilter(value);
   };
-
-  const getScoreColor = (score: number | undefined): string | undefined =>
-    score ? (score > 0 ? 'green.500' : 'red.500') : undefined;
 
   return (
     <AuthGuard>
@@ -128,33 +124,10 @@ export const Dashboard = () => {
                 width={{ md: 24 }} // TODO: do this better, kinda hacky
               >
                 <Box>
-                  <Text
-                    fontSize="xl"
-                    fontWeight={400}
-                    textAlign="center"
-                  >
-                    You Have
-                  </Text>
-                  {scoresIsLoading ? (
-                    <Loading />
-                  ) : (
-                    <Text
-                      // color={userScoreColor}
-                      color={getScoreColor(scoresData)}
-                      fontSize="4xl"
-                      fontWeight={700}
-                      textAlign="center"
-                    >
-                      {scoresData}
-                    </Text>
-                  )}
-                  <Text
-                    fontSize="xl"
-                    fontWeight={400}
-                    textAlign="center"
-                  >
-                    points
-                  </Text>
+                  <Score
+                    currentUserScore={true}
+                    uid={auth.currentUser?.uid || ''}
+                  />
                 </Box>
                 <Button
                   colorScheme="blue"
@@ -190,14 +163,8 @@ export const Dashboard = () => {
               gap={8}
             >
               <ChoiceChips onChange={onPointsFilterChange} />
-              {pointsIsLoading && (
-                <Flex
-                  justifyContent="center"
-                  p={8}
-                >
-                  <Loading />
-                </Flex>
-              )}
+              {pointsIsLoading &&
+                [...Array(3).keys()].map(() => <SkeletonPointCard />)}
               {pointsData?.map((x) => (
                 <PointCard
                   key={x.id}

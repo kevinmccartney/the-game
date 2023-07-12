@@ -6,4 +6,5 @@ export * from './loading';
 export * from './maybe-linked';
 export * from './navbar';
 export * from './point-card';
+export * from './score';
 export * from './user-search-field';
