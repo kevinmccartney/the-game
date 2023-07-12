@@ -44,3 +44,6 @@ jobs:
 
       - name: Push Docker image to GCP
         run: docker push us-central1-docker.pkg.dev/the-game-388502/the-game-docker/client
+
+      - name: Deploy Cloud Run
+        run: gcloud run deploy the-game-client --image=us-central1-docker.pkg.dev/the-game-388502/the-game-docker/client:latest
