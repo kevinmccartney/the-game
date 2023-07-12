@@ -17,18 +17,17 @@ import React from 'react';
 
 import { MaybeLinked } from '@the-game/ui/components/maybe-linked';
 import { Point } from '@the-game/ui/models';
-import { useGetUserEntityQuery } from '@the-game/ui/services';
 
 export const PointCard = ({ point }: Readonly<{ point: Readonly<Point> }>) => {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const utcZonedTime = utcToZonedTime(point.created_time, timezone);
   const formattedDistance = formatDistanceToNow(utcZonedTime);
   const auth = getAuth();
-  const { data: currentUserData } = useGetUserEntityQuery(
-    auth.currentUser?.uid || '',
-  );
 
   const pointsColor = point.points > 0 ? 'green.500' : 'red.500';
+  const currentUserUid = auth.currentUser?.uid;
+
+  const isCreatedByCurrentUser = currentUserUid === point.created_by.uid;
 
   return (
     <Card
@@ -39,19 +38,17 @@ export const PointCard = ({ point }: Readonly<{ point: Readonly<Point> }>) => {
       <CardHeader>
         <Link
           href={`/users/${
-            currentUserData?.uid === point.created_by.uid
-              ? point.subject.uid
-              : point.created_by.uid
+            isCreatedByCurrentUser ? point.subject.uid : point.created_by.uid
           }/profile`}
         >
           <Avatar
             name={
-              currentUserData?.uid === point.created_by.uid
+              isCreatedByCurrentUser
                 ? point.subject.display_name
                 : point.created_by.display_name
             }
             src={
-              currentUserData?.uid === point.created_by.uid
+              isCreatedByCurrentUser
                 ? point.subject.photo_url || ''
                 : point.created_by.photo_url || ''
             }
@@ -67,16 +64,14 @@ export const PointCard = ({ point }: Readonly<{ point: Readonly<Point> }>) => {
             fontWeight={400}
           >
             <Text
-              fontWeight={
-                point.created_by.uid !== currentUserData?.uid ? 700 : 400
-              }
               as="span"
+              fontWeight={point.created_by.uid !== currentUserUid ? 700 : 400}
             >
               <MaybeLinked
                 href={`/users/${point.created_by.uid}/profile`}
-                isLinked={point.created_by.uid !== currentUserData?.uid}
+                isLinked={point.created_by.uid !== currentUserUid}
               >
-                {currentUserData?.uid === point.created_by.uid
+                {currentUserUid === point.created_by.uid
                   ? 'You'
                   : point.created_by.display_name}
               </MaybeLinked>
@@ -84,15 +79,13 @@ export const PointCard = ({ point }: Readonly<{ point: Readonly<Point> }>) => {
             gave{' '}
             <MaybeLinked
               href={`/users/${point.subject.uid}/profile`}
-              isLinked={point.subject.uid !== currentUserData?.uid}
+              isLinked={point.subject.uid !== currentUserUid}
             >
               <Text
-                fontWeight={
-                  point.subject.uid !== currentUserData?.uid ? 700 : 400
-                }
                 as="span"
+                fontWeight={point.subject.uid !== currentUserUid ? 700 : 400}
               >
-                {currentUserData?.uid === point.subject.uid
+                {currentUserUid === point.subject.uid
                   ? 'You'
                   : point.subject.display_name}
               </Text>
