@@ -1,20 +1,21 @@
-/* eslint-disable react/react-in-jsx-scope */
-
 'use client';
 
 import { Box, ChakraProvider, Flex } from '@chakra-ui/react';
 import { config as fontAwesomeConfig } from '@fortawesome/fontawesome-svg-core';
+// eslint-disable-next-line import/no-unassigned-import
+import '@fortawesome/fontawesome-svg-core/styles.css';
 import { initializeApp } from 'firebase/app';
 import {
   browserLocalPersistence,
   getAuth,
   setPersistence,
 } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
 
 import { Loading } from '@the-game/ui/components';
+import { DefaultLayout } from '@the-game/ui/layouts';
 import store from '@the-game/ui/state/store';
 import theme from '@the-game/ui/theme';
 
@@ -35,51 +36,43 @@ const MyApp = ({
 
   useEffect(() => {
     const initialize = async () => {
-      //  TODO: revisit this, might be a bit hacky
-      if (!isInitialized) {
-        const url = window.location.href;
+      const config = {
+        apiKey: 'AIzaSyDurKKzRP9h_692StW7-SvcTpVZN0oCRE4',
+        authDomain: 'the-game-388502.firebaseapp.com',
+      };
 
-        if (url.includes('index.html')) {
-          // eslint-disable-next-line functional/immutable-data
-          window.location.href = url.replace('index.html', '');
-        }
+      initializeApp(config);
+      const auth = getAuth();
 
-        const config = {
-          apiKey: 'AIzaSyDurKKzRP9h_692StW7-SvcTpVZN0oCRE4',
-          authDomain: 'the-game-388502.firebaseapp.com',
-        };
+      await setPersistence(auth, browserLocalPersistence);
 
-        initializeApp(config);
-        const auth = getAuth();
-
-        await setPersistence(auth, browserLocalPersistence);
-
-        setIsInitialized(true);
-      }
+      setIsInitialized(true);
     };
 
     initialize().catch((e) => {
       console.log(e);
     });
-  });
+  }, []);
 
   return (
     <Provider store={store}>
       <HelmetProvider>
         <ChakraProvider theme={theme}>
           <Box color="gray.700">
-            {isInitialized ? (
-              <Component {...pageProps} />
-            ) : (
-              <Flex
-                alignItems="center"
-                h="100vh"
-                justifyContent="center"
-                w="100vw"
-              >
-                <Loading />
-              </Flex>
-            )}
+            <DefaultLayout isInitialized={isInitialized}>
+              {isInitialized ? (
+                <Component {...pageProps} />
+              ) : (
+                <Flex
+                  alignItems="center"
+                  h="100%"
+                  justifyContent="center"
+                  w="100%"
+                >
+                  <Loading />
+                </Flex>
+              )}
+            </DefaultLayout>
           </Box>
         </ChakraProvider>
       </HelmetProvider>
@@ -88,4 +81,3 @@ const MyApp = ({
 };
 
 export default MyApp;
-/* eslint-enable react/react-in-jsx-scope */

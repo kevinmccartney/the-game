@@ -34,7 +34,7 @@ import {
   Score,
   SkeletonPointCard,
 } from '@the-game/ui/components';
-import { DefaultLayout } from '@the-game/ui/layouts';
+import { DefaultContainer } from '@the-game/ui/layouts';
 import { AssignPointsForm as AssignPointsFormModel } from '@the-game/ui/models';
 import { useGetPointsQuery } from '@the-game/ui/services/points';
 import { useGetScoresQuery } from '@the-game/ui/services/scores';
@@ -73,152 +73,147 @@ export const Dashboard = () => {
       <Helmet>
         <title>The Game | Dashboard</title>
       </Helmet>
-      <DefaultLayout>
-        <Box
-          as="section"
-          my={16}
-        >
-          <Flex flexDirection="column">
-            <Flex
-              flexDirection={{ base: 'column', md: 'row' }}
-              gap={{ md: 16 }}
-              justifyContent={{ md: 'space-between' }}
-            >
-              <Box>
-                <Heading
-                  as="h1"
-                  fontWeight={400}
-                  size="2xl"
-                >
-                  Hello{' '}
-                  <Box
-                    display="block"
-                    fontWeight={700}
-                  >
-                    {auth.currentUser?.displayName} 👋
-                  </Box>
-                </Heading>
-                <Heading
-                  as="h2"
-                  size="lg"
-                >
-                  <Text
-                    as="span"
-                    fontStyle="italic"
-                    fontWeight={400}
-                  >
-                    Are you ready to assign value to your friends?{' '}
-                  </Text>
-                  😈
-                </Heading>
-              </Box>
-              <Divider
-                borderBottomColor="gray.500"
-                display={{ md: 'none' }}
-                my={8}
-              />
-              <Flex
-                alignItems="center"
-                gap={16}
-                justifyContent={{ base: 'space-between', sm: 'center' }}
-                width={{ md: 24 }} // TODO: do this better, kinda hacky
+      <DefaultContainer>
+        <Flex flexDirection="column">
+          <Flex
+            flexDirection={{ base: 'column', md: 'row' }}
+            gap={{ md: 16 }}
+            justifyContent={{ md: 'space-between' }}
+          >
+            <Box>
+              <Heading
+                as="h1"
+                fontWeight={400}
+                size="2xl"
               >
-                <Box>
-                  <Score
-                    currentUserScore={true}
-                    uid={auth.currentUser?.uid || ''}
-                  />
-                </Box>
-                <Button
-                  colorScheme="blue"
-                  display={{ md: 'none' }}
-                  onClick={onOpen}
-                  ref={btnRef}
+                Hello{' '}
+                <Box
+                  display="block"
+                  fontWeight={700}
                 >
-                  Assign Points
-                </Button>
-              </Flex>
-            </Flex>
-
-            <Card
-              display={{ base: 'none', md: 'flex' }}
-              justifyContent={{ md: 'center' }}
-              my={12}
-            >
-              <CardBody>
-                <AssignPointsForm
-                  form={form}
-                  inverse={true}
-                  onSubmitSuccess={onSubmitSuccess}
-                />
-              </CardBody>
-            </Card>
+                  {auth.currentUser?.displayName} 👋
+                </Box>
+              </Heading>
+              <Heading
+                as="h2"
+                size="lg"
+              >
+                <Text
+                  as="span"
+                  fontStyle="italic"
+                  fontWeight={400}
+                >
+                  Are you ready to assign value to your friends?{' '}
+                </Text>
+                😈
+              </Heading>
+            </Box>
             <Divider
               borderBottomColor="gray.500"
               display={{ md: 'none' }}
               my={8}
             />
             <Flex
-              flexDirection="column"
-              gap={8}
+              alignItems="center"
+              gap={16}
+              justifyContent={{ base: 'space-between', sm: 'center' }}
+              width={{ md: 24 }} // TODO: do this better, kinda hacky
             >
-              <ChoiceChips onChange={onPointsFilterChange} />
-              {pointsIsLoading &&
-                [...Array(3).keys()].map(() => <SkeletonPointCard />)}
-              {pointsData?.map((x) => (
-                <PointCard
-                  key={x.id}
-                  point={x}
+              <Box>
+                <Score
+                  currentUserScore={true}
+                  uid={auth.currentUser?.uid || ''}
                 />
-              ))}
-              {pointsData?.length === 0 && (
-                <Flex
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <Alert status="info">
-                    <AlertIcon />
-                    No points found
-                  </Alert>
-                </Flex>
-              )}
+              </Box>
+              <Button
+                colorScheme="blue"
+                display={{ md: 'none' }}
+                onClick={onOpen}
+                ref={btnRef}
+              >
+                Assign Points
+              </Button>
             </Flex>
           </Flex>
-        </Box>
-        <Drawer
-          finalFocusRef={btnRef}
-          isOpen={isOpen}
-          onClose={onClose}
-          placement="right"
-          size="full"
-        >
-          <DrawerOverlay />
-          <DrawerContent>
-            <DrawerCloseButton color="white">
-              <FontAwesomeIcon
-                icon={faXmark}
-                inverse={true}
-                size="2x"
-              />
-            </DrawerCloseButton>
-            <DrawerHeader
-              backgroundColor="purple.500"
-              color="white"
-            >
-              Assign Points
-            </DrawerHeader>
 
-            <DrawerBody>
+          <Card
+            display={{ base: 'none', md: 'flex' }}
+            justifyContent={{ md: 'center' }}
+            my={12}
+          >
+            <CardBody>
               <AssignPointsForm
                 form={form}
-                onClose={onClose}
+                inverse={true}
                 onSubmitSuccess={onSubmitSuccess}
-                showCancel={true}
               />
-            </DrawerBody>
-          </DrawerContent>
-        </Drawer>
-      </DefaultLayout>
+            </CardBody>
+          </Card>
+          <Divider
+            borderBottomColor="gray.500"
+            display={{ md: 'none' }}
+            my={8}
+          />
+          <Flex
+            flexDirection="column"
+            gap={8}
+          >
+            <ChoiceChips onChange={onPointsFilterChange} />
+            {pointsIsLoading &&
+              [...Array(3).keys()].map(() => <SkeletonPointCard />)}
+            {pointsData?.map((x) => (
+              <PointCard
+                key={x.id}
+                point={x}
+              />
+            ))}
+            {pointsData?.length === 0 && (
+              <Flex
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Alert status="info">
+                  <AlertIcon />
+                  No points found
+                </Alert>
+              </Flex>
+            )}
+          </Flex>
+        </Flex>
+      </DefaultContainer>
+      <Drawer
+        finalFocusRef={btnRef}
+        isOpen={isOpen}
+        onClose={onClose}
+        placement="right"
+        size="full"
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton color="white">
+            <FontAwesomeIcon
+              icon={faXmark}
+              inverse={true}
+              size="2x"
+            />
+          </DrawerCloseButton>
+          <DrawerHeader
+            backgroundColor="purple.500"
+            color="white"
+          >
+            Assign Points
+          </DrawerHeader>
+
+          <DrawerBody>
+            <AssignPointsForm
+              form={form}
+              onClose={onClose}
+              onSubmitSuccess={onSubmitSuccess}
+              showCancel={true}
+            />
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </AuthGuard>
   );
 };

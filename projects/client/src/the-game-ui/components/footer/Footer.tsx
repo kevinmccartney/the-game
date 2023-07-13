@@ -1,35 +1,27 @@
 import { Flex, Link, Text } from '@chakra-ui/react';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 
-export const Footer = () => (
+export const Footer: FunctionComponent<
+  Readonly<{
+    inverse?: boolean;
+  }>
+> = ({ inverse }) => (
   <Flex
-    bg="gray.800"
+    bgColor={inverse ? 'gray.800' : undefined}
     justifyContent="center"
     p="4"
     role="contentinfo"
   >
-    <Text color="white">Made with</Text>
-    <Text
-      color="red.400"
-      ml={1}
-    >
-      <FontAwesomeIcon icon={faHeart} />
+    <Text color={inverse ? 'white' : 'black'}>
+      Made with 🖕 by{' '}
+      <Link
+        color="blue.400"
+        href="https://github.com/kevinmccartney"
+        isExternal={true}
+        ml={1}
+      >
+        Kevin McCartney
+      </Link>
     </Text>
-    <Text
-      color="white"
-      ml={1}
-    >
-      by
-    </Text>
-    <Link
-      color="blue.400"
-      href="https://github.com/kevinmccartney"
-      isExternal={true}
-      ml={1}
-    >
-      Kevin McCartney
-    </Link>
   </Flex>
 );

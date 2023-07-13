@@ -49,16 +49,16 @@ export const AuthGuard = (
       router.events.off('routeChangeStart', preventAccess);
       router.events.off('routeChangeComplete', authCheck);
     };
-  }, [router, router.events]);
+  }, []);
 
   return authorized ? (
     props?.children
   ) : (
     <Flex
       alignItems="center"
-      h="100vh"
+      h="100%"
       justifyContent="center"
-      w="100vw"
+      w="100%"
     >
       <Loading />
     </Flex>

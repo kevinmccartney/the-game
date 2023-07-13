@@ -2,23 +2,17 @@
 
 import { Button, Heading, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet-async';
-
-import { DefaultLayout } from '@the-game/ui/layouts';
 
 export const NotFound = () => {
   const router = useRouter();
-
-  useEffect(() => {
-    window.history.pushState({}, '', '/not-found');
-  });
 
   const handleClick = () => {
     router.push('/').catch(() => {});
   };
   return (
-    <DefaultLayout>
+    <>
       <Helmet>
         <title>The Game</title>
       </Helmet>
@@ -42,6 +36,6 @@ export const NotFound = () => {
           </Button>
         </VStack>
       </header>
-    </DefaultLayout>
+    </>
   );
 };

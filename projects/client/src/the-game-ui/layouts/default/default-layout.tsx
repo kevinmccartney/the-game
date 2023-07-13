@@ -1,44 +1,79 @@
-import { Box, Flex, Grid } from '@chakra-ui/react';
-// eslint-disable-next-line import/no-unassigned-import
-import '@fortawesome/fontawesome-svg-core/styles.css';
-import React, { FunctionComponent } from 'react';
+import { Box, Grid, useBreakpointValue } from '@chakra-ui/react';
+import { getAuth } from 'firebase/auth';
+import React, { FunctionComponent, PropsWithChildren } from 'react';
 
-import { Footer, Navbar } from '@the-game/ui/components';
-import { ReactChildren } from '@the-game/ui/models';
+import { BottomNav, Header, SideNav } from '@the-game/ui/components';
 
-export const DefaultLayout: FunctionComponent<{
-  children: ReactChildren;
-  flexProps?: { [key: string]: string };
-}> = ({ children, flexProps }) => (
-  <Grid
-    gridTemplateRows="72px 1fr 56px"
-    minH="100vh"
-  >
-    <Navbar />
-    <Flex
-      alignItems="center"
+export const DefaultLayout: FunctionComponent<
+  PropsWithChildren<{
+    isInitialized: boolean;
+  }>
+> = ({ children, isInitialized }) => {
+  const isMobile = useBreakpointValue({
+    base: true,
+    lg: false,
+  });
+
+  const isLoggedIn = () => {
+    const auth = getAuth();
+
+    return !!auth.currentUser;
+  };
+
+  return (
+    <Grid
+      gridTemplateAreas={{
+        base: `
+              'header header'
+              'main main'
+              'bottomNav bottomNav'
+            `,
+        lg:
+          isInitialized && isLoggedIn()
+            ? `
+              'header header'
+              'aside main'
+              'bottomNav bottomNav'
+            `
+            : `
+              'header header'
+              'main main'
+              'bottomNav bottomNav'
+            `,
+      }}
       backgroundColor="gray.50"
-      flexDirection="column"
-      flexGrow={1}
-      {...flexProps}
-      px={6}
-      role="main"
+      gridTemplateColumns="1fr 4fr"
+      gridTemplateRows="64px 1fr"
+      maxHeight={{ base: undefined, lg: '100vh' }}
+      minHeight={{ base: '100vh', lg: undefined }}
     >
+      <Header gridArea="header" />
+      {isInitialized && isLoggedIn() && !isMobile && (
+        <SideNav
+          display={{ base: 'none', lg: 'initial' }}
+          gridArea="aside"
+        />
+      )}
       <Box
-        maxW={{
-          lg: 'container.lg',
-          md: 'container.md',
-          sm: 'container.sm',
-        }}
-        width="100%"
+        boxShadow={
+          isInitialized
+            ? {
+                base: 'inset 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                lg: 'inset 0 20px 25px -5px rgba(0, 0, 0, 0.1), inset 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+              }
+            : undefined
+        }
+        gridArea="main"
+        maxHeight={{ lg: '100vh' }}
+        overflow="auto"
+        px={6}
+        role="main"
       >
         {children}
       </Box>
-    </Flex>
-    <Footer />
-  </Grid>
-);
-
-DefaultLayout.defaultProps = {
-  flexProps: {},
+      {isInitialized && isLoggedIn() && isMobile && (
+        <BottomNav gridArea="bottomNav" />
+      )}
+    </Grid>
+  );
 };

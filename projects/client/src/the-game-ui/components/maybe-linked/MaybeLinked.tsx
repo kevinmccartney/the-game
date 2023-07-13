@@ -1,13 +1,12 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 
-import { ReactChildren } from '@the-game/ui/models';
-
-export type MaybeLinkedProps = Readonly<{
-  children: ReactChildren;
-  href: string;
-  isLinked: boolean;
-}>;
+export type MaybeLinkedProps = Readonly<
+  PropsWithChildren<{
+    href: string;
+    isLinked: boolean;
+  }>
+>;
 
 export const MaybeLinked = ({
   children,
