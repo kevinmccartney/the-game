@@ -25,6 +25,31 @@ const Document = () => (
         href="/site.webmanifest"
         rel="manifest"
       />
+      <link
+        href="https://fonts.googleapis.com"
+        rel="preconnect"
+      />
+      <link
+        crossOrigin=""
+        href="https://fonts.gstatic.com"
+        rel="preconnect"
+      />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet"
+      />
+      <meta
+        content="#805ad5"
+        name="theme-color"
+      />
+      <meta
+        content="yes"
+        name="apple-mobile-web-app-capable"
+      />
+      <meta
+        content="black-translucent"
+        name="apple-mobile-web-app-status-bar-style"
+      />
     </Head>
     <body>
       <Main />

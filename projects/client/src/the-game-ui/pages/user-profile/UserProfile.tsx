@@ -18,12 +18,12 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 import {
+  AuthGuard,
   ChoiceChips,
   PointCard,
   Score,
   SkeletonPointCard,
 } from '@the-game/ui/components';
-import { DefaultLayout } from '@the-game/ui/layouts';
 import {
   useGetPointsQuery,
   useGetUserEntityQuery,
@@ -49,9 +49,9 @@ export const UserProfile = () => {
   };
 
   return (
-    <DefaultLayout>
+    <AuthGuard>
       <Helmet>
-        <title>The Game</title>
+        <title>The Game | Profile</title>
       </Helmet>
       <header className="App-header">
         {userData && (
@@ -120,6 +120,6 @@ export const UserProfile = () => {
           </Flex>
         )}
       </header>
-    </DefaultLayout>
+    </AuthGuard>
   );
 };
