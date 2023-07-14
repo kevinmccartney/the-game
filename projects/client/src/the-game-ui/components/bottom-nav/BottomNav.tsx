@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getAuth } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { v4 as uuidV4 } from 'uuid';
 
 import { PATH_MAPPINGS } from '@the-game/ui/constants';
 
@@ -51,6 +52,7 @@ export const BottomNav = (props: { [key: string]: any }) => {
     <Flex
       alignItems="center"
       backgroundColor="purple.500"
+      border={0}
       bottom={0}
       justifyContent="center"
       position="sticky"
@@ -63,6 +65,7 @@ export const BottomNav = (props: { [key: string]: any }) => {
             colorScheme="purple"
             h="auto"
             isActive={router.pathname === x.pathMapping}
+            key={uuidV4()}
             onClick={() => handleClick(x.path)}
             py={2}
           >

@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getAuth } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { v4 as uuidV4 } from 'uuid';
 
 import { PATH_MAPPINGS } from '@the-game/ui/constants';
 
@@ -58,7 +59,10 @@ export const SideNav = (props: { [key: string]: any }) => {
         gap={4}
       >
         {items.map((x) => (
-          <ListItem p={2}>
+          <ListItem
+            key={uuidV4()}
+            p={2}
+          >
             <Link
               _hover={{
                 color: 'purple.500',
