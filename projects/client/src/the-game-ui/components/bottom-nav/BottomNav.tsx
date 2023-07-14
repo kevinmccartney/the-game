@@ -56,7 +56,7 @@ export const BottomNav = (props: { [key: string]: any }) => {
       position="sticky"
       {...props}
     >
-      <ButtonGroup gap={4}>
+      <ButtonGroup gap={{ sm: 4 }}>
         {items.map((x) => (
           <Button
             borderRadius={0}
