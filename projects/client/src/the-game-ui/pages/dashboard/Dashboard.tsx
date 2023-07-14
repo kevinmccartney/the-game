@@ -1,8 +1,6 @@
 'use client';
 
 import {
-  Alert,
-  AlertIcon,
   Box,
   Button,
   Card,
@@ -29,10 +27,8 @@ import { useForm } from 'react-hook-form';
 import {
   AssignPointsForm,
   AuthGuard,
-  ChoiceChips,
-  PointCard,
+  PointsFeed,
   Score,
-  SkeletonPointCard,
 } from '@the-game/ui/components';
 import { DefaultContainer } from '@the-game/ui/layouts';
 import { AssignPointsForm as AssignPointsFormModel } from '@the-game/ui/models';
@@ -44,28 +40,22 @@ export const Dashboard = () => {
   const [pointsFilter, setPointsFilter] = useState('all');
   const btnRef = useRef<any>();
   const form = useForm<AssignPointsFormModel>();
-
   const auth = getAuth();
-  const {
-    data: pointsData,
-    isLoading: pointsIsLoading,
-    refetch: pointsRefetch,
-  } = useGetPointsQuery({
+  const userUid = auth.currentUser?.uid || '';
+  const { refetch: pointsRefetch } = useGetPointsQuery({
     type: pointsFilter,
-    userId: auth.currentUser?.uid || '',
+    userId: userUid,
   });
 
-  const { refetch: scoresRefetch } = useGetScoresQuery(
-    auth.currentUser?.uid || '',
-  );
+  const { refetch: scoresRefetch } = useGetScoresQuery(userUid);
 
   const onSubmitSuccess = async () => {
     await scoresRefetch();
     await pointsRefetch();
   };
 
-  const onPointsFilterChange = (value: string) => {
-    setPointsFilter(value);
+  const onPointsFeedTypeChange = (type: string) => {
+    setPointsFilter(type);
   };
 
   return (
@@ -154,31 +144,10 @@ export const Dashboard = () => {
             display={{ md: 'none' }}
             my={8}
           />
-          <Flex
-            flexDirection="column"
-            gap={8}
-          >
-            <ChoiceChips onChange={onPointsFilterChange} />
-            {pointsIsLoading &&
-              [...Array(3).keys()].map(() => <SkeletonPointCard />)}
-            {pointsData?.map((x) => (
-              <PointCard
-                key={x.id}
-                point={x}
-              />
-            ))}
-            {pointsData?.length === 0 && (
-              <Flex
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Alert status="info">
-                  <AlertIcon />
-                  No points found
-                </Alert>
-              </Flex>
-            )}
-          </Flex>
+          <PointsFeed
+            onTypeChange={onPointsFeedTypeChange}
+            uid={auth.currentUser?.uid || ''}
+          />
         </Flex>
       </DefaultContainer>
       <Drawer

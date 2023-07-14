@@ -7,6 +7,7 @@ export * from './maybe-linked';
 export * from './header';
 export * from './bottom-nav';
 export * from './point-card';
+export * from './points-feed';
 export * from './side-nav';
 export * from './score';
 export * from './user-search-field';
