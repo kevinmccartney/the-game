@@ -14,6 +14,9 @@
     },
     {
       "path": "./projects/infra"
+    },
+    {
+      "path": "projects/identity-services"
     }
   ],
   "extensions": {
@@ -100,7 +103,7 @@
         "pattern": "the-game-client"
       }
     ],
-    "explorer.autoReveal": true,
+    "explorer.autoReveal": false,
     "explorer.confirmDelete": false,
     "explorer.confirmDragAndDrop": false,
     "explorer.decorations.badges": true,
