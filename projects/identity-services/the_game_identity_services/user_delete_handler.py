@@ -35,7 +35,9 @@ def function_handler(data: dict, context: Context):
         data (dict): The event payload.
         context (google.cloud.functions.Context): Metadata for the event.
     """
-    uid = (data.get("uid", None),)
+    uid = data.get("uid", None)
+
+    _logging.info(f"uid: ${uid}")
 
     try:
         user_record = (
