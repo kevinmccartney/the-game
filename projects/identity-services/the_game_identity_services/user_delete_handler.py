@@ -37,20 +37,15 @@ def function_handler(data: dict, context: Context):
     """
     uid = data.get("uid", None)
 
-    _logging.info(f"uid: ${uid}")
-
     try:
         user_record = (
             _db.collection("users").where(filter=_FieldFilter("uid", "==", uid)).get()
         )
 
         for record in user_record:
-            print(str(record.to_dict()))
-            print(record.id)
-
             _db.collection("users").document(record.id).delete()
 
-            _logging.info(f"Deleted user id ${record.id}, uid ${uid}")
+            _logging.info(f"Deleted user - record id: ${record.id}, uid: ${uid}")
     except Exception as ex:
         _logging.error(ex)
         _logging.error(_traceback.format_exc())

@@ -88,9 +88,10 @@ def function_handler(data: dict, context: Context):
         _logging.error(_traceback.format_exc())
 
     try:
-        _db.collection("users").document(str(_uuid4())).set(
-            user.model_dump(mode="json")
-        )
+        record_id = _uuid4()
+        _db.collection("users").document(record_id).set(user.model_dump(mode="json"))
+
+        _logging.info(f"Created user - record id: ${record_id}, uid: ${user.uid}")
     except Exception as ex:
         _logging.error(ex)
         _logging.error(_traceback.format_exc())
