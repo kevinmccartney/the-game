@@ -89,6 +89,10 @@ def function_handler(data: dict, context: Context):
 
     try:
         record_id = _uuid4()
+        _logging.info(user)
+        _logging.info(type(user.uid))
+        dump = user.model_dump(mode="json")
+        _logging.info(dump)
         _db.collection("users").document(record_id).set(user.model_dump(mode="json"))
 
         _logging.info(f"Created user - record id: ${record_id}, uid: ${user.uid}")
