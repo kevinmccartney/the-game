@@ -74,3 +74,4 @@
 - [Why is /var/www a recommended location to host your web app?](https://askubuntu.com/a/877280)
 - [Permission artifactregistry.repositories.uploadArtifacts denied on resource using github actions](https://stackoverflow.com/a/76078997)
 - [Parameter Expansion](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_06_02)
+- [ReactJS header that disappears on scroll down and appears on scroll up](https://www.codemzy.com/blog/react-sticky-header-disappear-scroll)
