@@ -1,0 +1,15 @@
+name: "Deploy Identity Services"
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  deploy-infra:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hello World
+        run: echo "hello, world"
