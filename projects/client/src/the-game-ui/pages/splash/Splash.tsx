@@ -1,19 +1,18 @@
 'use client';
 
 import { Box, Button, Flex, Heading, VStack } from '@chakra-ui/react';
-import { GoogleAuthProvider, getAuth } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 import { Footer } from '@the-game/ui/components';
 import { DefaultContainer } from '@the-game/ui/layouts';
-import { loginClickHandler } from '@the-game/ui/utils';
 
 export const Splash = () => {
-  const auth = getAuth();
   const router = useRouter();
-  const provider = new GoogleAuthProvider();
+  const handleGetStartedClick = () => {
+    void router.push('/login');
+  };
 
   return (
     <>
@@ -55,7 +54,7 @@ export const Splash = () => {
               <Button
                 colorScheme="blue"
                 mt={6}
-                onClick={loginClickHandler({ auth, provider, router })}
+                onClick={handleGetStartedClick}
               >
                 Log in
               </Button>
