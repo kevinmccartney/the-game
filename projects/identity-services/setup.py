@@ -12,8 +12,8 @@ setup(
     py_modules=find_packages(),
     install_requires=[
         "firebase-admin",
+        "functions-framework",
         "google-cloud-logging",
         "google-cloud-firestore",
-        "google-cloud-functions",
     ],
 )

@@ -19,3 +19,6 @@ package-lock.json
 *.zip
 Makefile
 *.code-workspace
+*.py
+Pipfile
+Pipfile.lock
