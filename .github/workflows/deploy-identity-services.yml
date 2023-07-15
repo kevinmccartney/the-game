@@ -19,6 +19,7 @@ jobs:
       matrix:
         function:
           - 'user_creation_handler'
+          - 'user_delete_handler'
       fail-fast: false
     runs-on: ubuntu-latest
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
