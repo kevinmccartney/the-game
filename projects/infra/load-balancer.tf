@@ -32,7 +32,7 @@ resource "google_compute_url_map" "the_game_lb" {
   project         = var.project_id
 
   host_rule {
-    hosts        = [google_storage_bucket.web_client.name]
+    hosts        = ["the-game.kevinmccartney.dev"]
     path_matcher = "default-matcher"
   }
 

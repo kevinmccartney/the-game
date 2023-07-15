@@ -1,7 +1,7 @@
 # TODO: cloud run & artifact registry apis
 
 locals {
-  functions = {
+  api_functions = {
     ping : "A ping service for The Game API",
     "user-points-post" : "Add or remove points on a user",
     "user-points-get" : "Get points for a user",
@@ -33,7 +33,7 @@ resource "google_storage_bucket" "cloud_function_source" {
 }
 
 resource "google_storage_bucket_object" "cf_source" {
-  for_each = local.functions
+  for_each = local.api_functions
 
   name           = "${each.key}/function_source.zip"
   bucket         = google_storage_bucket.cloud_function_source.name
@@ -52,7 +52,7 @@ resource "google_cloudfunctions2_function" "chatbot-api" {
   # TODO: private/lb ingress
   # TODO: scaling/other stuff?
 
-  for_each = local.functions
+  for_each = local.api_functions
 
   name        = "the-game-${each.key}"
   location    = var.region
