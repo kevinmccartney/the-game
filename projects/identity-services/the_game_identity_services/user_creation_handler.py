@@ -88,7 +88,9 @@ def function_handler(data: dict, context: Context):
         _logging.error(_traceback.format_exc())
 
     try:
-        _db.collection("users").document(str(_uuid4())).set(user)
+        _db.collection("users").document(str(_uuid4())).set(
+            user.model_dump(mode="json")
+        )
     except Exception as ex:
         _logging.error(ex)
         _logging.error(_traceback.format_exc())
