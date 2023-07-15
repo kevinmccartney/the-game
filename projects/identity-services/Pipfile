@@ -1,0 +1,13 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[requires]
+python_version = "3.9"
+
+[packages]
+firebase-admin = "*"
+google-cloud-logging = "*"
+google-cloud-firestore = "*"
+google-cloud-functions = "*"

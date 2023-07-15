@@ -1,15 +1,84 @@
-name: "Deploy Identity Services"
+name: 'Deploy Identity Services'
 
 on:
   workflow_dispatch:
   push:
+    paths:
+      - projects/identity-services/**/*
+      - .github/workflows/deploy-identity-services.yml
     branches:
       - main
       - develop
 
+permissions:
+  contents: read
+
 jobs:
-  deploy-infra:
+  deploy_cloud_function:
+    strategy:
+      matrix:
+        function:
+          - 'user_creation_handler'
+      fail-fast: false
     runs-on: ubuntu-latest
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: projects/identity-services
     steps:
-      - name: Hello World
-        run: echo "hello, world"
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install pipenv
+        run: |
+          python -m pip install --upgrade pipenv wheel
+
+      - name: Cache pipenv
+        id: cache-pipenv
+        uses: actions/cache@v1
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+
+      - name: Pipenv install
+        if: steps.cache-pipenv.outputs.cache-hit != 'true'
+        run: pipenv install --deploy --dev
+
+      - name: Generate requirements.txt
+        run: pipenv requirements > requirements.txt
+
+      - name: Make deployment dir
+        run: |
+          mkdir ${{ matrix.function }} && \
+          mv requirements.txt ${{ matrix.function }} && \
+          mv the_game_identity_services/${{ matrix.function }}.py ${{ matrix.function }}/main.py
+
+      - name: Zip deployment package
+        run: |
+          cd ${{ matrix.function }}
+          zip function_source.zip main.py requirements.txt
+
+      - name: GCP auth
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+
+      - name: Set up Cloud SDK
+        uses: 'google-github-actions/setup-gcloud@v1'
+
+      - name: Upload CF source
+        run: |
+          cf_name=$(echo ${{ matrix.function }} | tr '_' '-')
+          gsutil cp ${{ matrix.function }}/function_source.zip gs://the-game-388502-gcf-source/${cf_name}
+
+      - name: Deploy Cloud Function
+        run: |
+          cf_name=$(echo ${{ matrix.function }} | tr '_' '-')
+          gcloud functions deploy the-game-${cf_name} --source gs://the-game-388502-gcf-source/${cf_name}/function_source.zip
