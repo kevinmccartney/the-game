@@ -25,14 +25,15 @@ resource "google_cloudfunctions_function" "identity_handlers" {
 
   name                  = "the-game-user-creation-handler"
   description           = "Handler for Firebase user creation event"
-  runtime               = "python39"
+  runtime               = "python311"
   entry_point           = "function_handler"
   source_archive_bucket = google_storage_bucket.cloud_function_source.name
   source_archive_object = google_storage_bucket_object.identity_cf_source[each.key].name
+  service_account_email = google_service_account.the_game_api.email
 
   event_trigger {
     event_type = "providers/firebase.auth/eventTypes/user.create"
-    resource   = var.project_id
+    resource   = "projects/${var.project_id}"
 
     failure_policy {
       retry = true
