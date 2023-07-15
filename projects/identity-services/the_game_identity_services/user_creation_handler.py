@@ -1,12 +1,14 @@
 # TODO: how much can be abstracted out here?
 # import traceback as _traceback
 import os as _os
+from typing import List, Union
 
 # import json as _json
 
 # import functions_framework as _functions_framework
 # from flask import Request as _Request, Response as _Response
 from firebase_admin import initialize_app as _initialize_app
+from pydantic import BaseModel
 
 # from firebase_admin.firestore import client as _firestore_client
 from google.cloud.logging import Client as _LoggingClient
@@ -42,6 +44,41 @@ if _env != "local":
 # }
 
 
+#  User
+#  uid: $Admin,$Self,$Friend,$Anon
+#  display_name: string; $Admin,$Self,$Friend,$Anon
+#  username: string; $Admin,$Self,$Friend,$Anon
+#  photo_url: string; $Admin,$Self,$Friend,$Anon
+#  join_date: Date $Admin,$Self,$Friend
+#  location: string; $Admin,$Self,$Friend
+#  about_me: string; $Admin,$Self,$Friend
+#  likes: Array<string> $Admin,$Self,$Friend
+#  friends: Array<string> $Admin,$Self,$Friend # ARRAY OF UIDs. Exposed by /v1/users/{id}/friends
+#  dislikes: Array<string> $Admin,$Self,$Friend
+#  email: string; $Admin,$Self
+#  phone_number: string; $Admin,$Self
+#
+#  Admin User returned by API
+#  User - $Self
+#  Friend - $Friend
+#  UserIdentifier - $Anon
+
+
+class User(BaseModel):
+    uid: str
+    display_name: str
+    username: str
+    photo_url: Union[str, None] = None
+    join_date: str
+    location: Union[str, None] = None
+    about_me: Union[str, None] = None
+    likes: List[str] = []
+    friends: List[str] = []
+    dislikes: List[str] = []
+    email: str
+    phone_number: Union[str, None] = None
+
+
 def function_handler(data: dict, context: Context):
     """Triggered by creation or deletion of a Firebase Auth user object.
     Args:
@@ -54,6 +91,23 @@ def function_handler(data: dict, context: Context):
     # now print out the entire event object
     print(str(data))
     print(str(context))
+
+    user = User(
+        uid=data.get("uid", None),
+        display_name=data.get("displayName", None),
+        username=data.get("displayName", None),
+        photo_url=data.get("photoURL", None),
+        join_date=data.get("metadata", {}).get("createdAt", None),
+        location=None,
+        about_me=None,
+        likes=[],
+        friends=[],
+        dislikes=[],
+        email=data.get("email", None),
+        phone_number=None,
+    )
+
+    print(user)
 
     # try:
     #     id_token = request.headers.get("x_forwarded_authorization").replace(
