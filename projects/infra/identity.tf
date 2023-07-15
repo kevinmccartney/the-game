@@ -1,5 +1,14 @@
 locals {
-  identity_functions = toset(["user-creation-handler"])
+  identity_functions = {
+    "user-creation-handler" : {
+      description : "Handler for Firebase user creation event",
+      event_type : "providers/firebase.auth/eventTypes/user.create"
+    },
+    "user-delete-handler" : {
+      description : "Handler for Firebase user delete event",
+      event_type : "providers/firebase.auth/eventTypes/user.delete"
+    }
+  }
 }
 
 resource "google_storage_bucket_object" "identity_cf_source" {
@@ -23,8 +32,8 @@ resource "google_cloudfunctions_function" "identity_handlers" {
   # TODO: scaling/other stuff?
   for_each = local.identity_functions
 
-  name                  = "the-game-user-creation-handler"
-  description           = "Handler for Firebase user creation event"
+  name                  = "the-game-${each.key}"
+  description           = each.value["description"]
   runtime               = "python311"
   entry_point           = "function_handler"
   source_archive_bucket = google_storage_bucket.cloud_function_source.name
@@ -32,7 +41,7 @@ resource "google_cloudfunctions_function" "identity_handlers" {
   service_account_email = google_service_account.the_game_api.email
 
   event_trigger {
-    event_type = "providers/firebase.auth/eventTypes/user.create"
+    event_type = each.value["event_type"]
     resource   = "projects/${var.project_id}"
 
     failure_policy {
