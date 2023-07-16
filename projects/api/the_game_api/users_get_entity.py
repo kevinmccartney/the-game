@@ -78,9 +78,9 @@ def function_handler(request: _Request):
                 _headers,
             )
 
-        created_by_user = users_results[0].to_dict()
+        user = users_results[0].to_dict()
 
-        return _Response(_json.dumps(created_by_user), 200, _headers)
+        return _Response(_json.dumps({"data": user}), 200, _headers)
 
     except AttributeError as ex:
         _logging.error(ex)

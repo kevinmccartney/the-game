@@ -39,7 +39,7 @@ paths:
           schema:
             type: object
             properties:
-              response:
+              data:
                 type: array
                 items:
                   $ref: '#/definitions/User'
@@ -71,7 +71,7 @@ paths:
           schema:
             type: object
             properties:
-              response:
+              data:
                 $ref: '#/definitions/User'
     options:
       operationId: users-get-options
@@ -124,18 +124,10 @@ paths:
           schema:
             type: object
             properties:
-              created_time:
-                type: string
-              id:
-                type: string
-              points:
-                type: integer
-              reason:
-                type: string
-              subject:
-                $ref: '#/definitions/User'
-              created_by:
-                $ref: '#/definitions/User'
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Point'
 
     options:
       operationId: user-points-options
@@ -165,10 +157,13 @@ paths:
           schema:
             type: object
             properties:
-              points:
-                type: integer
+              data:
+                type: object
+                properties:
+                  points:
+                    type: integer
     options:
-      operationId: user-get-scores-options
+      operationId: user-get-notifications-options
       summary: CORS for the user scores resource
       security: []
       x-google-backend:
@@ -217,3 +212,18 @@ definitions:
         type: string
       uid:
         type: string
+  Point:
+    type: object
+    properties:
+      created_time:
+        type: string
+      id:
+        type: string
+      points:
+        type: integer
+      reason:
+        type: string
+      subject:
+        $ref: '#/definitions/User'
+      created_by:
+        $ref: '#/definitions/User'
