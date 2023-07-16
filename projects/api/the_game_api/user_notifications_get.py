@@ -1,8 +1,7 @@
 # TODO: how much can be abstracted out here?
 import traceback as _traceback
 
-# import re as _re
-# import functools as _functools
+import re as _re
 import os as _os
 import json as _json
 from urllib.parse import urlparse as _urlparse
@@ -13,8 +12,8 @@ from flask import Request as _Request, Response as _Response
 import firebase_admin as _firebase_admin
 from google.cloud.logging import Client as _LoggingClient
 
-# from firebase_admin.firestore import client as _firestore_client
-# from google.cloud.firestore import Client as _FirestoreClient
+from firebase_admin.firestore import client as _firestore_client
+from google.cloud.firestore import Client as _FirestoreClient
 from firebase_admin.auth import (
     InvalidIdTokenError as _InvalidIdTokenError,
     ExpiredIdTokenError as _ExpiredIdTokenError,
@@ -23,7 +22,7 @@ from firebase_admin.auth import (
     verify_id_token as _verify_id_token,
 )
 
-# from google.cloud.firestore_v1.base_query import FieldFilter as _FieldFilter
+from google.cloud.firestore_v1.base_query import FieldFilter as _FieldFilter
 
 _env = _os.environ.get("THE_GAME_ENV", "")
 
@@ -36,7 +35,7 @@ if _env != "local":
 
 import logging as _logging
 
-# _db: _FirestoreClient = _firestore_client()
+_db: _FirestoreClient = _firestore_client()
 
 _headers = {
     "Access-Control-Allow-Origin": "*",
@@ -97,22 +96,21 @@ def function_handler(request: _Request):
         )
 
     try:
-        # request_path = request.headers.get("x-envoy-original-path")
-        # parsed_url = _urlparse(request_path)
-        # pattern = _re.compile(r"^\/v1\/users\/(.*)/notifications$")
+        request_path = request.headers.get("x-envoy-original-path")
+        parsed_url = _urlparse(request_path)
+        pattern = _re.compile(r"^\/v1\/users\/(.*)/notifications$")
 
-        # subject_uid = pattern.sub(r"\1", parsed_url.path)
+        subject_uid = pattern.sub(r"\1", parsed_url.path)
 
-        # points_ref = _db.collection("notifications")
-        # points_query_ref = points_ref.where(
-        #     filter=_FieldFilter(field_path="uid", op_string="==", value=subject_uid)
-        # )
+        points_ref = _db.collection("notifications")
+        points_query_ref = points_ref.where(
+            filter=_FieldFilter(field_path="uid", op_string="==", value=subject_uid)
+        )
 
-        # points_results = points_query_ref.get()
-        # points_docs = [doc.to_dict() for doc in points_results]
+        points_results = points_query_ref.get()
+        points_docs = [doc.to_dict() for doc in points_results]
 
-        # return _Response(_json.dumps({"data": points_docs}), 200, _headers)
-        return _Response(_json.dumps({"data": []}), 200, _headers)
+        return _Response(_json.dumps({"data": points_docs}), 200, _headers)
 
     except Exception as ex:
         _logging.error(ex)
