@@ -78,7 +78,20 @@ def function_handler(request: _Request):
                 _headers,
             )
 
-        user = users_results[0].to_dict()
+        users = [doc.to_dict() for doc in users_results]
+        users_return_value = []
+
+        for user in users:
+            users_return_value.append(
+                {
+                    "uid": user["uid"],
+                    "display_name": user["display_name"],
+                    "username": user["username"],
+                    "photo_url": user["photo_url"],
+                }
+            )
+
+        user = users_return_value[0]
 
         return _Response(_json.dumps({"data": user}), 200, _headers)
 
