@@ -7,6 +7,8 @@ export const usersApi = api.injectEndpoints({
     getUserEntity: build.query<Readonly<User>, string>({
       providesTags: () => [{ type: 'Users' }], // TODO: look into providing ID
       query: (id: string) => `users/${id}`,
+      transformResponse: (baseQueryReturnValue) =>
+        (baseQueryReturnValue as { data: Readonly<User> }).data,
     }),
     getUsers: build.query<ReadonlyArray<User>, { name: string } | undefined>({
       providesTags: () => [{ type: 'Users' }], // TODO: look into providing ID
