@@ -9,6 +9,9 @@ from firebase_admin import initialize_app as _initialize_app
 
 _initialize_app()
 
+from the_game_api.user_notifications_get import (
+    function_handler as user_notifications_get_handler,
+)
 from the_game_api.user_points_get import function_handler as user_points_get_handler
 from the_game_api.user_points_post import function_handler as user_points_post_handler
 from the_game_api.user_scores_get import function_handler as user_scores_get_handler
@@ -33,6 +36,11 @@ def request_handler(func, *args, **kwargs):
 
     return wrapper
 
+
+app.add_url_rule(
+    "/v1/users/<id>/notifications",
+    view_func=request_handler(func=user_notifications_get_handler),
+)
 
 app.add_url_rule(
     "/v1/users/<id>/points",
@@ -66,7 +74,6 @@ class Middleware:
         self.app = app
 
     def __call__(self, environ, start_response):
-
         try:
             environ["HTTP_X_FORWARDED_AUTHORIZATION"] = environ["HTTP_AUTHORIZATION"]
             del environ["HTTP_AUTHORIZATION"]
