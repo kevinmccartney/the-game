@@ -3,6 +3,8 @@ import traceback as _traceback
 import os as _os
 from typing import List, Union
 from uuid import uuid4 as _uuid4
+from string import digits
+from random import choice
 
 from firebase_admin import initialize_app as _initialize_app
 from pydantic import BaseModel
@@ -50,6 +52,7 @@ _db: _FirestoreClient = _firestore_client()
 class User(BaseModel):
     uid: str
     display_name: str
+    display_name_normalized: str
     username: str
     photo_url: Union[str, None] = None
     join_date: str
@@ -68,11 +71,16 @@ def function_handler(data: dict, context: Context):
         data (dict): The event payload.
         context (google.cloud.functions.Context): Metadata for the event.
     """
+    display_name = data.get("displayName", None)
+    if display_name:
+        username = f"{display_name.replace(' ', '')}{''.join(choice(digits) for i in range(10))}"
+        display_name_normalized = display_name.lower()
     try:
         user = User(
             uid=data.get("uid", None),
             display_name=data.get("displayName", None),
-            username=data.get("displayName", None),
+            display_name_normalized=display_name_normalized,
+            username=username,
             photo_url=data.get("photoURL", None),
             join_date=data.get("metadata", {}).get("createdAt", None),
             location=None,
