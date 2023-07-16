@@ -110,7 +110,7 @@ paths:
       summary: CORS for the user scores resource
       security: []
       x-google-backend:
-        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-scores-options
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-notifications-options
       responses:
         '200':
           $ref: '#/responses/CORSSuccess'
