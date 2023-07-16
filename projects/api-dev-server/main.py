@@ -9,6 +9,9 @@ from firebase_admin import initialize_app as _initialize_app
 
 _initialize_app()
 
+from the_game_api.me_get import (
+    function_handler as me_get_handler,
+)
 from the_game_api.user_notifications_get import (
     function_handler as user_notifications_get_handler,
 )
@@ -36,6 +39,11 @@ def request_handler(func, *args, **kwargs):
 
     return wrapper
 
+
+app.add_url_rule(
+    "/v1/me",
+    view_func=request_handler(func=me_get_handler),
+)
 
 app.add_url_rule(
     "/v1/users/<id>/notifications",
