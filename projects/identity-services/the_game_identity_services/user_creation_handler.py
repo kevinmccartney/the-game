@@ -71,11 +71,14 @@ def function_handler(data: dict, context: Context):
         data (dict): The event payload.
         context (google.cloud.functions.Context): Metadata for the event.
     """
-    display_name = data.get("displayName", None)
-    if display_name:
-        username = f"{display_name.replace(' ', '')}{''.join(choice(digits) for i in range(10))}"
-        display_name_normalized = display_name.lower()
+
     try:
+        display_name = data.get("displayName", None)
+
+        if display_name:
+            username = f"{display_name.replace(' ', '')}{''.join(choice(digits) for i in range(10))}"
+            display_name_normalized = display_name.lower()
+
         user = User(
             uid=data.get("uid", None),
             display_name=data.get("displayName", None),
