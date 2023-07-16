@@ -89,13 +89,9 @@ def function_handler(data: dict, context: Context):
 
     try:
         record_id = str(_uuid4())
-        _logging.info(user)
-        _logging.info(type(user.uid))
-        dump = user.model_dump()
-        _logging.info(dump)
         _db.collection("users").document(record_id).set(document_data=user.model_dump())
 
-        _logging.info(f"Created user - record id: ${record_id}, uid: ${user.uid}")
+        _logging.info(f"Created user - record id: {record_id}, uid: {user.uid}")
     except Exception as ex:
         _logging.error(ex)
         _logging.error(_traceback.format_exc())

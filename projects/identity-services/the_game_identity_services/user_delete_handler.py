@@ -45,7 +45,7 @@ def function_handler(data: dict, context: Context):
         for record in user_record:
             _db.collection("users").document(record.id).delete()
 
-            _logging.info(f"Deleted user - record id: ${record.id}, uid: ${uid}")
+            _logging.info(f"Deleted user - record id: {record.id}, uid: {uid}")
     except Exception as ex:
         _logging.error(ex)
         _logging.error(_traceback.format_exc())
