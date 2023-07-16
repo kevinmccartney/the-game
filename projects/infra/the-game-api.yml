@@ -10,6 +10,30 @@ consumes:
 produces:
   - application/json
 paths:
+  /v1/me:
+    get:
+      operationId: me-get
+      summary: Get the authenticated user.
+      x-google-backend:
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-me-get
+      responses:
+        # TODO: add error codes
+        '200':
+          description: The authenticated user.
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/definitions/User'
+    options:
+      operationId: me-options
+      summary: CORS for the the authenticated user resource
+      security: []
+      x-google-backend:
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-me-options
+      responses:
+        '200':
+          $ref: '#/responses/CORSSuccess'
   /v1/ping:
     get:
       operationId: ping-get
@@ -42,7 +66,7 @@ paths:
               data:
                 type: array
                 items:
-                  $ref: '#/definitions/User'
+                  $ref: '#/definitions/AnonymousUser'
     options:
       operationId: users-options
       summary: CORS for the Users resource.
@@ -72,7 +96,7 @@ paths:
             type: object
             properties:
               data:
-                $ref: '#/definitions/User'
+                $ref: '#/definitions/AnonymousUser'
     options:
       operationId: users-get-options
       summary: CORS for the user scores resource
@@ -106,7 +130,7 @@ paths:
                 items:
                   $ref: '#/definitions/Notification'
     options:
-      operationId: user-get-scores-options
+      operationId: user-notifications-options
       summary: CORS for the user scores resource
       security: []
       x-google-backend:
@@ -195,7 +219,7 @@ paths:
                   points:
                     type: integer
     options:
-      operationId: user-get-notifications-options
+      operationId: user-scores-options
       summary: CORS for the user scores resource
       security: []
       x-google-backend:
@@ -232,18 +256,49 @@ responses:
         description: How long to cache the results of a preflight request
 definitions:
   AnyValue: {}
-  User:
+  AnonymousUser:
     type: object
     properties:
+      uid:
+        type: string
       display_name:
         type: string
-      email:
-        type: string
-      phone_number:
+      username:
         type: string
       photo_url:
         type: string
+  User:
+    type: object
+    properties:
       uid:
+        type: string
+      display_name:
+        type: string
+      username:
+        type: string
+      photo_url:
+        type: string
+      join_date:
+        type: string
+      location:
+        type: string
+      about_me:
+        type: string
+      likes:
+        type: array
+        items:
+          type: string
+      friends:
+        type: array
+        items:
+          type: string
+      dislikes:
+        type: array
+        items:
+          type: string
+      email:
+        type: string
+      phone_number:
         type: string
   Point:
     type: object
