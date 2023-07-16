@@ -2,7 +2,6 @@ export * from './add-points-drawer';
 export * from './assign-points-form';
 export * from './auth-guard';
 export * from './bottom-nav';
-export * from './choice-chips';
 export * from './dashboard-header';
 export * from './footer';
 export * from './header';
