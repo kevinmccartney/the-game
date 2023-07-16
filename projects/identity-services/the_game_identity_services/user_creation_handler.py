@@ -88,7 +88,7 @@ def function_handler(data: dict, context: Context):
         _logging.error(_traceback.format_exc())
 
     try:
-        record_id = _uuid4()
+        record_id = str(_uuid4())
         _logging.info(user)
         _logging.info(type(user.uid))
         dump = user.model_dump()
