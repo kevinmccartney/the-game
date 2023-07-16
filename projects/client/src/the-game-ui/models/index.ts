@@ -1,3 +1,4 @@
 export * from './assign-points-form';
-export * from './user';
+export * from './notification';
 export * from './point';
+export * from './user';

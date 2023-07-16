@@ -55,7 +55,7 @@ export const api = createApi({
   baseQuery,
   endpoints: () => ({}),
   reducerPath: 'api',
-  tagTypes: ['Users', 'Points', 'Scores'],
+  tagTypes: ['Users', 'Points', 'Scores', 'Notifications'],
 });
 
 export const enhancedApi = api;

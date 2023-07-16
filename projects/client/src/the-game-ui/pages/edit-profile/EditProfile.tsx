@@ -15,7 +15,7 @@ import { Helmet } from 'react-helmet-async';
 import { AuthGuard } from '@the-game/ui/components';
 import { DefaultContainer } from '@the-game/ui/layouts';
 
-export const Friends = () => {
+export const EditProfile = () => {
   const [searchType, setSearchType] = useState('friends');
   const onTabChange = (index: number) => {
     const searchTypes = ['friends', 'all'];
@@ -23,9 +23,9 @@ export const Friends = () => {
     setSearchType(searchTypes[index]);
   };
 
-  // search with search type
-
   console.log(searchType);
+
+  // search with search type
 
   return (
     <AuthGuard>

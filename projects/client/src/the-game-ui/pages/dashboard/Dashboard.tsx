@@ -1,57 +1,83 @@
 'use client';
 
 import {
-  Box,
   Button,
   Card,
   CardBody,
   Divider,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
   Flex,
-  Heading,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Portal,
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getAuth } from 'firebase/auth';
-import React, { useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useContext, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useForm } from 'react-hook-form';
 
 import {
+  AddPointsDrawer,
   AssignPointsForm,
   AuthGuard,
+  DashboardHeader,
   PointsFeed,
-  Score,
 } from '@the-game/ui/components';
+import { ModalContext } from '@the-game/ui/contexts';
 import { DefaultContainer } from '@the-game/ui/layouts';
-import { AssignPointsForm as AssignPointsFormModel } from '@the-game/ui/models';
+import { useGetNotificationsQuery } from '@the-game/ui/services/notifications';
 import { useGetPointsQuery } from '@the-game/ui/services/points';
 import { useGetScoresQuery } from '@the-game/ui/services/scores';
 
 export const Dashboard = () => {
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  const {
+    isOpen: drawerIsOpen,
+    onClose: drawerOnClose,
+    onOpen: drawerOnOpen,
+  } = useDisclosure();
+  const {
+    isOpen: modalIsOpen,
+    onClose: modalOnClose,
+    onOpen: modalOnOpen,
+  } = useDisclosure();
+  const router = useRouter();
   const [pointsFilter, setPointsFilter] = useState('all');
+  const [onboardingModalHasBeenOpened, setOnboardingModalHasBeenOpened] =
+    useState(false);
   const btnRef = useRef<any>();
-  const form = useForm<AssignPointsFormModel>();
   const auth = getAuth();
   const userUid = auth.currentUser?.uid || '';
   const { refetch: pointsRefetch } = useGetPointsQuery({
     type: pointsFilter,
     userId: userUid,
   });
+  const modalPortalRef = useContext(
+    ModalContext,
+  ) as React.MutableRefObject<null>;
 
   const { refetch: scoresRefetch } = useGetScoresQuery(userUid);
+  const { data: notificationsData } = useGetNotificationsQuery(
+    auth.currentUser?.uid || '',
+  );
+  const hasOnboardingNotification = notificationsData
+    ? notificationsData.map((x) => x.type).includes('user-onboarding')
+    : false;
+
+  if (hasOnboardingNotification && !onboardingModalHasBeenOpened) {
+    modalOnOpen();
+    setOnboardingModalHasBeenOpened(true);
+  }
 
   const onSubmitSuccess = async () => {
     await scoresRefetch();
     await pointsRefetch();
+    drawerOnClose();
   };
 
   const onPointsFeedTypeChange = (type: string) => {
@@ -65,78 +91,18 @@ export const Dashboard = () => {
       </Helmet>
       <DefaultContainer>
         <Flex flexDirection="column">
-          <Flex
-            flexDirection={{ base: 'column', md: 'row' }}
-            gap={{ md: 16 }}
-            justifyContent={{ md: 'space-between' }}
-          >
-            <Box>
-              <Heading
-                as="h1"
-                fontWeight={400}
-                size="2xl"
-              >
-                Hello{' '}
-                <Box
-                  display="block"
-                  fontWeight={700}
-                >
-                  {auth.currentUser?.displayName} 👋
-                </Box>
-              </Heading>
-              <Heading
-                as="h2"
-                size="lg"
-              >
-                <Text
-                  as="span"
-                  fontStyle="italic"
-                  fontWeight={400}
-                >
-                  Are you ready to assign value to your friends?{' '}
-                </Text>
-                😈
-              </Heading>
-            </Box>
-            <Divider
-              borderBottomColor="gray.500"
-              display={{ md: 'none' }}
-              my={8}
-            />
-            <Flex
-              alignItems="center"
-              gap={16}
-              justifyContent={{ base: 'space-between', sm: 'center' }}
-              width={{ md: 24 }} // TODO: do this better, kinda hacky
-            >
-              <Box>
-                <Score
-                  currentUserScore={true}
-                  uid={auth.currentUser?.uid || ''}
-                />
-              </Box>
-              <Button
-                colorScheme="blue"
-                display={{ md: 'none' }}
-                onClick={onOpen}
-                ref={btnRef}
-              >
-                Assign Points
-              </Button>
-            </Flex>
-          </Flex>
-
+          <DashboardHeader
+            auth={auth}
+            btnRef={btnRef}
+            onOpen={drawerOnOpen}
+          />
           <Card
             display={{ base: 'none', md: 'flex' }}
             justifyContent={{ md: 'center' }}
             my={12}
           >
             <CardBody>
-              <AssignPointsForm
-                form={form}
-                inverse={true}
-                onSubmitSuccess={onSubmitSuccess}
-              />
+              <AssignPointsForm onSubmitSuccess={onSubmitSuccess} />
             </CardBody>
           </Card>
           <Divider
@@ -150,39 +116,51 @@ export const Dashboard = () => {
           />
         </Flex>
       </DefaultContainer>
-      <Drawer
+      <AddPointsDrawer
         finalFocusRef={btnRef}
-        isOpen={isOpen}
-        onClose={onClose}
-        placement="right"
-        size="full"
+        isOpen={drawerIsOpen}
+        onClose={drawerOnClose}
       >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton color="white">
-            <FontAwesomeIcon
-              icon={faXmark}
-              inverse={true}
-              size="2x"
-            />
-          </DrawerCloseButton>
-          <DrawerHeader
-            backgroundColor="purple.500"
-            color="white"
-          >
-            Assign Points
-          </DrawerHeader>
+        <AssignPointsForm onSubmitSuccess={onSubmitSuccess} />
+      </AddPointsDrawer>
+      <Portal containerRef={modalPortalRef}>
+        Portal: This text is portaled!
+        <Modal
+          isCentered={true}
+          isOpen={modalIsOpen}
+          onClose={modalOnClose}
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Welcome to The Game!</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Text>Do you want to complete your profile?</Text>
+            </ModalBody>
 
-          <DrawerBody>
-            <AssignPointsForm
-              form={form}
-              onClose={onClose}
-              onSubmitSuccess={onSubmitSuccess}
-              showCancel={true}
-            />
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+            <ModalFooter gap={4}>
+              <Button
+                colorScheme="blue"
+                onClick={modalOnClose}
+                variant="outline"
+              >
+                Not now
+              </Button>
+              <Button
+                onClick={() => {
+                  router.push('/users/123/profile/edit').catch((e) => {
+                    console.log(e);
+                  });
+                }}
+                colorScheme="blue"
+                mr={3}
+              >
+                Sure
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </Portal>
     </AuthGuard>
   );
 };

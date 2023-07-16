@@ -1,48 +1,51 @@
 'use client';
 
-import { PayloadAction, configureStore, createSlice } from '@reduxjs/toolkit';
-import { User } from 'firebase/auth';
+import { configureStore } from '@reduxjs/toolkit';
 
 import { api } from '@the-game/ui/services/api';
 
-type AppState = {
-  user: User | null;
-};
+// type Modal = {
+//   isOpen: boolean;
+// };
 
-function loadFromLocalStorage(): AppState | null {
-  try {
-    const serializedState = localStorage.getItem('persistentState');
-    if (serializedState === null) return null;
-    return JSON.parse(serializedState) as AppState;
-  } catch (e) {
-    // TODO: log to cloud logs
-    console.warn(e);
-    return null;
-  }
-}
+// type AppState = Readonly<{
+//   // modal: Modal;
+// }>;
 
-function saveToLocalStorage(state: Readonly<AppState>) {
-  try {
-    const serializedState = JSON.stringify(state);
-    localStorage.setItem('persistentState', serializedState);
-  } catch (e) {
-    // TODO: log to cloud logs
-    console.warn(e);
-  }
-}
+// function loadFromLocalStorage(): AppState | null {
+//   try {
+//     const serializedState = localStorage.getItem('persistentState');
+//     if (serializedState === null) return null;
+//     return JSON.parse(serializedState) as AppState;
+//   } catch (e) {
+//     // TODO: log to cloud logs
+//     console.warn(e);
+//     return null;
+//   }
+// }
 
-const hydratedState = loadFromLocalStorage();
+// function saveToLocalStorage(state: Readonly<AppState>) {
+//   try {
+//     const serializedState = JSON.stringify(state);
+//     localStorage.setItem('persistentState', serializedState);
+//   } catch (e) {
+//     // TODO: log to cloud logs
+//     console.warn(e);
+//   }
+// }
 
-export const userSlice = createSlice({
-  initialState: hydratedState ? hydratedState.user : null,
-  name: 'user',
-  reducers: {
-    login_success: (state, action: Readonly<PayloadAction<User | null>>) =>
-      action.payload,
-  },
-});
+// const hydratedState = loadFromLocalStorage();
 
-export const userSelector = (state: Readonly<AppState>) => state.user;
+// export const modalSlice = createSlice({
+//   initialState: hydratedState ? hydratedState.modal : { isOpen: false },
+//   name: 'user',
+//   reducers: {
+//     openModal: (state, action: Readonly<PayloadAction<Modal>>) =>
+//       action.payload,
+//   },
+// });
+
+// export const modalSelector = (state: Readonly<AppState>) => state.modal;
 
 const store = configureStore({
   // Adding the api middleware enables caching, invalidation, polling,
@@ -51,10 +54,10 @@ const store = configureStore({
     getDefaultMiddleware().concat(api.middleware),
   reducer: {
     [api.reducerPath]: api.reducer,
-    user: userSlice.reducer,
+    // modal: modalSlice.reducer,
   },
 });
 
-store.subscribe(() => saveToLocalStorage(store.getState()));
+// store.subscribe(() => saveToLocalStorage(store.getState()));
 
 export default store;

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import React from 'react';
 
-import { useScrollDirection } from '@the-game/ui/hooks/useScrollDirection';
+import { useScrollDirection } from '@the-game/ui/hooks';
 
 export const Header = (props: { [key: string]: any }) => {
   const scrollDirection = useScrollDirection();

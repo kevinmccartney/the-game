@@ -14,12 +14,19 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 import { AuthGuard, Footer } from '@the-game/ui/components';
+import { useRequestLogout } from '@the-game/ui/hooks';
 import { DefaultContainer } from '@the-game/ui/layouts';
-import { logoutClickHandler } from '@the-game/ui/utils';
 
 export const Settings = () => {
   const auth = getAuth();
   const router = useRouter();
+  const logout = useRequestLogout({ auth, router });
+
+  const handleLogoutClick = () => {
+    logout().catch((e) => {
+      console.log(e);
+    });
+  };
 
   return (
     <AuthGuard>
@@ -50,7 +57,7 @@ export const Settings = () => {
               <Button
                 colorScheme="red"
                 mt={8}
-                onClick={logoutClickHandler({ auth, router })}
+                onClick={handleLogoutClick}
               >
                 Logout
               </Button>

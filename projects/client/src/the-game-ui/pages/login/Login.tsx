@@ -20,13 +20,20 @@ import React from 'react';
 import GoogleButton from 'react-google-button';
 import { Helmet } from 'react-helmet-async';
 
+import { useRequestLogin } from '@the-game/ui/hooks';
 import { DefaultContainer } from '@the-game/ui/layouts';
-import { loginClickHandler } from '@the-game/ui/utils';
 
 export const Login = () => {
   const auth = getAuth();
   const router = useRouter();
   const provider = new GoogleAuthProvider();
+  const login = useRequestLogin({ auth, provider, router });
+
+  const handleLoginClick = () => {
+    login().catch((e) => {
+      console.log(e);
+    });
+  };
 
   return (
     <>
@@ -84,9 +91,7 @@ export const Login = () => {
                   </Text>
                   <Divider my={4} />
                   <Flex justifyContent="center">
-                    <GoogleButton
-                      onClick={loginClickHandler({ auth, provider, router })}
-                    />
+                    <GoogleButton onClick={handleLoginClick} />
                   </Flex>
                 </CardBody>
               </Card>
@@ -125,9 +130,7 @@ export const Login = () => {
                   </Text>
                   <Divider my={4} />
                   <Flex justifyContent="center">
-                    <GoogleButton
-                      onClick={loginClickHandler({ auth, provider, router })}
-                    />
+                    <GoogleButton onClick={handleLoginClick} />
                   </Flex>
                 </CardBody>
               </Card>

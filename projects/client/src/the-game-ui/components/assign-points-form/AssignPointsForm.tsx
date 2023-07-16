@@ -13,24 +13,20 @@ import {
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { noop } from 'lodash-es';
-import React, { useEffect, useState } from 'react';
-import { SubmitHandler, UseFormReturn } from 'react-hook-form';
+import React, { FunctionComponent, useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { UserSearchField } from '@the-game/ui/components/user-search-field';
 import { AssignPointsForm as AssignPointsFormModel } from '@the-game/ui/models';
 import { usePostPointsMutation } from '@the-game/ui/services';
 
-export const AssignPointsForm = ({
-  form,
-  onClose,
-  onSubmitSuccess,
-  showCancel,
-}: Readonly<{
-  form: Readonly<UseFormReturn<AssignPointsFormModel, any, undefined>>;
-  onClose?: () => void;
-  onSubmitSuccess?: () => Promise<void>;
+export const AssignPointsForm: FunctionComponent<{
+  // form: Readonly<UseFormReturn<AssignPointsFormModel, any, undefined>>;
+  onCancel?: () => void;
+  onSubmitSuccess: () => Promise<void> | void;
   showCancel?: boolean;
-}>) => {
+}> = ({ onCancel, onSubmitSuccess, showCancel }) => {
+  const form = useForm<AssignPointsFormModel>();
   const {
     formState: { errors },
     getValues,
@@ -62,12 +58,13 @@ export const AssignPointsForm = ({
       userId: values.subject,
     });
 
-    if (onClose) {
-      onClose();
+    if (onCancel) {
+      onCancel();
     }
 
     if (onSubmitSuccess) {
       await onSubmitSuccess();
+      reset();
     }
 
     reset();
@@ -155,7 +152,7 @@ export const AssignPointsForm = ({
         {showCancel && (
           <Button
             mr={3}
-            onClick={onClose || noop}
+            onClick={onCancel || noop}
             variant="outline"
           >
             Cancel
@@ -183,7 +180,6 @@ export const AssignPointsForm = ({
 };
 
 AssignPointsForm.defaultProps = {
-  inverse: false,
-  onClose: () => {},
+  onCancel: () => {},
   showCancel: false,
 };

@@ -10,11 +10,12 @@ import {
   getAuth,
   setPersistence,
 } from 'firebase/auth';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
 
 import { Loading } from '@the-game/ui/components';
+import { ModalContext } from '@the-game/ui/contexts';
 import { DefaultLayout } from '@the-game/ui/layouts';
 import store from '@the-game/ui/state/store';
 import theme from '@the-game/ui/theme';
@@ -33,6 +34,7 @@ const MyApp = ({
   pageProps: any;
 }>) => {
   const [isInitialized, setIsInitialized] = useState(false);
+  const ref = useRef(null);
 
   useEffect(() => {
     const initialize = async () => {
@@ -58,22 +60,25 @@ const MyApp = ({
     <Provider store={store}>
       <HelmetProvider>
         <ChakraProvider theme={theme}>
-          <Box color="gray.700">
-            <DefaultLayout isInitialized={isInitialized}>
-              {isInitialized ? (
-                <Component {...pageProps} />
-              ) : (
-                <Flex
-                  alignItems="center"
-                  h="100%"
-                  justifyContent="center"
-                  w="100%"
-                >
-                  <Loading />
-                </Flex>
-              )}
-            </DefaultLayout>
-          </Box>
+          <ModalContext.Provider value={ref}>
+            <Box color="gray.700">
+              <DefaultLayout isInitialized={isInitialized}>
+                {isInitialized ? (
+                  <Component {...pageProps} />
+                ) : (
+                  <Flex
+                    alignItems="center"
+                    h="100%"
+                    justifyContent="center"
+                    w="100%"
+                  >
+                    <Loading />
+                  </Flex>
+                )}
+              </DefaultLayout>
+              <Box ref={ref} />
+            </Box>
+          </ModalContext.Provider>
         </ChakraProvider>
       </HelmetProvider>
     </Provider>
