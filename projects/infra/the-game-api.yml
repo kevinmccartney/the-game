@@ -82,6 +82,38 @@ paths:
       responses:
         '200':
           $ref: '#/responses/CORSSuccess'
+  /v1/users/{userId}/notifications:
+    parameters:
+      - in: path
+        name: userId
+        type: string
+        required: true
+        description: UID of the user the notifications belong to.
+    get:
+      operationId: user-notifications-get
+      summary: Get scores for a user.
+      x-google-backend:
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-notifications-get
+      responses:
+        # TODO: add error codes
+        '200':
+          description: A list of user notifications.
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Notification'
+    options:
+      operationId: user-get-scores-options
+      summary: CORS for the user scores resource
+      security: []
+      x-google-backend:
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-user-scores-options
+      responses:
+        '200':
+          $ref: '#/responses/CORSSuccess'
   /v1/users/{userId}/points:
     parameters:
       - in: path
@@ -199,6 +231,7 @@ responses:
         type: string
         description: How long to cache the results of a preflight request
 definitions:
+  AnyValue: {}
   User:
     type: object
     properties:
@@ -227,3 +260,16 @@ definitions:
         $ref: '#/definitions/User'
       created_by:
         $ref: '#/definitions/User'
+  Notification:
+    type: object
+    properties:
+      uid:
+        type: string
+      type:
+        type: string
+      created_time:
+        type: string
+      payload:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/AnyValue'
