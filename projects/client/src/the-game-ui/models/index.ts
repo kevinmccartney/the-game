@@ -2,6 +2,7 @@ export * from './anonymous-user';
 export * from './app-state';
 export * from './assign-points-form';
 export * from './edit-profile-form';
+export * from './me-patch-body';
 export * from './navigation-item';
 export * from './notification';
 export * from './point';

@@ -12,18 +12,24 @@ import {
   Heading,
   Input,
   Textarea,
+  useToast,
 } from '@chakra-ui/react';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 
-import { AuthGuard, MultipleInput } from '@the-game/ui/components';
+import { AuthGuard, BackButton, MultipleInput } from '@the-game/ui/components';
 import { DefaultContainer } from '@the-game/ui/layouts';
-import { EditProfileForm } from '@the-game/ui/models';
-import { useGetMeQuery } from '@the-game/ui/services';
+import { EditProfileForm, MePatchBody } from '@the-game/ui/models';
+import { useGetMeQuery, usePatchMeMutation } from '@the-game/ui/services';
 
 export const EditProfile = () => {
   const [isHydrated, setIsHydrated] = useState(false);
+  const [hydratedLikes, setHydratedLikes] = useState<string[]>([]);
+  const [hydratedDislikes, setHydratedDislikes] = useState<string[]>([]);
   const {
     formState: { errors },
     handleSubmit,
@@ -32,9 +38,35 @@ export const EditProfile = () => {
     watch,
   } = useForm<EditProfileForm>();
   const { data } = useGetMeQuery();
+  const [usePatchMe, { isLoading }] = usePatchMeMutation();
+  const toast = useToast();
+  const router = useRouter();
 
-  const submissionHandler = (vals: { [key: string]: any }) => {
+  const submissionHandler = async (vals: EditProfileForm) => {
     console.log(vals);
+
+    const mePatchBody: MePatchBody = {
+      ...vals,
+      dislikes: vals.dislikes.split(',').filter((x) => !!x),
+      likes: vals.likes.split(',').filter((x) => !!x),
+    };
+
+    try {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      await usePatchMe(mePatchBody);
+
+      toast({
+        duration: 9000,
+        isClosable: true,
+        status: 'success',
+        title: 'Profile updated.',
+        variant: 'top-accent',
+      });
+
+      router.back();
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   if (data && !isHydrated) {
@@ -44,6 +76,11 @@ export const EditProfile = () => {
     setValue('phone_number', data.phone_number);
     setValue('location', data.location);
     setValue('about_me', data.about_me);
+    setValue('likes', data.likes.join(','));
+    setValue('dislikes', data.dislikes.join(','));
+
+    setHydratedLikes(data.likes);
+    setHydratedDislikes(data.dislikes);
 
     setIsHydrated(true);
   }
@@ -61,6 +98,7 @@ export const EditProfile = () => {
       </Helmet>
       <DefaultContainer>
         <Flex flexDirection="column">
+          <BackButton buttonProps={{ alignSelf: 'flex-start', mb: 6 }} />
           <Card>
             <CardBody>
               <Heading>Edit Profile</Heading>
@@ -158,6 +196,7 @@ export const EditProfile = () => {
                   <MultipleInput
                     errors={errors}
                     fieldName="likes"
+                    hydratedValues={hydratedLikes}
                     label="Likes"
                     register={register}
                     setValue={setValue}
@@ -165,29 +204,28 @@ export const EditProfile = () => {
                   <MultipleInput
                     errors={errors}
                     fieldName="dislikes"
+                    hydratedValues={hydratedDislikes}
                     label="Dislikes"
                     register={register}
                     setValue={setValue}
                   />
                 </Flex>
                 <Button
-                  // leftIcon={
-                  //   isLoading ? (
-                  //     <FontAwesomeIcon
-                  //       icon={faSpinner}
-                  //       spin={true}
-                  //     />
-                  //   ) : undefined
-                  // }
-                  colorScheme="blue"
-                  // colorScheme={isLoading ? 'gray' : 'blue'}
-                  justifySelf="flex-end"
-                  // disabled={isLoading}
+                  leftIcon={
+                    isLoading ? (
+                      <FontAwesomeIcon
+                        icon={faSpinner}
+                        spin={true}
+                      />
+                    ) : undefined
+                  }
+                  alignSelf="flex-end"
+                  colorScheme={isLoading ? 'gray' : 'blue'}
+                  disabled={isLoading}
                   mt={8}
                   type="submit"
                 >
-                  {/* {isLoading ? 'Loading...' : 'Submit'} */}
-                  Submit
+                  {isLoading ? 'Loading...' : 'Submit'}
                 </Button>
               </form>
             </CardBody>

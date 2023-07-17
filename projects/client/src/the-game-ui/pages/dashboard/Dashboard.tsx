@@ -69,6 +69,16 @@ export const Dashboard = () => {
     ? notificationsData.map((x) => x.type).includes('user-onboarding')
     : false;
 
+  const handleOnboardingDismiss = () => {
+    const onboardingNotification = notificationsData?.find(
+      (x) => x.type === 'user-onboarding',
+    );
+
+    console.log(onboardingNotification);
+
+    modalOnClose();
+  };
+
   if (hasOnboardingNotification && !onboardingModalHasBeenOpened) {
     modalOnOpen();
     setOnboardingModalHasBeenOpened(true);
@@ -141,14 +151,14 @@ export const Dashboard = () => {
             <ModalFooter gap={4}>
               <Button
                 colorScheme="blue"
-                onClick={modalOnClose}
+                onClick={handleOnboardingDismiss}
                 variant="outline"
               >
                 Not now
               </Button>
               <Button
                 onClick={() => {
-                  router.push('/users/123/profile/edit').catch((e) => {
+                  router.push('/profile/me/edit').catch((e) => {
                     console.log(e);
                   });
                 }}

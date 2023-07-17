@@ -1,19 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getAuth } from 'firebase/auth';
-// import getConfig from 'next/config';
 
-// type TheGameNextConfig = {
-//   publicRuntimeConfig: { API_BASE_URL: string };
-// };
-
-// const { publicRuntimeConfig } = getConfig() as TheGameNextConfig;
-
-// Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
-  // prepareHeaders: prepareAuthHeaders,
   credentials: 'same-origin',
-
   fetchFn: async (req: Readonly<RequestInfo>) => {
     const request = (req as Request).clone();
     const auth = getAuth();
@@ -36,7 +26,7 @@ const baseQuery = fetchBaseQuery({
 
       return fetch(
         request?.url,
-        request.method === 'POST'
+        request.method === 'POST' || request.method === 'PATCH'
           ? { ...baseOptions, body: JSON.stringify(body) }
           : baseOptions,
       );
@@ -55,12 +45,5 @@ export const api = createApi({
   baseQuery,
   endpoints: () => ({}),
   reducerPath: 'api',
-  tagTypes: ['Users', 'Points', 'Scores', 'Notifications'],
+  tagTypes: ['Users', 'Points', 'Scores', 'Notifications', 'Me'],
 });
-
-export const enhancedApi = api;
-// .enhanceEndpoints({
-//   endpoints: () => ({
-//     getPost: () => 'test',
-//   }),
-// });

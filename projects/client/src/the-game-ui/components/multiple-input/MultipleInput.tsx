@@ -27,16 +27,25 @@ import { EditProfileForm, EditProfileFormKey } from '@the-game/ui/models';
 export const MultipleInput: FunctionComponent<{
   errors: FieldErrors<EditProfileForm>;
   fieldName: string;
+  hydratedValues?: string[];
   label: string;
   register: UseFormRegister<EditProfileForm>;
   setValue: UseFormSetValue<EditProfileForm>;
-}> = ({ errors, fieldName, label, register, setValue }) => {
+}> = ({ errors, fieldName, hydratedValues, label, register, setValue }) => {
   const [selections, setSelections] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
+  const [isHydrated, setIsHydrated] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  if (!isHydrated && hydratedValues && hydratedValues.length > 0) {
+    setSelections(hydratedValues);
+    setIsHydrated(true);
+  }
 
   const handleKeydown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
+      e.preventDefault();
+
       setSelections([...selections, inputValue]);
       setValue(fieldName as any, [...selections, inputValue].join(','));
 
@@ -120,4 +129,8 @@ export const MultipleInput: FunctionComponent<{
       </List>
     </FormControl>
   );
+};
+
+MultipleInput.defaultProps = {
+  hydratedValues: [],
 };

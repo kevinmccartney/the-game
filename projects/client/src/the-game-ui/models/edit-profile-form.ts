@@ -11,10 +11,10 @@ export type EditProfileFormKey =
 
 export type EditProfileForm = {
   about_me: null | string;
-  dislikes: string[];
+  dislikes: string;
   display_name: string;
   email: string;
-  likes: string[];
+  likes: string;
   location: null | string;
   phone_number: null | string;
   photo_url: null | string;
