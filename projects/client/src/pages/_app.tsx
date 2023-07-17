@@ -14,7 +14,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
 
-import { Loading } from '@the-game/ui/components';
+import { ActiveNavigationProvider, Loading } from '@the-game/ui/components';
 import { ModalContext } from '@the-game/ui/contexts';
 import { DefaultLayout } from '@the-game/ui/layouts';
 import store from '@the-game/ui/state/store';
@@ -60,25 +60,27 @@ const MyApp = ({
     <Provider store={store}>
       <HelmetProvider>
         <ChakraProvider theme={theme}>
-          <ModalContext.Provider value={ref}>
-            <Box color="gray.700">
-              <DefaultLayout isInitialized={isInitialized}>
-                {isInitialized ? (
-                  <Component {...pageProps} />
-                ) : (
-                  <Flex
-                    alignItems="center"
-                    h="100%"
-                    justifyContent="center"
-                    w="100%"
-                  >
-                    <Loading />
-                  </Flex>
-                )}
-              </DefaultLayout>
-              <Box ref={ref} />
-            </Box>
-          </ModalContext.Provider>
+          <ActiveNavigationProvider>
+            <ModalContext.Provider value={ref}>
+              <Box color="gray.700">
+                <DefaultLayout isInitialized={isInitialized}>
+                  {isInitialized ? (
+                    <Component {...pageProps} />
+                  ) : (
+                    <Flex
+                      alignItems="center"
+                      h="100%"
+                      justifyContent="center"
+                      w="100%"
+                    >
+                      <Loading />
+                    </Flex>
+                  )}
+                </DefaultLayout>
+                <Box ref={ref} />
+              </Box>
+            </ModalContext.Provider>
+          </ActiveNavigationProvider>
         </ChakraProvider>
       </HelmetProvider>
     </Provider>

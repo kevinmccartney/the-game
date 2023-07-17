@@ -1,52 +1,20 @@
 import { Button, ButtonGroup, Flex, Text } from '@chakra-ui/react';
-import {
-  faAddressCard,
-  faCog,
-  faHome,
-  faUserGroup,
-} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getAuth } from 'firebase/auth';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useContext } from 'react';
 import { v4 as uuidV4 } from 'uuid';
 
-import { PATH_MAPPINGS } from '@the-game/ui/constants';
+import { NAVIGATION_ITEMS } from '@the-game/ui/constants';
+import { ActiveNavigationContext } from '@the-game/ui/contexts';
+import { NavigationItem } from '@the-game/ui/models';
 
 export const BottomNav = (props: { [key: string]: any }) => {
   const router = useRouter();
-  const auth = getAuth();
+  const activeNavigation = useContext(ActiveNavigationContext);
 
-  const handleClick = (path: string) => {
-    void router.push(path);
+  const handleClick = (item: NavigationItem) => {
+    void router.push(item.path);
   };
-
-  const items = [
-    {
-      icon: faHome,
-      label: 'Home',
-      path: '/',
-      pathMapping: PATH_MAPPINGS.home,
-    },
-    {
-      icon: faUserGroup,
-      label: 'Friends',
-      path: '/friends',
-      pathMapping: PATH_MAPPINGS.friends,
-    },
-    {
-      icon: faAddressCard,
-      label: 'Profile',
-      path: `/users/${auth.currentUser?.uid || ''}/profile`,
-      pathMapping: PATH_MAPPINGS.profile,
-    },
-    {
-      icon: faCog,
-      label: 'Settings',
-      path: '/settings',
-      pathMapping: PATH_MAPPINGS.settings,
-    },
-  ];
 
   return (
     <Flex
@@ -59,14 +27,14 @@ export const BottomNav = (props: { [key: string]: any }) => {
       {...props}
     >
       <ButtonGroup gap={{ sm: 4 }}>
-        {items.map((x) => (
+        {NAVIGATION_ITEMS.map((x) => (
           <Button
             borderRadius={0}
             colorScheme="purple"
             h="auto"
-            isActive={router.pathname === x.pathMapping}
+            isActive={activeNavigation === x.id}
             key={uuidV4()}
-            onClick={() => handleClick(x.path)}
+            onClick={() => handleClick(x)}
             py={2}
           >
             <Flex

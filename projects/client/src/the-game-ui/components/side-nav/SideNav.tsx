@@ -1,49 +1,20 @@
-import { Link } from '@chakra-ui/next-js';
-import { Flex, List, ListItem, Text } from '@chakra-ui/react';
-import {
-  faAddressCard,
-  faCog,
-  faHome,
-  faUserGroup,
-} from '@fortawesome/free-solid-svg-icons';
+import { Button, Flex, List, ListItem, Text } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getAuth } from 'firebase/auth';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useContext } from 'react';
 import { v4 as uuidV4 } from 'uuid';
 
-import { PATH_MAPPINGS } from '@the-game/ui/constants';
+import { NAVIGATION_ITEMS } from '@the-game/ui/constants';
+import { ActiveNavigationContext } from '@the-game/ui/contexts';
+import { NavigationItem } from '@the-game/ui/models';
 
 export const SideNav = (props: { [key: string]: any }) => {
   const router = useRouter();
-  const auth = getAuth();
+  const activeNavigation = useContext(ActiveNavigationContext);
 
-  const items = [
-    {
-      icon: faHome,
-      label: 'Home',
-      path: '/',
-      pathMapping: PATH_MAPPINGS.home,
-    },
-    {
-      icon: faUserGroup,
-      label: 'Friends',
-      path: '/friends',
-      pathMapping: PATH_MAPPINGS.friends,
-    },
-    {
-      icon: faAddressCard,
-      label: 'Profile',
-      path: `/users/${auth.currentUser?.uid || ''}/profile`,
-      pathMapping: PATH_MAPPINGS.profile,
-    },
-    {
-      icon: faCog,
-      label: 'Settings',
-      path: '/settings',
-      pathMapping: PATH_MAPPINGS.settings,
-    },
-  ];
+  const handleClick = (item: NavigationItem) => {
+    void router.push(item.path);
+  };
 
   return (
     <Flex
@@ -58,25 +29,26 @@ export const SideNav = (props: { [key: string]: any }) => {
         fontSize="xl"
         gap={4}
       >
-        {items.map((x) => (
+        {NAVIGATION_ITEMS.map((x) => (
           <ListItem
             key={uuidV4()}
             p={2}
           >
-            <Link
+            <Button
               _hover={{
                 color: 'purple.500',
               }}
               borderRadius={0}
-              color={router.pathname === x.pathMapping ? 'purple.500' : 'black'}
+              color={activeNavigation === x.id ? 'purple.500' : 'black'}
               h="auto"
-              href={x.path}
+              onClick={() => handleClick(x)}
+              variant="link"
             >
               <Flex alignItems="center">
                 <FontAwesomeIcon icon={x.icon} />
                 <Text ml={3}>{x.label}</Text>
               </Flex>
-            </Link>
+            </Button>
           </ListItem>
         ))}
       </List>

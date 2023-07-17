@@ -37,9 +37,11 @@ export const PointCard = ({ point }: Readonly<{ point: Readonly<Point> }>) => {
     >
       <CardHeader>
         <Link
-          href={`/users/${
-            isCreatedByCurrentUser ? point.subject.uid : point.created_by.uid
-          }/profile`}
+          href={
+            isCreatedByCurrentUser
+              ? '/profile/me'
+              : `/users/${point.created_by.uid}/profile`
+          }
         >
           <Avatar
             name={

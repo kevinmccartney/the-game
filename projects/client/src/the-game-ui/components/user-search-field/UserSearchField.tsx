@@ -21,7 +21,7 @@ import React, { useRef, useState } from 'react';
 import { FieldErrors, UseFormReturn } from 'react-hook-form';
 
 import { Loading } from '@the-game/ui/components/loading';
-import { AssignPointsForm, User } from '@the-game/ui/models';
+import { AnonymousUser, AssignPointsForm } from '@the-game/ui/models';
 import { useGetUsersQuery } from '@the-game/ui/services';
 
 const bufferSearchTermInner = (
@@ -42,7 +42,7 @@ export const UserSearchField = ({
   errors: Readonly<FieldErrors<AssignPointsForm>>;
   form: Readonly<UseFormReturn<AssignPointsForm, any, undefined>>;
 }>) => {
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<AnonymousUser | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);
   const fieldRef = useRef(null);
@@ -66,7 +66,7 @@ export const UserSearchField = ({
     ref: fieldRef,
   });
 
-  const handleSelect = async (user: Readonly<User>) => {
+  const handleSelect = async (user: Readonly<AnonymousUser>) => {
     setSelectedUser(user);
     form.setValue('subject', user.uid);
     form.setValue('subjectDisplayName', user.display_name);

@@ -1,22 +1,20 @@
 import { Box, Skeleton, Text } from '@chakra-ui/react';
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 
 import { useGetScoresQuery } from '@the-game/ui/services';
 
-export const Score = ({
-  currentUserScore,
-  uid,
-}: {
+export const Score: FunctionComponent<{
+  boxProps?: { [key: string]: any };
   currentUserScore?: boolean;
   uid: string;
-}) => {
+}> = ({ boxProps, currentUserScore, uid }) => {
   const { data: scoresData, isLoading: scoresIsLoading } =
     useGetScoresQuery(uid);
   const getScoreColor = (score: number | undefined): string | undefined =>
     score ? (score > 0 ? 'green.500' : 'red.500') : undefined;
 
   return (
-    <Box>
+    <Box {...boxProps}>
       {currentUserScore && (
         <Text
           fontSize="xl"
@@ -51,5 +49,6 @@ export const Score = ({
 };
 
 Score.defaultProps = {
+  boxProps: {},
   currentUserScore: false,
 };
