@@ -14,6 +14,7 @@ setup(
         "functions-framework",
         "flask",
         "firebase-admin",
+        "pydantic",
         "werkzeug",
         "google-cloud-logging",
         "google-cloud-firestore",

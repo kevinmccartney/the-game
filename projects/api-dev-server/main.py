@@ -12,6 +12,9 @@ _initialize_app()
 from the_game_api.me_get import (
     function_handler as me_get_handler,
 )
+from the_game_api.me_patch import (
+    function_handler as me_patch_handler,
+)
 from the_game_api.user_notifications_get import (
     function_handler as user_notifications_get_handler,
 )
@@ -43,6 +46,12 @@ def request_handler(func, *args, **kwargs):
 app.add_url_rule(
     "/v1/me",
     view_func=request_handler(func=me_get_handler),
+)
+
+app.add_url_rule(
+    "/v1/me",
+    view_func=request_handler(func=me_patch_handler),
+    methods=["PATCH"],
 )
 
 app.add_url_rule(
