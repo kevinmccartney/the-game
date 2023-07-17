@@ -25,6 +25,17 @@ paths:
             properties:
               data:
                 $ref: '#/definitions/User'
+    patch:
+      operationId: me-patch
+      summary: Update the authenticated user.
+      x-google-backend:
+        address: https://us-central1-the-game-388502.cloudfunctions.net/the-game-me-patch
+      parameters:
+        - $ref: '#/parameters/MePatchBody'
+      responses:
+        # TODO: add error codes
+        '200':
+          $ref: '#/responses/Ok'
     options:
       operationId: me-options
       summary: CORS for the the authenticated user resource
@@ -167,7 +178,7 @@ paths:
       responses:
         # TODO: add error codes
         '201':
-          description: Created.
+          $ref: '#/responses/Created'
     get:
       operationId: user-points-get
       summary: Get points for a user.
@@ -239,6 +250,10 @@ securityDefinitions:
     x-google-jwks_uri: 'https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com'
     x-google-audiences: 'the-game-388502'
 responses:
+  Ok:
+    description: Ok.
+  Created:
+    description: Created.
   CORSSuccess:
     description: CORS headers.
     headers:
@@ -254,6 +269,40 @@ responses:
       Access-Control-Max-Age:
         type: string
         description: How long to cache the results of a preflight request
+parameters:
+  MePatchBody:
+    in: body
+    name: me_patch_body
+    description: The user data to update
+    schema:
+      type: object
+      required:
+        - display_name
+        - email
+        - username
+      properties:
+        about_me:
+          type: string
+        dislikes:
+          type: array
+          items:
+            type: string
+        display_name:
+          type: string
+        email:
+          type: string
+        likes:
+          type: array
+          items:
+            type: string
+        location:
+          type: string
+        phone_number:
+          type: string
+        photo_url:
+          type: string
+        username:
+          type: string
 definitions:
   AnyValue: {}
   AnonymousUser:

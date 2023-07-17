@@ -3,6 +3,7 @@
 locals {
   api_functions = {
     "me-get" : "Get the authenticated user",
+    "me-patch" : "Updates the authenticated user",
     "me-options" : "CORS for the authenticated user resource",
     ping : "A ping service for The Game API",
     "user-notifications-get" : "Get notifications for a user",
