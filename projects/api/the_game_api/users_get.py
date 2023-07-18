@@ -104,7 +104,7 @@ def function_handler(request: _Request):
 
         users_results = users_ref.get()
 
-        users = [doc.to_dict() for doc in users_results]
+        users = [doc.to_dict() | {id: doc.id} for doc in users_results]
         users_return_value = []
 
         for user in users:
@@ -114,6 +114,7 @@ def function_handler(request: _Request):
                     "display_name": user["display_name"],
                     "username": user["username"],
                     "photo_url": user["photo_url"],
+                    id: user["id"],
                 }
             )
 
