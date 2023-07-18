@@ -105,15 +105,22 @@ def function_handler(data: dict, context: Context):
         _db.collection("users").document(user_record_id).set(
             document_data=user.model_dump()
         )
-        _db.collection("notifications").document(notification_record_id).set(
-            {
-                "uid": user.uid,
-                "type": "user-onboarding",
-                "created_time": f"{_datetime.utcnow().isoformat()}Z",
-                "payload": {},
-            }
+        notification_write = (
+            _db.collection("notifications")
+            .document(notification_record_id)
+            .set(
+                {
+                    "uid": user.uid,
+                    "type": "user-onboarding",
+                    "created_time": f"{_datetime.utcnow().isoformat()}Z",
+                    "payload": {},
+                }
+            )
         )
 
+        _logging.info(
+            f"Created user notification - record transform results: {notification_write.transform_results}, uid: {user.uid}"
+        )
         _logging.info(f"Created user - record id: {user_record_id}, uid: {user.uid}")
     except Exception as ex:
         _logging.error(ex)
