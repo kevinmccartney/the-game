@@ -15,6 +15,9 @@ from the_game_api.me_get import (
 from the_game_api.me_patch import (
     function_handler as me_patch_handler,
 )
+from the_game_api.user_notifications_delete import (
+    function_handler as user_notifications_delete_handler,
+)
 from the_game_api.user_notifications_get import (
     function_handler as user_notifications_get_handler,
 )
@@ -57,6 +60,12 @@ app.add_url_rule(
 app.add_url_rule(
     "/v1/users/<id>/notifications",
     view_func=request_handler(func=user_notifications_get_handler),
+)
+
+app.add_url_rule(
+    "/v1/users/<id>/notifications",
+    view_func=request_handler(func=user_notifications_delete_handler),
+    methods=["DELETE"],
 )
 
 app.add_url_rule(

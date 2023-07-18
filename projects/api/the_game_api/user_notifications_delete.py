@@ -108,15 +108,11 @@ def function_handler(request: _Request):
         )
 
         notifications_results = notifications_query_ref.get()
-        notification_documents = [
-            doc.to_dict() | {id: doc.id} for doc in notifications_results
-        ]
+        notification = notifications_results[0]
 
-        return _Response(
-            response=_json.dumps({"data": notification_documents}),
-            status=200,
-            headers=_headers,
-        )
+        notifications_ref.document(notification.id).delete()
+
+        return _Response(status=204, headers=_headers)
 
     except Exception as ex:
         _logging.error(ex)
