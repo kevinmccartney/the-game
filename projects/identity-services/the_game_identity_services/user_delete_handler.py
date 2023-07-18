@@ -42,10 +42,17 @@ def function_handler(data: dict, context: Context):
             _db.collection("users").where(filter=_FieldFilter("uid", "==", uid)).get()
         )
 
+        notifications_records = (
+            _db.collection("users").where(filter=_FieldFilter("uid", "==", uid)).get()
+        )
+
         for record in user_record:
             _db.collection("users").document(record.id).delete()
 
             _logging.info(f"Deleted user - record id: {record.id}, uid: {uid}")
+
+        for record in notifications_records:
+            _db.collection("notifications").document(record.id).delete()
     except Exception as ex:
         _logging.error(ex)
         _logging.error(_traceback.format_exc())

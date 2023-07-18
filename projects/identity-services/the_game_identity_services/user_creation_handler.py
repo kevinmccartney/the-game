@@ -119,7 +119,7 @@ def function_handler(data: dict, context: Context):
         )
 
         _logging.info(
-            f"Created user notification - record transform results: {notification_write.transform_results}, uid: {user.uid}"
+            f"Created user notification - record id: {notification_record_id}, uid: {user.uid}"
         )
         _logging.info(f"Created user - record id: {user_record_id}, uid: {user.uid}")
     except Exception as ex:
