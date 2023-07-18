@@ -6,6 +6,7 @@ uid: str
 type: 'user-onboarding'
 created_time: str
 payload: dict
+id: string
 
 // User
 // uid: $Admin,$Self,$Friend,$Anon
@@ -13,6 +14,7 @@ payload: dict
 // display_name_normalized: string; # No one, solely used for search
 // username: string; $Admin,$Self,$Friend,$Anon
 // photo_url: string | null; $Admin,$Self,$Friend,$Anon
+// id: string; $Admin,$Self,$Friend,$Anon
 // join_date: string $Admin,$Self,$Friend
 // location: string | null; $Admin,$Self,$Friend
 // about_me: string | null; $Admin,$Self,$Friend
