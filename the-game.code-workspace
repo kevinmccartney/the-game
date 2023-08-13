@@ -17,6 +17,9 @@
     },
     {
       "path": "projects/identity-services"
+    },
+    {
+      "path": "projects/api-docs"
     }
   ],
   "extensions": {

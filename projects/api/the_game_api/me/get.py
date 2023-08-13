@@ -3,7 +3,6 @@ import traceback as _traceback
 
 import os as _os
 import json as _json
-from urllib.parse import urlparse as _urlparse
 
 import functions_framework as _functions_framework
 from flask import Request as _Request, Response as _Response
@@ -117,4 +116,5 @@ def function_handler(request: _Request):
             _json.dumps({"code": 500, "message": "Internal server error"}),
             500,
             _headers,
-        )
+        )1
+    
